@@ -392,6 +392,92 @@ phải để kết luận độc lập.
 
 ---
 
+## 7c. Diễn giải mô hình
+
+§5.2 ghi về D3: *"Feature importance is descriptive, not causal."* Mục này trích
+xuất con số đó, kèm luôn hệ số hồi quy của Ridge.
+
+Chạy bằng `python3 -m src.interpretability`.
+
+### Hệ số hồi quy Ridge (D2-b)
+
+Ridge chọn `alpha = 1.0`, hằng số 21,270 Wh.
+
+| Đặc trưng | Hệ số (chuẩn hoá) | Hệ số (đơn vị gốc) |
+|---|---|---|
+| thời lượng kế hoạch | **4,122** | +0,1356 Wh mỗi giây |
+| độ cao | **3,052** | +0,1085 Wh mỗi mét |
+| tải trọng | 1,677 | +0,0081 Wh mỗi gram |
+| tốc độ ra lệnh | 0,668 | +0,2353 Wh mỗi m/s |
+| gió trung bình | 0,119 | +0,1428 Wh mỗi m/s |
+| cự ly | −0,077 | −0,0013 Wh mỗi mét |
+
+**Hai cách đọc, đừng lẫn:**
+
+- **Hệ số chuẩn hoá** so sánh được giữa các đặc trưng — "cái nào ảnh hưởng mạnh
+  hơn". Vì mọi đặc trưng đã đưa về cùng thang đo.
+- **Hệ số đơn vị gốc** đọc trực tiếp được — "tăng 100 g tải thì tốn thêm 0,81 Wh".
+  Nhưng không so sánh giữa các đặc trưng được, vì đơn vị khác nhau.
+
+Con số đơn vị gốc rất đáng đưa vào bài: nó biến mô hình từ hộp đen thành câu phát
+biểu kiểm chứng được.
+
+**Cảnh báo bắt buộc:** các hệ số này là **có điều kiện**, không phải ảnh hưởng độc
+lập. Cụ thể `duration_planned_s = cự ly ÷ tốc độ` nên nó và `speed_num` liên hệ
+cơ học với nhau. Vì vậy hệ số của tốc độ **dương** (+0,668) dù tương quan thô giữa
+tốc độ và năng lượng là **âm** (−0,602). Không mâu thuẫn — chỉ là "giữ thời lượng
+không đổi, tăng tốc độ" là một tình huống khác với "tăng tốc độ trên cùng tuyến
+bay". Phải nói rõ trong bài, nếu không người đọc sẽ thấy nghịch lý.
+
+Hệ số cự ly gần như bằng 0 (−0,077) — lại là hệ quả của việc 94% chuyến cùng một
+tuyến. Không đọc thành "cự ly không quan trọng".
+
+### Độ quan trọng đặc trưng (D3-b Random Forest)
+
+Tham số chọn được: `max_depth = 8`, `min_samples_leaf = 2`.
+
+| Đặc trưng | Độ quan trọng | Độ lệch chuẩn giữa các cây |
+|---|---|---|
+| thời lượng kế hoạch | 0,480 | 0,110 |
+| độ cao | 0,341 | 0,046 |
+| tải trọng | 0,107 | 0,029 |
+| tốc độ ra lệnh | 0,032 | 0,092 |
+| gió trung bình | 0,024 | 0,021 |
+| cự ly | 0,017 | 0,016 |
+
+**Hai mô hình đồng ý với nhau về thứ tự ba đặc trưng đầu**: thời lượng kế hoạch >
+độ cao > tải trọng. Hai thuật toán hoàn toàn khác nhau cùng ra một kết luận là
+dấu hiệu quy luật có thật, không phải sản phẩm của một lựa chọn mô hình.
+
+**Cảnh báo bắt buộc (§5.2):** độ quan trọng đặc trưng chỉ **mô tả** mô hình dùng
+cột nào nhiều khi chia cây. Nó **không** phải quan hệ nhân quả, và không đọc được
+thành "tăng biến X thì năng lượng tăng bao nhiêu".
+
+Chú ý thêm: tốc độ có độ quan trọng 0,032 nhưng độ lệch chuẩn 0,092 — **lớn gấp
+ba lần chính giá trị đó**. Nghĩa là các cây rất không thống nhất về việc có dùng
+cột này hay không. Không rút kết luận gì từ nó.
+
+---
+
+## 7d. Hình cho bài
+
+Sinh bằng `python3 -m src.figures`, ghi vào `reports/figures/` dạng PNG 300 dpi.
+Mục 9 của thầy yêu cầu: *mọi hình trong bài phải sinh từ script* — không vẽ tay,
+không chỉnh trong Excel.
+
+| Hình | Nội dung | Dùng ở phần nào |
+|---|---|---|
+| `fig1_model_comparison` | MAE của 7 mô hình, kèm thanh độ lệch chuẩn | Kết quả |
+| `fig2_predicted_vs_measured` | Dự báo out-of-fold so với đo được, D2-b | Kết quả |
+| `fig3_residuals_by_condition` | Phần dư theo tải, tốc độ, độ cao, gió | Kết quả |
+| `fig4_distance_extrapolation` | bias theo dải cự ly — phát hiện đoán thiếu | Thảo luận / Hạn chế |
+| `fig5_interpretation` | Hệ số Ridge và độ quan trọng RF | Thảo luận |
+
+Bảng màu đã qua kiểm định: dải độ sáng, ngưỡng chroma, tách biệt với các dạng mù
+màu, và độ tương phản với nền. Hình dùng nền trắng cho bản in.
+
+---
+
 ## 7e. Khoảng tin cậy bootstrap
 
 §5.3 cấm: *"Do not claim that a small difference is significant merely because one
@@ -483,92 +569,6 @@ Mục đích: ba tháng nữa, lúc viết bài, nhìn một file kết quả v�
 sinh ra từ phiên bản dữ liệu nào, tập đặc trưng nào. Nó cũng bắt được lỗi thầm
 lặng — nếu ai đó sửa tập đặc trưng rồi chạy lại mà quên ghi, nhật ký sẽ cho thấy
 hai lần chạy có cấu hình khác nhau.
-
----
-
-## 7c. Diễn giải mô hình
-
-§5.2 ghi về D3: *"Feature importance is descriptive, not causal."* Mục này trích
-xuất con số đó, kèm luôn hệ số hồi quy của Ridge.
-
-Chạy bằng `python3 -m src.interpretability`.
-
-### Hệ số hồi quy Ridge (D2-b)
-
-Ridge chọn `alpha = 1.0`, hằng số 21,270 Wh.
-
-| Đặc trưng | Hệ số (chuẩn hoá) | Hệ số (đơn vị gốc) |
-|---|---|---|
-| thời lượng kế hoạch | **4,122** | +0,1356 Wh mỗi giây |
-| độ cao | **3,052** | +0,1085 Wh mỗi mét |
-| tải trọng | 1,677 | +0,0081 Wh mỗi gram |
-| tốc độ ra lệnh | 0,668 | +0,2353 Wh mỗi m/s |
-| gió trung bình | 0,119 | +0,1428 Wh mỗi m/s |
-| cự ly | −0,077 | −0,0013 Wh mỗi mét |
-
-**Hai cách đọc, đừng lẫn:**
-
-- **Hệ số chuẩn hoá** so sánh được giữa các đặc trưng — "cái nào ảnh hưởng mạnh
-  hơn". Vì mọi đặc trưng đã đưa về cùng thang đo.
-- **Hệ số đơn vị gốc** đọc trực tiếp được — "tăng 100 g tải thì tốn thêm 0,81 Wh".
-  Nhưng không so sánh giữa các đặc trưng được, vì đơn vị khác nhau.
-
-Con số đơn vị gốc rất đáng đưa vào bài: nó biến mô hình từ hộp đen thành câu phát
-biểu kiểm chứng được.
-
-**Cảnh báo bắt buộc:** các hệ số này là **có điều kiện**, không phải ảnh hưởng độc
-lập. Cụ thể `duration_planned_s = cự ly ÷ tốc độ` nên nó và `speed_num` liên hệ
-cơ học với nhau. Vì vậy hệ số của tốc độ **dương** (+0,668) dù tương quan thô giữa
-tốc độ và năng lượng là **âm** (−0,602). Không mâu thuẫn — chỉ là "giữ thời lượng
-không đổi, tăng tốc độ" là một tình huống khác với "tăng tốc độ trên cùng tuyến
-bay". Phải nói rõ trong bài, nếu không người đọc sẽ thấy nghịch lý.
-
-Hệ số cự ly gần như bằng 0 (−0,077) — lại là hệ quả của việc 94% chuyến cùng một
-tuyến. Không đọc thành "cự ly không quan trọng".
-
-### Độ quan trọng đặc trưng (D3-b Random Forest)
-
-Tham số chọn được: `max_depth = 8`, `min_samples_leaf = 2`.
-
-| Đặc trưng | Độ quan trọng | Độ lệch chuẩn giữa các cây |
-|---|---|---|
-| thời lượng kế hoạch | 0,480 | 0,110 |
-| độ cao | 0,341 | 0,046 |
-| tải trọng | 0,107 | 0,029 |
-| tốc độ ra lệnh | 0,032 | 0,092 |
-| gió trung bình | 0,024 | 0,021 |
-| cự ly | 0,017 | 0,016 |
-
-**Hai mô hình đồng ý với nhau về thứ tự ba đặc trưng đầu**: thời lượng kế hoạch >
-độ cao > tải trọng. Hai thuật toán hoàn toàn khác nhau cùng ra một kết luận là
-dấu hiệu quy luật có thật, không phải sản phẩm của một lựa chọn mô hình.
-
-**Cảnh báo bắt buộc (§5.2):** độ quan trọng đặc trưng chỉ **mô tả** mô hình dùng
-cột nào nhiều khi chia cây. Nó **không** phải quan hệ nhân quả, và không đọc được
-thành "tăng biến X thì năng lượng tăng bao nhiêu".
-
-Chú ý thêm: tốc độ có độ quan trọng 0,032 nhưng độ lệch chuẩn 0,092 — **lớn gấp
-ba lần chính giá trị đó**. Nghĩa là các cây rất không thống nhất về việc có dùng
-cột này hay không. Không rút kết luận gì từ nó.
-
----
-
-## 7d. Hình cho bài
-
-Sinh bằng `python3 -m src.figures`, ghi vào `reports/figures/` dạng PNG 300 dpi.
-Mục 9 của thầy yêu cầu: *mọi hình trong bài phải sinh từ script* — không vẽ tay,
-không chỉnh trong Excel.
-
-| Hình | Nội dung | Dùng ở phần nào |
-|---|---|---|
-| `fig1_model_comparison` | MAE của 7 mô hình, kèm thanh độ lệch chuẩn | Kết quả |
-| `fig2_predicted_vs_measured` | Dự báo out-of-fold so với đo được, D2-b | Kết quả |
-| `fig3_residuals_by_condition` | Phần dư theo tải, tốc độ, độ cao, gió | Kết quả |
-| `fig4_distance_extrapolation` | bias theo dải cự ly — phát hiện đoán thiếu | Thảo luận / Hạn chế |
-| `fig5_interpretation` | Hệ số Ridge và độ quan trọng RF | Thảo luận |
-
-Bảng màu đã qua kiểm định: dải độ sáng, ngưỡng chroma, tách biệt với các dạng mù
-màu, và độ tương phản với nền. Hình dùng nền trắng cho bản in.
 
 ---
 

@@ -158,8 +158,6 @@ biết trước khi bay cho **R² = 0.73**, tức 27 % thông tin trong thời l
 
 ---
 
----
-
 ## Ba lỗi phát hiện trong bộ dữ liệu
 
 Đây là phần có giá trị khoa học nhất của D1. Cả ba phải viết vào bài.

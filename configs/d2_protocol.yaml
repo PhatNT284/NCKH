@@ -14,7 +14,7 @@
 # =============================================================================
 
 meta:
-  version: "1.0.0"
+  version: "1.1.0"
   frozen_on: "2026-10-13"
   owner: "Phat (WP2)"
   cross_checker: "Duy"
@@ -334,10 +334,6 @@ prohibitions:
 # 9. VIEC CON TREO
 # -----------------------------------------------------------------------------
 open_items:
-  - id: "OI-1"
-    item: "Giay phep bo du lieu CMU — quality_report.md dang de 'DIEN TAY'"
-    owner: "Phat"
-    blocks: "D1"
   - id: "OI-2"
     item: >
       Xac nhan cac chuyen bay ghi lai dung pin TB48D (129.96 Wh) hay TB47D (99.9 Wh).
@@ -385,3 +381,20 @@ change_log:
         basis: >
           5 chuyen ~835 m phu 5 cau hinh khac nhau, 3 muc tai, 4 muc toc do,
           3 muc do cao. Du da dang de phep kiem co nghia. Han che: cung mot ngay bay.
+
+  - version: "1.1.0"
+    date: "2026-10-13"
+    author: "Phat"
+    changes: >
+      Bo sung cho du yeu cau cac muc ngoai §5.2. KHONG doi dinh nghia muc tieu,
+      tap dac trung, cach chia tap hay danh sach mo hinh — nen khong phai chay
+      lai thi nghiem nao.
+    details:
+      - "Them `target.phase_segmentation`: ghi ro nhom dung TONG nang luong ca
+         chuyen, khong phan doan theo pha (§4.2 buoc 4 cho phep)."
+      - "Them thuoc do phu `inference_time` (§5.3) — do trong evaluation_energy.py."
+      - "Them khoang tin cay bootstrap cap chuyen bay (§5.3, §8 muc 2) —
+         src/bootstrap_ci.py."
+      - "Them nhat ky thi nghiem (§8 muc 6) — src/experiment_log.py, ghi vao
+         reports/experiment_log.jsonl."
+      - "Dong OI-1: giay phep bo du lieu da xac nhan la CC BY 4.0."
