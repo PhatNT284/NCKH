@@ -1,0 +1,98 @@
+# =============================================================================
+# ANH XA COT CUA BO DU LIEU CMU
+# =============================================================================
+# File nay noi ten cot trong flights.csv / parameters.csv voi ten noi bo ma
+# code dung. Tach rieng ra day de khi ten cot khac voi du doan thi chi sua
+# mot cho, khong phai sua code.
+#
+# CHAY LAN DAU:
+#     python -m src.data_ingestion --inspect
+# Lenh tren in ra ten cot that su co trong flights.csv. Doi chieu roi sua
+# muc `columns` ben duoi cho khop.
+# =============================================================================
+
+paths:
+  raw_dir: "data/raw"
+  flights: "data/raw/flights.csv"
+  parameters: "data/raw/parameters.csv"
+  processed_dir: "data/processed"
+
+# Ten cot trong flights.csv. Gia tri ben phai la ten THAT trong file goc.
+columns:
+  flight: "flight"
+  time: "time"                       # moc thoi gian, giay
+  voltage: "battery_voltage"         # V
+  current: "battery_current"         # A
+  position_x: "position_x"           # m, dong  (x_east — xac nhan bang --check-frame)
+  position_y: "position_y"           # m, bac
+  position_z: "position_z"           # Bang 1 bai bao ghi don vi la DO nhung mo ta
+                                     # la do cao — tac gia thua nhan la loi.
+                                     # Xu ly nhu met, co ghi chu trong bao cao.
+  wind_speed: "wind_speed"           # m/s, THO (chua hieu chinh)
+  wind_angle: "wind_angle"           # do
+  velocity_x: "velocity_x"           # m/s
+  velocity_y: "velocity_y"
+  velocity_z: "velocity_z"
+
+# Ten cot trong parameters.csv
+parameter_columns:
+  flight: "flight"
+  speed: "speed"
+  payload: "payload"
+  altitude: "altitude"
+  date: "date"
+  local_time: "local_time"
+  route: "route"
+
+# Don vi — kiem bang --check-units truoc khi tin
+units:
+  time: "s"
+  voltage: "V"
+  current: "A"
+  position: "m"
+  wind_speed: "m/s"
+  payload_raw: "g"
+
+# -----------------------------------------------------------------------------
+# QUY TAC LOC — tai lap dung 192 chuyen cua quality_report.md
+# -----------------------------------------------------------------------------
+# Tong: 209 dong parameters.csv -> loai 17 -> giu 192
+exclusions:
+  non_cruise_routes:
+    rule: "loai chuyen co route bat dau bang 'A' (chay khong tai) hoac bang 'H' (bay treo)"
+    expected_count: 13
+  altitude_off_grid:
+    rule: "loai chuyen co altitude khong thuoc {25, 50, 75, 100} m"
+    expected_count: 2
+  payload_off_grid:
+    rule: "loai chuyen co payload khong thuoc {0, 250, 500} g"
+    expected_count: 1
+  broken_current_sensor:
+    rule: "loai chuyen co dong dien trung vi < 1.0 A"
+    threshold_a: 1.0
+    expected_count: 1
+  total_expected_excluded: 17
+  expected_kept: 192
+
+# -----------------------------------------------------------------------------
+# TICH PHAN NANG LUONG
+# -----------------------------------------------------------------------------
+energy:
+  method: "trapezoid"                # phuong phap CONG BO
+  cross_check_method: "riemann"      # chi de doi chieu; lech trung vi 0.040 %
+  cross_check_tolerance_pct: 0.5     # vuot nguong nay -> canh bao
+  use_actual_timestamps: true        # §4.2: dung khoang thoi gian thuc giua hai mau
+  output_unit: "Wh"                  # J -> Wh: chia 3600
+
+# -----------------------------------------------------------------------------
+# GHI CHU BAT BUOC NEU TRONG BAI
+# -----------------------------------------------------------------------------
+dataset_caveats:
+  - "Cam bien gio co do lech duoc chinh tac gia thua nhan, ro nhat o toc do bay thap.
+     Cach hieu chinh nam trong Supplementary Information va KHONG duoc ap dung o day."
+  - "Bang 1 cua bai bao ghi don vi position_z la do, nhung mo ta la do cao — tac gia
+     thua nhan la loi."
+  - "Tac gia neu ro: khong duoc ngoai suy du lieu nay sang loai may bay khac."
+  - "Ma chuyen bay chay tu 1 den 279 nhung chi co 209 dong; 70 chuyen da bi tac gia
+     loai tu truoc."
+  - "180/192 chuyen nam tren mot tuyen (R1), do lech chuan cu ly chi 5.3 m."

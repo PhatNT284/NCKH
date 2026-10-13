@@ -1,0 +1,20 @@
+# Du lieu goc va du lieu sinh ra — khong commit
+data/raw/
+data/processed/
+*.csv.gz
+
+# Ket qua chay — chi commit bang/hinh cuoi cung duoc chon
+reports/figures/*.png
+!reports/figures/.gitkeep
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# He dieu hanh / IDE
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,380 @@
+# =============================================================================
+# GIAO THUC DA DONG BANG — D2: Benchmark du bao nang luong
+# =============================================================================
+# File nay la ban dong bang bat buoc cua Tuan 2 (ke hoach 12 tuan cua thay).
+#
+# QUY TAC: moi thay doi trong file nay PHAI
+#   (1) ghi ly do vao muc `change_log` o cuoi file,
+#   (2) chay lai toan bo thi nghiem bi anh huong,
+#   (3) duoc nguoi kiem cheo cua WP2 (Duy) xac nhan.
+#
+# Tham chieu:
+#   §x.y  -> Delivery_UAV_Preflight_Feasibility_Proposal_updated.md (file cua thay)
+#   Eq(n) -> Proposal.docx (ban nhom da sua)
+# =============================================================================
+
+meta:
+  version: "1.0.0"
+  frozen_on: "2026-10-13"
+  owner: "Phat (WP2)"
+  cross_checker: "Duy"
+  cross_check_status: "PENDING"      # -> "CONFIRMED" khi Duy da soat xong
+  work_package: "WP2"
+  deliverable: "D2"
+
+# -----------------------------------------------------------------------------
+# 1. MUC TIEU DU BAO
+# -----------------------------------------------------------------------------
+target:
+  column: "energy_Wh"
+  definition: "Nang luong dien do duoc moi chuyen bay"
+  formula: "E_measured = sum_t V_t * I_t * dt"
+  source_ref: "§4.2"
+  integration_method: "trapezoid, dung khoang thoi gian thuc giua hai mau"
+  unit: "Wh"
+  # Doi chieu hai phuong phap tich phan: lech trung vi 0.040 % (quality_report.md)
+
+# -----------------------------------------------------------------------------
+# 2. DON VI PHAN TICH VA CHIA TAP
+# -----------------------------------------------------------------------------
+partitioning:
+  unit_of_analysis: "flight"         # KHONG phai mau telemetry
+  source_ref: "§5.3"
+  rule: >
+    Moi mau cua mot chuyen bay luon nam cung mot phan vung. Mot chuyen bay
+    duoc tong hop thanh dung mot dong truoc khi dua vao mo hinh.
+  n_flights: 192                     # sau khi loc, tu 209 dong parameters.csv
+
+  cv:
+    scheme: "repeated_k_fold"
+    n_splits: 5
+    n_repeats: 5
+    random_state: 42
+    report: ["mean", "std"]
+    note: >
+      Khong mo ta mot chenh lech la co y nghia chi vi mot lan chia cho ket qua
+      thap hon (§5.3).
+
+  preprocessing_rule: >
+    Chuan hoa dac trung va MOI viec chon sieu tham so chi dung thong ke cua
+    fold huan luyen. Khong cham vao fold kiem cuoi. (§5.3)
+
+# -----------------------------------------------------------------------------
+# 3. TAP DAC TRUNG
+# -----------------------------------------------------------------------------
+# Can cu dong bang:
+#   - §5.2 liet ke tap dac trung bang cum tu "such as" -> minh hoa, khong bat buoc.
+#     Nhom tu chot tap dac trung va khai bao, dung tinh than §5.2.
+#   - §4.3 (bang bien kha dung) KHONG liet ke `duration`.
+#   - §5.5 bat khai bao gia dinh toc do hanh trinh -> khi lap ke hoach nhiem vu,
+#     thoi luong la dai luong SUY RA, khong phai do duoc.
+#
+# Bang chung so: hoi quy duration_s theo (cu ly, speed_num, altitude_num,
+# payload_num) cho R^2 = 0.73 (toan bo 192 chuyen) va 0.75 (chi R1).
+# => 27 % thong tin trong duration_s KHONG suy duoc tu ke hoach bay.
+#    Hai bien the D2 that su khac nhau, nen phai chay ca hai.
+
+features:
+
+  # Bien the chinh — dung cho bo may quyet dinh D3.
+  # Chi gom dai luong BIET TRUOC khi cat canh.
+  preflight:                         # D2-b
+    - payload_num                    # g        — cau hinh nhiem vu
+    - speed_num                      # m/s      — toc do RA LENH, khong phai thuc te
+    - altitude_num                   # m        — do cao hanh trinh ke hoach
+    - distance_2d_m                  # m        — cu ly tuyen da lap
+    - wind_raw_mean_ms               # m/s      — gio du bao (xem muc 4)
+    - duration_planned_s             # s        — SUY RA, xem `derived` ben duoi
+
+  # Bien the doi chung — dung dung chu §5.2, co duration do duoc.
+  as_written:                        # D2-a
+    - payload_num
+    - speed_num
+    - altitude_num
+    - distance_2d_m
+    - wind_raw_mean_ms
+    - duration_s                     # DO DUOC — chi co sau khi bay xong
+
+  derived:
+    duration_planned_s:
+      formula: "distance_2d_m / speed_num"
+      source_ref: "§5.5 (gia dinh toc do hanh trinh phai duoc khai bao)"
+      note: >
+        Day la thoi luong ke hoach, khong phai thoi luong do duoc. No bo qua
+        thoi gian cat canh, leo, ha va treo — mot gia dinh phai neu trong bai.
+
+  # TUYET DOI khong dua vao mo hinh du bao: cac dai luong HAU NGHIEM.
+  forbidden:
+    - column: "speed_realised_ms"
+      reason: "toc do thuc te = cu ly / thoi luong do duoc; la 1/duration tra hinh"
+    - column: "climb_m"
+      reason: "met leo DO DUOC, khong phai ke hoach"
+    - column: "descent_m"
+      reason: "met ha DO DUOC, khong phai ke hoach"
+    - column: "P_mean_W"
+      reason: "cong suat do duoc"
+    - column: "P_max_W"
+      reason: "cong suat do duoc"
+    - column: "energy_per_metre_J"
+      reason: "tinh truc tiep tu chinh cot muc tieu — ro ri trang tron"
+    - column: "alt_mean_m"
+      reason: "do cao so voi muc nuoc bien, khong phai thong so ke hoach"
+    - column: "n_samples"
+      reason: "thuoc tinh ghi du lieu, khong phai dai luong vat ly"
+    - column: "sample_hz"
+      reason: "thuoc tinh ghi du lieu, khong phai dai luong vat ly"
+
+  reporting_rule: >
+    Bao cao ca D2-a lan D2-b canh nhau. Chenh lech MAE giua hai bien the chinh
+    la cai gia cua viec khong biet truoc thoi luong bay — viet hẳn mot doan
+    trong bai. Chi D2-b duoc dua vao bo may quyet dinh D3.
+
+# -----------------------------------------------------------------------------
+# 4. XU LY GIO
+# -----------------------------------------------------------------------------
+wind:
+  primary_column: "wind_raw_mean_ms"
+  secondary_column: "wind_corr_mean_ms"
+  source_ref: "§13 (bang rui ro), §4.3, §5.5"
+
+  decision: >
+    §13 cho hai nhanh: dung do lon gio kem ghi ro han che, HOAC suy ra thanh
+    phan theo huong CHI KHI du lieu hop le ton tai. d2_report.md da chung minh
+    du lieu hieu chinh KHONG hop le, nen theo nhanh thu nhat.
+
+  evidence_against_corrected:
+    - "wind_corr_mean_ms tuong quan +0.506 voi speed_realised_ms, manh hon ca
+       wind_raw_mean_ms (+0.415) — dau hieu cot gio dang do toc do UAV"
+    - "33.72 % so mau nam duoi can duoi 2.218 m/s cua da thuc hieu chinh"
+    - "2.64 % so mau nam tren can tren 12.697 m/s"
+    - "wind_coverage nho nhat 0.289"
+
+  limitations_to_state_in_paper:
+    - "Cam bien gio co do lech duoc chinh tac gia thua nhan, ro nhat o toc do bay thap"
+    - "Do lon gio don thuan KHONG phan biet duoc gio nguoc va gio xuoi (§4.3)"
+    - "Da thuc hieu chinh cua Rodrigues khong bao phu duoc 33.7 % du lieu cua chinh ho"
+    - "Bai bao neu hai tri so sai so khac nhau cho cam bien gio (±0.1 va ±0.3 m/s)"
+    - "Toan chien dich bay trong dai gio hep 2.81–6.67 m/s (tho)"
+
+  secondary_analysis: >
+    Giu nhanh gio da hieu chinh nhu phan tich phu, bao ca hai trong bang so sanh.
+    Khong dung nhanh phu de chon mo hinh.
+
+# -----------------------------------------------------------------------------
+# 5. MO HINH
+# -----------------------------------------------------------------------------
+# Dinh nghia lay nguyen tu §5.2 / Proposal 4.3. Khong them mo hinh ngoai danh sach.
+models:
+
+  D0:
+    name: "Constant-mean baseline"
+    spec: "du bao bang trung binh energy_Wh cua fold huan luyen"
+    role: "moc kiem tra, khong ky vong dung duoc trong van hanh"
+    required: true
+
+  D1:
+    name: "Distance-only regression"
+    spec: "hoi quy tuyen tinh energy_Wh ~ distance_2d_m"
+    variants: ["ols", "huber"]       # §5.2: bao ca bien the hoi quy ben vung
+    required: true
+    caveat: >
+      CANH BAO THIET KE: 180/192 chuyen nam tren tuyen R1 voi do lech chuan cu ly
+      chi 5.3 m (~1 %). D1 bi thoai hoa tren bo du lieu nay — no se gan nhu khong
+      du bao duoc gi, KHONG phai vi cu ly khong quan trong ma vi du lieu khong cho
+      cu ly thay doi. PHAI neu ro dieu nay khi bao ket qua, neu khong bang D2 se
+      trong nhu mo hinh da yeu to thang ap dao mot cach gian lan.
+
+  D2:
+    name: "Ridge regression"
+    spec: "Ridge tren tap dac trung co dinh, chuan hoa trong fold huan luyen"
+    alpha_grid: [0.01, 0.1, 1.0, 10.0, 100.0]
+    tuning: "nested CV ben trong fold huan luyen"
+    required: true
+    rationale_ref: "§5.2 — uu tien Ridge hon da thuc bac cao vi du lieu nho"
+
+  D3:
+    name: "Random Forest Regressor"
+    spec: "rung ngau nhien gioi han do sau"
+    n_estimators: 300
+    max_depth_grid: [3, 5, 8]
+    min_samples_leaf_grid: [2, 4, 8]
+    tuning: "nested CV ben trong fold huan luyen"
+    required: true
+    caveat: >
+      Voi 192 dong va quan he kha tuyen tinh, KHONG ky vong D3 thang D2 nhieu.
+      Neu D3 khong thang D2 thi do la ket qua binh thuong va dung — viet thang ra.
+      Feature importance la mo ta, KHONG phai nhan qua (§5.2).
+
+  D4:
+    name: "Gradient-boosted trees"
+    required: false
+    gate: "chi lam sau khi D1–D5 da dat tieu chi nghiem thu (§2.4)"
+
+  D5:
+    name: "Physics-based model (Gong et al. 2023)"
+    required: false
+    gate: "chi dua vao xep hang dinh luong sau khi qua bang kiem tuong thich M100"
+    compatibility_checklist_ref: "§3.2"
+    rule: >
+      Khong bia tham so. Thieu tham so co nguon tai lieu -> giu lam doi chung
+      tai lieu va LOAI khoi xep hang dinh luong. Ban thich nghi phai dan nhan
+      "adapted", khong duoc goi la tai lap.
+
+# -----------------------------------------------------------------------------
+# 6. THUOC DO
+# -----------------------------------------------------------------------------
+metrics:
+  source_ref: "§5.3"
+  primary:
+    - name: "MAE"
+      unit: "Wh"
+    - name: "RMSE"
+      unit: "Wh"
+    - name: "bias"
+      unit: "Wh"
+      definition: "sai so trung binh CO DAU"
+      why: >
+        Du bao THIEU mot cach he thong la van de an toan: no khien he thong cho
+        bay nhung chuyen khong du pin. Dau cua sai so quan trong hon do lon.
+  secondary:
+    - name: "WAPE"
+      note: "dung thay MAPE; khong dung MAPE vi can kiem tra gia tri muc tieu xa 0"
+    - name: "inference_time"
+  subgroup_breakdown:
+    - payload_num
+    - speed_num
+    - altitude_num
+    - wind_regime
+  reporting: "trung binh va do lech chuan qua cac fold"
+
+# -----------------------------------------------------------------------------
+# 7. THI NGHIEM
+# -----------------------------------------------------------------------------
+experiments:
+
+  E2a_flight_level_cv:
+    status: "bat buoc"
+    source_ref: "§5.3, §6/E2"
+    description: "CV 5-fold lap 5 lan o cap chuyen bay tren toan bo 192 chuyen"
+
+  E2b_configuration_holdout:
+    status: "bat buoc"
+    source_ref: "§5.3 — 'configuration-holdout experiment'"
+    description: >
+      Bo nguyen mot to hop (payload x speed x altitude) ra khoi tap huan luyen,
+      lap qua cac to hop. Kiem kha nang tong quat ngoai dieu kien gan trung lap.
+    note: >
+      Luoi giai thua day du 3 tai x 5 toc do x 4 do cao = 60 to hop, co mat du
+      60/60, moi to hop 2–5 chuyen. Co mau HIEU DUNG vi vay gan voi 60 cau hinh
+      hon la 192 chuyen — phai ghi ro trong bai, khong duoc thoi phong 192.
+
+  E2c_distance_extrapolation_holdout:
+    status: "BO SUNG — ngoai giao thuc cua thay"
+    source_ref: "khong co trong §5.3; lien quan §5.5 (Eq 5) va §6/E3"
+    declared_as: "thi nghiem mo rong, khai bao ro rang"
+    description: >
+      Huan luyen CHI tren 180 chuyen tuyen R1 (cu ly ~472 m), roi du bao 12 chuyen
+      ngoai R1. Kiem xem phep nhan cu ly trong Eq (5) co dung vung khi cu ly dai ra.
+    holdout_flights:
+      long_range:                    # ~835 m, gap 1.77 lan R1
+        - {flight: 268, route: R6, distance_2d_m: 830.7, payload: 500, speed: 6,  altitude: 25, energy_Wh: 28.7}
+        - {flight: 271, route: R6, distance_2d_m: 834.6, payload: 0,   speed: 10, altitude: 25, energy_Wh: 18.4}
+        - {flight: 269, route: R6, distance_2d_m: 837.0, payload: 500, speed: 12, altitude: 25, energy_Wh: 19.9}
+        - {flight: 270, route: R6, distance_2d_m: 837.5, payload: 250, speed: 10, altitude: 75, energy_Wh: 24.0}
+        - {flight: 272, route: R6, distance_2d_m: 841.4, payload: 250, speed: 4,  altitude: 50, energy_Wh: 37.7}
+      mid_range:                     # 427–609 m, deu tai 0 g, gia tri thap hon
+        - {flight: 5, route: R2, distance_2d_m: 427.4}
+        - {flight: 6, route: R3, distance_2d_m: 466.8}
+        - {flight: 7, route: R4, distance_2d_m: 475.4}
+        - {flight: 1, route: R5, distance_2d_m: 510.8}
+        - {flight: 4, route: R5, distance_2d_m: 524.5}
+        - {flight: 3, route: R5, distance_2d_m: 543.1}
+        - {flight: 2, route: R5, distance_2d_m: 609.1}
+    strengths:
+      - "5 chuyen dai = 5 CAU HINH khac nhau, khong phai 5 ban sao"
+      - "phu ca 3 muc tai, 4/5 muc toc do, 3/4 muc do cao"
+      - "nang luong trai rong 18.4–37.7 Wh"
+    limitations_mandatory:
+      - "CA 5 CHUYEN DAI BAY CUNG NGAY 2019-09-19 — sai lech neu co se lan giua
+         'do cu ly dai' va 'do dieu kien hom do / tinh trang pin luc do'. Khong tach duoc."
+      - "7 chuyen mid-range deu tai 0 g va hau het toc do 4 — gia tri thap hon"
+      - "Co mau qua nho de ket luan manh"
+    wording_rule: >
+      Viet la "kiem tra so bo tren mot tap giu lai nho". TUYET DOI khong viet
+      "da kiem chung".
+    usage_rule: >
+      KHONG dung ket qua nay de chon mo hinh. Chi de bao cao va de xac dinh
+      envelope cu ly hop le cua he thong.
+
+  E2d_learning_curve:
+    status: "tuy chon"
+    description: "huan luyen tren 40/80/120/160/192 chuyen, xem sai so da bao hoa chua"
+    gate: "chi lam neu E2a–E2c xong som"
+
+# -----------------------------------------------------------------------------
+# 8. NHUNG DIEU KHONG DUOC LAM
+# -----------------------------------------------------------------------------
+prohibitions:
+  - "Khong chon dac trung hoac sieu tham so bang ket qua fold kiem cuoi (§5.2)"
+  - "Khong chia tap o cap mau telemetry (§5.3)"
+  - "Khong dua bien hau nghiem vao mo hinh du bao (xem features.forbidden)"
+  - "Khong goi bat ky dau ra nao cua D2 la 'xac suat' hay 'do tin cay' (§5.6, §5.8)"
+  - "Khong bia tham so cho D5 (§3.2)"
+  - "Khong them mo hinh ngoai danh sach §5.2 de lam day bang so sanh"
+  - "Khong mo ta chenh lech nho la co y nghia dua tren mot lan chia (§5.3)"
+
+# -----------------------------------------------------------------------------
+# 9. VIEC CON TREO
+# -----------------------------------------------------------------------------
+open_items:
+  - id: "OI-1"
+    item: "Giay phep bo du lieu CMU — quality_report.md dang de 'DIEN TAY'"
+    owner: "Phat"
+    blocks: "D1"
+  - id: "OI-2"
+    item: >
+      Xac nhan cac chuyen bay ghi lai dung pin TB48D (129.96 Wh) hay TB47D (99.9 Wh).
+      Proposal 4.4 yeu cau xac nhan tu tai lieu bo du lieu, KHONG duoc doan.
+      Lech ~30 % giua hai loai, anh huong thang toi moi phan quyet.
+    owner: "Quyen"
+    blocks: "D3"
+  - id: "OI-3"
+    item: "Khoi luong khung M100 trong cau hinh da bay, de tinh tai trong toi da"
+    owner: "Quyen"
+    blocks: "D3 (lop luat cung)"
+  - id: "OI-4"
+    item: >
+      Bao cao thay ve quyet dinh hai bien the D2 (kem con so R^2 = 0.73).
+      Day la BAO CAO, khong phai xin phep.
+    owner: "Phat"
+    blocks: null
+  - id: "OI-5"
+    item: >
+      Draft Bao.docx dang mau thuan voi file thay: con dung E_nominal = 349.2 Wh
+      (pin TB55 cua Matrice 210), diem bi chan S = min(1, ...), va "do tin cay da
+      hieu chuan" — ca ba deu da bi thay loai o §5.6 va §5.8. Can dong bo lai.
+    owner: "Ca nhom"
+    blocks: "D8"
+
+# -----------------------------------------------------------------------------
+# 10. NHAT KY THAY DOI
+# -----------------------------------------------------------------------------
+change_log:
+  - version: "1.0.0"
+    date: "2026-10-13"
+    author: "Phat"
+    changes: "Ban dong bang dau tien."
+    decisions:
+      - id: "B1"
+        question: "`duration` trong tap dac trung D2 la do duoc hay suy ra?"
+        resolution: "Chay ca hai bien the; D2-b (duration_planned_s) la mo hinh chinh."
+        basis: >
+          §5.2 dung 'such as' (minh hoa, khong bat buoc); §4.3 khong liet ke
+          `duration` trong bang bien kha dung; §5.5 bat khai bao gia dinh toc do
+          hanh trinh. Bang chung so: R^2(duration_s ~ ke hoach) = 0.73.
+      - id: "B2"
+        question: "Co giu thi nghiem ngoai suy cu ly khong?"
+        resolution: "GIU, khai bao ro la mo rong ngoai giao thuc."
+        basis: >
+          5 chuyen ~835 m phu 5 cau hinh khac nhau, 3 muc tai, 4 muc toc do,
+          3 muc do cao. Du da dang de phep kiem co nghia. Han che: cung mot ngay bay.
