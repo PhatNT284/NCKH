@@ -31,6 +31,13 @@ target:
   formula: "E_measured = sum_t V_t * I_t * dt"
   source_ref: "§4.2"
   integration_method: "trapezoid, dung khoang thoi gian thuc giua hai mau"
+  phase_segmentation: >
+    KHONG phan doan theo pha bay. §4.2 buoc 4 cho phep: "neu phan doan pha
+    khong dang tin thi dung tong nang luong ca chuyen lam muc tieu chinh va coi
+    phan tich cap pha la tuy chon". Nhom chon tong nang luong ca chuyen. Ly do:
+    cot vi tri ngang o don vi do va co nhieu GPS, cot van toc lech 2.5 % so voi
+    vi tri — khong du tin cay de cat ranh gioi cat canh / leo / hanh trinh /
+    ha / ha canh mot cach nhat quan.
   unit: "Wh"
   # Doi chieu hai phuong phap tich phan: lech trung vi 0.040 % (quality_report.md)
 

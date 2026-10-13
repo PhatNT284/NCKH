@@ -2,9 +2,34 @@
 
 - Nguồn: CMU Package Delivery Quadcopter, DOI 10.1184/R1/12683453
 - flights.csv: 107.1 MB, sha256 `117843be1846d4db353c8961b9f947ee`
-- Giấy phép: **ĐIỀN TAY — kiểm trên trang KiltHub rồi ghi vào đây** *(OI-1, chặn D1)*
-- Tái lập: `python -m src.features --out data/processed/flight_level.csv`
-- Kiểm tái lập: `python -m src.features --verify reports/flight_level_week3.csv`
+- Giấy phép: **CC BY 4.0** — Creative Commons Attribution 4.0 International,
+  https://creativecommons.org/licenses/by/4.0/
+  Cho phép dùng lại, chỉnh sửa và phân phối, kể cả cho mục đích thương mại, với
+  **điều kiện duy nhất là ghi công tác giả**. Hệ quả cho đề tài:
+  - Phải trích dẫn Rodrigues et al. (2021) và DOI bộ dữ liệu ở mọi nơi dùng dữ liệu.
+  - Được phép công bố bảng dữ liệu đã xử lý kèm mã nguồn ở sản phẩm D9, miễn ghi công.
+  - Không có điều khoản phi thương mại hay chia sẻ tương tự nào ràng buộc thêm.
+- Tái lập: `python3 -m src.features --out data/processed/flight_level.csv`
+- Kiểm tái lập: `python3 -m src.features --verify reports/flight_level_week3.csv`
+  → **đã chạy, cả 8 cột khớp tới 10⁻⁸**
+- Từ điển biến: `reports/data_dictionary.md`
+- Giải thích chi tiết cho người trong nhóm: `docs/D1_du_lieu.md`
+
+## Trạng thái nghiệm thu D1 (Mục 12.1)
+
+| Tiêu chí của thầy | Trạng thái |
+|---|---|
+| Ghi rõ nguồn và giấy phép | **Đạt** |
+| Kiểm từ điển biến và đơn vị | **Đạt** — `reports/data_dictionary.md` |
+| Ghi nhật ký loại trừ chuyến bay | **Đạt** — `reports/exclusion_log.csv` |
+| Test phép tích phân điện áp–dòng điện | **Đạt** — 20 unit test |
+| Mọi dòng giữ định danh chuyến bay | **Đạt** |
+| Chia tập theo chuyến bay hoặc cấu hình | **Đạt** — đóng băng trong `configs/d2_protocol.yaml` |
+| Script xử lý chạy lại được (Mục 9) | **Đạt** |
+| **Duy kiểm chéo đơn vị năng lượng và cách chia tập** | **CHƯA** |
+
+Thầy viết rõ: *người làm một phần không được là người duy nhất kiểm kết quả phần
+đó.* Chữ ký kiểm chéo của Duy là điều kiện cuối cùng để D1 được nghiệm thu.
 
 ## Số chuyến bay
 
@@ -133,6 +158,40 @@ biết trước khi bay cho **R² = 0.73**, tức 27 % thông tin trong thời l
 
 ---
 
+---
+
+## Ba lỗi phát hiện trong bộ dữ liệu
+
+Đây là phần có giá trị khoa học nhất của D1. Cả ba phải viết vào bài.
+
+### Lỗi 1 — Cột vị trí ở đơn vị độ, không phải mét
+
+`position_x` là kinh độ, `position_y` là vĩ độ, đều tính bằng **độ** (~ −79,78 và
+40,46 — Pittsburgh). Cộng hiệu số theo độ rồi coi là mét sẽ **sai khoảng 5 bậc độ
+lớn**, mà chương trình vẫn chạy bình thường, không báo lỗi gì.
+
+Cách đúng: công thức **haversine** với **R = 6.371.000 m**. Hằng số này xác định
+bằng thực nghiệm — thử nhiều cách quy đổi, chỉ cách này tái lập đúng bảng tuần 3
+(lệch 4,5 × 10⁻⁹ m). Xấp xỉ mặt phẳng với 111.320 m/độ lệch 0,68 m mỗi chuyến.
+
+**Phải ghi hằng số R vào bài**, nếu không không ai tái lập được kết quả.
+
+### Lỗi 2 — Đơn vị `position_z` trong bài báo ghi sai
+
+Bảng 1 của Rodrigues et al. ghi đơn vị là độ nhưng mô tả là độ cao; tác giả thừa
+nhận là lỗi. Dữ liệu xác nhận z ở đơn vị **mét**: biên độ 27,4 m ở chuyến bay độ
+cao 25 m, 52,9 m ở chuyến 50 m.
+
+### Lỗi 3 — Hai cách đo cự ly chênh 2,5%
+
+Trên cùng chuyến bay số 1: haversine từ toạ độ cho **510,8 m**, tích phân cột vận
+tốc cho **498,9 m**. Chênh 2,4%. Không xác định được cách nào đúng hơn.
+
+Quan trọng vì cự ly là đầu vào trung tâm của `E_req = E_out + E_return + ...`, nên
+sai số này lan thẳng vào mọi phán quyết ở D3.
+
+---
+
 ## Lưu ý bắt buộc nêu trong bài
 
 - Cảm biến gió có độ lệch được chính tác giả thừa nhận, rõ nhất ở tốc độ bay thấp.
@@ -160,7 +219,6 @@ biết trước khi bay cho **R² = 0.73**, tức 27 % thông tin trong thời l
 
 | Mã | Việc | Người |
 |---|---|---|
-| OI-1 | Điền giấy phép bộ dữ liệu từ trang KiltHub | Phát |
 | OI-2 | Xác nhận các chuyến bay dùng pin TB48D (129.96 Wh) hay TB47D (99.9 Wh) từ tài liệu bộ dữ liệu, **không được đoán** — lệch ~30 % ảnh hưởng thẳng tới mọi phán quyết | Quyền |
 | OI-3 | Tra khối lượng khung M100 trong cấu hình đã bay, để tính tải trọng tối đa | Quyền |
 | — | Duy kiểm chéo đơn vị năng lượng và cách chia tập (bắt buộc, WP1 ↔ WP2) | Duy |
