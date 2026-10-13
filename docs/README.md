@@ -14,6 +14,22 @@ giả định bạn đã biết gì về code hay thống kê.
 
 D3–D9 sẽ có file riêng khi làm tới.
 
+## Hai hệ đánh số cùng dùng ký hiệu D
+
+Thầy dùng hai hệ riêng biệt, trùng ký hiệu (Mục 2.4 của file thầy nói rõ điều này).
+
+| Mã | **Sản phẩm bàn giao** | **Mô hình** (§5.2) |
+|---|---|---|
+| D0 | *(không có)* | Trung bình hằng |
+| D1 | Rà soát bộ dữ liệu | Hồi quy chỉ cự ly |
+| D2 | Benchmark dự báo năng lượng | Ridge |
+| D3 | Bộ máy quyết định | Random Forest |
+| D4 | Benchmark kịch bản | Gradient boosting |
+| D5 | Gói độ bền vững | Mô hình vật lý Gong |
+
+Luôn viết **"sản phẩm D2"** hoặc **"mô hình D2"**, không viết "D2" trần.
+Chi tiết ở `README.md` ngoài gốc repo.
+
 ## Quy ước tham chiếu
 
 Trong toàn bộ tài liệu và mã nguồn:
