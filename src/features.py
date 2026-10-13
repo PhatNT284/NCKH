@@ -29,17 +29,60 @@ from src.energy_reconstruction import reconstruct_flight_energy
 VALID_ALTITUDES = {25.0, 50.0, 75.0, 100.0}
 VALID_PAYLOADS = {0.0, 250.0, 500.0}
 
+# Ban kinh Trai Dat trung binh, dung trong cong thuc haversine.
+# Gia tri nay duoc xac dinh bang thuc nghiem: no tai lap dung cot distance_2d_m
+# cua bang tuan 3 voi sai lech 4.5e-09 m (xem scripts/diagnose_distance.py).
+R_EARTH_M = 6_371_000.0
+
 
 # ---------------------------------------------------------------------------
-# Dac trung hinh hoc duong bay
+# Hinh hoc duong bay
 # ---------------------------------------------------------------------------
+# CHU Y VE DON VI — day la cho de sai nhat trong ca module.
+#
+# Trong flights.csv:
+#   position_x = KINH DO, don vi DO   (~ -79.78, Pittsburgh)
+#   position_y = VI DO,   don vi DO   (~  40.46)
+#   position_z = do cao,  don vi MET  (~ 269, so voi muc nuoc bien)
+#
+# Bang 1 cua Rodrigues et al. ghi don vi position_z la do nhung mo ta la do cao
+# — chinh tac gia thua nhan day la loi. Du lieu xac nhan z o don vi met: bien do
+# 27.4 m cho chuyen bay o do cao 25 m, 52.9 m cho chuyen o do cao 50 m.
+#
+# Cong hieu so toa do theo DO roi coi nhu met se cho ket qua sai khoang 5 bac
+# do lon. Phai doi sang met truoc.
+
+def haversine_steps_m(lon_deg: np.ndarray, lat_deg: np.ndarray) -> np.ndarray:
+    """
+    Khoang cach mat dat giua cac diem lien tiep, don vi met.
+
+    Dung cong thuc haversine chu khong dung xap xi mat phang: xap xi mat phang
+    voi he so 111320 m/do cho sai lech ~0.68 m moi chuyen bay, du de khong tai
+    lap duoc bang tuan 3.
+    """
+    lon = np.deg2rad(np.asarray(lon_deg, dtype=float))
+    lat = np.deg2rad(np.asarray(lat_deg, dtype=float))
+    if len(lon) < 2:
+        return np.array([])
+
+    lat1, lat2 = lat[:-1], lat[1:]
+    dlat = lat2 - lat1
+    dlon = lon[1:] - lon[:-1]
+
+    a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
+    return 2 * R_EARTH_M * np.arcsin(np.sqrt(np.clip(a, 0.0, 1.0)))
+
 
 def trajectory_features(df: pd.DataFrame) -> dict:
     """
     Cu ly 2D/3D, do cao trung binh, tong leo va tong ha.
 
-    Cu ly 2D cong don tren mat phang ngang; cu ly 3D co them thanh phan dung.
-    `climb_m` va `descent_m` la tong gia tri duong va am cua bien thien do cao.
+    Cu ly 2D la tong chieu dai duong di tren mat dat, tinh bang haversine tu
+    kinh do va vi do. Cu ly 3D ghep them thanh phan dung cua tung buoc:
+
+        step_3d = sqrt( step_haversine^2 + dz^2 )
+
+    `climb_m` va `descent_m` la tong rieng phan tang va phan giam cua do cao.
     """
     out = {
         "distance_2d_m": np.nan, "distance_3d_m": np.nan,
@@ -49,17 +92,19 @@ def trajectory_features(df: pd.DataFrame) -> dict:
         return out
 
     d = df.sort_values("time") if "time" in df.columns else df
-    dx = d["position_x"].diff()
-    dy = d["position_y"].diff()
-    step_2d = np.sqrt(dx**2 + dy**2)
-    out["distance_2d_m"] = float(step_2d.sum(skipna=True))
+    step_2d = haversine_steps_m(d["position_x"].to_numpy(float),
+                                d["position_y"].to_numpy(float))
+    if step_2d.size == 0:
+        return out
+    out["distance_2d_m"] = float(np.nansum(step_2d))
 
     if "position_z" in d.columns:
-        dz = d["position_z"].diff()
-        out["distance_3d_m"] = float(np.sqrt(dx**2 + dy**2 + dz**2).sum(skipna=True))
-        out["alt_mean_m"] = float(d["position_z"].mean())
-        out["climb_m"] = float(dz[dz > 0].sum())
-        out["descent_m"] = float(-dz[dz < 0].sum())
+        z = d["position_z"].to_numpy(float)
+        dz = np.diff(z)
+        out["distance_3d_m"] = float(np.nansum(np.sqrt(step_2d**2 + dz**2)))
+        out["alt_mean_m"] = float(np.nanmean(z))
+        out["climb_m"] = float(np.nansum(dz[dz > 0]))
+        out["descent_m"] = float(-np.nansum(dz[dz < 0]))
     else:
         out["distance_3d_m"] = out["distance_2d_m"]
 

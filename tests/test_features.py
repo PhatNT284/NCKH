@@ -14,69 +14,122 @@ import pytest
 import yaml
 
 from src.features import (
-    VALID_ALTITUDES, VALID_PAYLOADS, apply_exclusions, trajectory_features,
-    wind_features,
+    R_EARTH_M, VALID_ALTITUDES, VALID_PAYLOADS, apply_exclusions,
+    haversine_steps_m, trajectory_features, wind_features,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
+# Goc toa do dung trong test: khu vuc bay thuc te cua bo du lieu (Pittsburgh).
+LON0, LAT0 = -79.782396, 40.458047
+
+# Mot do vi do theo cong thuc haversine, tinh ra met.
+M_PER_DEG_LAT = np.deg2rad(1.0) * R_EARTH_M          # ~111 195 m
+
+
+def deg_lon_for_metres(metres: float, lat_deg: float = LAT0) -> float:
+    """Doi mot khoang cach dong-tay tu met sang do kinh, tai vi do cho truoc."""
+    return metres / (M_PER_DEG_LAT * np.cos(np.deg2rad(lat_deg)))
+
+
+def deg_lat_for_metres(metres: float) -> float:
+    """Doi mot khoang cach bac-nam tu met sang do vi."""
+    return metres / M_PER_DEG_LAT
+
+
+class TestHaversineSteps:
+    """
+    Kiem phep doi do -> met.
+
+    Day la cho de sai nhat: position_x/y o don vi DO, khong phai met. Phien ban
+    dau cua module cong thang hieu so theo do va cho ket qua sai ~5 bac do lon
+    ma chuong trinh van chay binh thuong.
+    """
+
+    def test_one_degree_of_latitude(self):
+        # Mot do vi do = ban kinh Trai Dat nhan mot radian chia 180
+        steps = haversine_steps_m(np.array([0.0, 0.0]), np.array([0.0, 1.0]))
+        assert steps[0] == pytest.approx(M_PER_DEG_LAT, rel=1e-9)
+
+    def test_longitude_shrinks_with_latitude(self):
+        # Cung mot do kinh, o vi do 60 do chi dai bang mot nua o xich dao
+        at_equator = haversine_steps_m(np.array([0.0, 1.0]), np.array([0.0, 0.0]))[0]
+        at_60 = haversine_steps_m(np.array([0.0, 1.0]), np.array([60.0, 60.0]))[0]
+        assert at_60 / at_equator == pytest.approx(0.5, rel=1e-3)
+
+    def test_known_metre_distance(self):
+        # 100 m ve phia bac phai quay lai dung 100 m
+        lat1 = LAT0 + deg_lat_for_metres(100.0)
+        steps = haversine_steps_m(np.array([LON0, LON0]), np.array([LAT0, lat1]))
+        assert steps[0] == pytest.approx(100.0, rel=1e-6)
+
+    def test_zero_movement(self):
+        steps = haversine_steps_m(np.array([LON0] * 5), np.array([LAT0] * 5))
+        assert np.allclose(steps, 0.0)
+
+    def test_too_few_points(self):
+        assert haversine_steps_m(np.array([LON0]), np.array([LAT0])).size == 0
+
+    def test_not_naive_degree_subtraction(self):
+        # Phep tru tho thien theo do se ra ~0.0009; phai ra ~100 m
+        lat1 = LAT0 + deg_lat_for_metres(100.0)
+        naive = abs(lat1 - LAT0)
+        real = haversine_steps_m(np.array([LON0, LON0]), np.array([LAT0, lat1]))[0]
+        assert naive < 0.01
+        assert real > 99.0
+
 
 class TestTrajectoryFeatures:
-    def test_straight_line_2d(self):
-        # Di thang 100 m doc truc x
-        df = pd.DataFrame({
-            "time": np.arange(11, dtype=float),
-            "position_x": np.linspace(0, 100, 11),
-            "position_y": np.zeros(11),
-            "position_z": np.zeros(11),
+    @staticmethod
+    def _track(east_m, north_m, up_m):
+        """Dung mot duong bay tu cac do dich chuyen theo met."""
+        east_m, north_m, up_m = map(np.asarray, (east_m, north_m, up_m))
+        return pd.DataFrame({
+            "time": np.arange(len(east_m), dtype=float),
+            "position_x": LON0 + np.array([deg_lon_for_metres(m) for m in east_m]),
+            "position_y": LAT0 + np.array([deg_lat_for_metres(m) for m in north_m]),
+            "position_z": 269.0 + up_m,
         })
+
+    def test_straight_line_2d(self):
+        df = self._track([0, 50, 100], [0, 0, 0], [0, 0, 0])
         f = trajectory_features(df)
-        assert f["distance_2d_m"] == pytest.approx(100.0)
-        assert f["distance_3d_m"] == pytest.approx(100.0)
+        assert f["distance_2d_m"] == pytest.approx(100.0, rel=1e-4)
+        assert f["distance_3d_m"] == pytest.approx(100.0, rel=1e-4)
         assert f["climb_m"] == pytest.approx(0.0)
 
     def test_diagonal_uses_pythagoras(self):
-        # 3-4-5: di 30 m theo x va 40 m theo y -> 50 m
-        df = pd.DataFrame({
-            "time": [0.0, 1.0],
-            "position_x": [0.0, 30.0],
-            "position_y": [0.0, 40.0],
-            "position_z": [0.0, 0.0],
-        })
-        assert trajectory_features(df)["distance_2d_m"] == pytest.approx(50.0)
+        # 3-4-5: 30 m dong va 40 m bac -> 50 m
+        df = self._track([0, 30], [0, 40], [0, 0])
+        assert trajectory_features(df)["distance_2d_m"] == pytest.approx(50.0, rel=1e-4)
 
     def test_3d_longer_than_2d_when_climbing(self):
-        df = pd.DataFrame({
-            "time": [0.0, 1.0],
-            "position_x": [0.0, 30.0],
-            "position_y": [0.0, 40.0],
-            "position_z": [0.0, 120.0],
-        })
+        # 5-12-13: ngang 50 m, len 120 m -> 130 m
+        df = self._track([0, 30], [0, 40], [0, 120])
         f = trajectory_features(df)
-        assert f["distance_2d_m"] == pytest.approx(50.0)
-        assert f["distance_3d_m"] == pytest.approx(130.0)   # 5-12-13
+        assert f["distance_2d_m"] == pytest.approx(50.0, rel=1e-4)
+        assert f["distance_3d_m"] == pytest.approx(130.0, rel=1e-4)
 
     def test_climb_and_descent_separated(self):
-        # Len 50 m roi xuong 30 m
-        df = pd.DataFrame({
-            "time": [0.0, 1.0, 2.0],
-            "position_x": [0.0, 0.0, 0.0],
-            "position_y": [0.0, 0.0, 0.0],
-            "position_z": [0.0, 50.0, 20.0],
-        })
+        df = self._track([0, 0, 0], [0, 0, 0], [0, 50, 20])
         f = trajectory_features(df)
         assert f["climb_m"] == pytest.approx(50.0)
         assert f["descent_m"] == pytest.approx(30.0)
 
     def test_out_and_back_counts_both_legs(self):
         # Di 100 m roi quay ve -> tong duong di 200 m, khong phai 0
-        df = pd.DataFrame({
-            "time": [0.0, 1.0, 2.0],
-            "position_x": [0.0, 100.0, 0.0],
-            "position_y": [0.0, 0.0, 0.0],
-            "position_z": [0.0, 0.0, 0.0],
-        })
-        assert trajectory_features(df)["distance_2d_m"] == pytest.approx(200.0)
+        df = self._track([0, 100, 0], [0, 0, 0], [0, 0, 0])
+        assert trajectory_features(df)["distance_2d_m"] == pytest.approx(200.0, rel=1e-4)
+
+    def test_altitude_is_in_metres_not_degrees(self):
+        # position_z o don vi MET du Bang 1 bai bao ghi la do
+        df = self._track([0, 0], [0, 0], [0, 25])
+        assert trajectory_features(df)["climb_m"] == pytest.approx(25.0)
+
+    def test_realistic_route_magnitude(self):
+        # Tuyen R1 thuc te: di-ve khoang 472 m
+        df = self._track([0, 118, 236, 118, 0], [0, 0, 0, 0, 0], [0, 25, 25, 25, 0])
+        assert trajectory_features(df)["distance_2d_m"] == pytest.approx(472.0, rel=1e-3)
 
     def test_missing_columns_returns_nan(self):
         f = trajectory_features(pd.DataFrame({"time": [0.0, 1.0]}))

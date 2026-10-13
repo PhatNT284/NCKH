@@ -72,8 +72,11 @@ def iter_flights(cfg: dict | None = None, chunksize: int = 500_000):
     rename = {v: k for k, v in colmap.items()}
     flight_col = colmap["flight"]
 
+    # Cot `altitude` trong flights.csv lan ca kieu chu va so, gay DtypeWarning.
+    # Doc no nhu chuoi cho nhat quan; tham so nhiem vu lay tu parameters.csv
+    # chu khong lay tu day, nen khong anh huong gi.
     carry: pd.DataFrame | None = None
-    for chunk in pd.read_csv(path, chunksize=chunksize):
+    for chunk in pd.read_csv(path, chunksize=chunksize, dtype={"altitude": "string"}):
         chunk = chunk.rename(columns={k: v for k, v in rename.items() if k in chunk.columns})
         if carry is not None:
             chunk = pd.concat([carry, chunk], ignore_index=True)
