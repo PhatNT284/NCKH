@@ -48,7 +48,7 @@ cầu gì, cài đặt thế nào, kết quả riêng, điểm mạnh yếu.
 | D2 Ridge | `../cach_lam/D2_ridge.md` | D2-a, D2-b | Xong — **được chọn** |
 | D3 Random Forest | `../cach_lam/D3_random_forest.md` | D3-a, D3-b | Xong |
 | D4 Gradient boosting | *(xem `../cach_lam/README.md`)* | — | Chưa — bị chặn |
-| D5 Mô hình vật lý | `../cach_lam/D5_mo_hinh_vat_ly.md` | — | **Đang làm** — tuần 6 |
+| D5 Mô hình vật lý | `../cach_lam/D5_mo_hinh_vat_ly.md` | — | **Xong** — khả thi một phần |
 
 Bảy biến thể, vì D2 và D3 mỗi cái chạy hai phiên bản đặc trưng (mục 3).
 
@@ -599,8 +599,9 @@ một con số duy nhất cho mọi cự ly là quá lạc quan.
 |---|---|
 | ~~Sai số theo nhóm~~ | **Xong** — mục 7b |
 | ~~Hình vẽ~~ | **Xong** — mục 7d, 5 hình |
-| Kiểm tương thích D5 Gong | §3.2, việc của tuần 6 |
+| ~~Kiểm tương thích D5 Gong~~ | **Xong** — `../cach_lam/D5_mo_hinh_vat_ly.md`, khả thi một phần (η xác thực 3,4%; thiếu P_bl/P_par vì DJI không công bố độ đặc cánh) |
 | Báo thầy về hai phiên bản D2 | Báo cáo, không phải xin phép. Kèm số 0,657 và 1,073 |
 
-Và nhớ: D2 chỉ được coi là chính thức sau khi **D1 nghiệm thu xong** — hiện còn
-chờ từ điển biến và chữ ký kiểm chéo của Duy.
+**Cổng chặn đã mở:** sản phẩm D1 nghiệm thu ngày 14/10/2026 (từ điển biến xong,
+Duy kiểm chéo xong). Sản phẩm D2 vì vậy **chính thức** — đạt 4/4 tiêu chí Mục 12.1.
+Việc còn lại duy nhất là báo thầy quyết định hai phiên bản D2 (OI-4).
