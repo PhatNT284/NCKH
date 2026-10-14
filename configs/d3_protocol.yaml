@@ -152,12 +152,23 @@ energy_required:
     mo hinh da chot. Doi mo hinh la doi san pham D2, phai nghiem thu lai.
 
   measured_error:
+    # NHAT QUAN: moi con so duoi day tinh tu PHAN DU OUT-OF-FOLD GOP
+    # (reports/d2_oof_residuals.csv, cot D2_ridge_preflight, 192 dong).
+    # Dung nguon nay vi nguong FLY o muc 5 can mot phan vi, ma phan vi chi
+    # tinh duoc tren phan du tung chuyen, khong tinh duoc tu trung binh fold.
+    basis: "phan du out-of-fold gop, 192 chuyen"
     MAE_Wh: 0.6554
     RMSE_Wh: 0.8386
-    bias_Wh: 0.0099
-    ci95_MAE_Wh: [0.5818, 0.7285]
+    bias_Wh: 0.0105
     p95_abs_residual_Wh: 1.4687      # dung cho nguong FLY, xem muc 5
-    source: "reports/d2_bootstrap_mae_ci.csv, reports/d2_oof_residuals.csv"
+    ci95_MAE_Wh: [0.5818, 0.7285]    # bootstrap cap chuyen bay, 2000 lan
+    source: "reports/d2_oof_residuals.csv, reports/d2_bootstrap_mae_ci.csv"
+    note_on_second_source: >
+      reports/d2_e2a_flight_level_cv.csv bao TRUNG BINH QUA CAC FOLD, nen lech
+      o chu so thap phan thu ba: MAE 0.6570, RMSE 0.8402, bias 0.0099. Hai cach
+      tinh deu dung, chi khac don vi lay trung binh (chuyen bay vs fold). Bai
+      bao dung so cua E2a cho bang xep hang; D3 dung so gop vi can phan vi.
+      KHONG duoc tron hai nguon trong cung mot bang.
 
   validity_envelope:
     distance_2d_m: [420, 610]

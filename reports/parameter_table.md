@@ -97,8 +97,17 @@ tình huống mùa đông).
 
 | Dải nhiệt độ | Dùng gì | Căn cứ |
 |---|---|---|
-| 4,5 – 18,4 °C | `0,8814 + 0,0091·T − 0,0001·T²` | trong dải hiệu chỉnh |
-| Ngoài dải đó | **κ = 1** | cận bảo thủ, §5.4 |
+| 4,5 – 18,4 °C | `min(1; 0,8814 + 0,0091·T − 0,0001·T²)` | trong dải hiệu chỉnh |
+| **Dưới 4,5 °C** | **0,9203** — giữ ở giá trị biên lạnh | §5.4 cấm ngoại suy. Quyết định B3 |
+| **Trên 18,4 °C** | **1,000** — chặn trên | xem lý do ngay dưới |
+
+**Vì sao phía lạnh không cho về 1 (sửa ngày 14/10/2026, quyết định B3):**
+quy tắc cũ cho κ = 1 với mọi nhiệt độ ngoài dải. Ở phía nóng thì đúng, ở phía
+lạnh thì sai: tại 4,4 °C nó nhảy từ 0,920 lên 1,000, tức càng lạnh càng giả
+định pin càng khoẻ. Pin LiPo lạnh thì tụt dung lượng, nên quy tắc cũ làm
+`E_available` bị tính thừa → biên dự trữ ảo → cho bay chuyến không đủ pin.
+Giữ ở giá trị biên 0,9203 thì vẫn không ngoại suy, vẫn bảo thủ, và liên tục.
+Chi tiết: `configs/d3_protocol.yaml` mục `available_energy.kappa_temperature`.
 
 **Vì sao phải chặn trên bằng 1:** đa thức gốc trả về giá trị **lớn hơn 1** trong
 khoảng xấp xỉ 15,8 – 75,2 °C, đạt 1,089 tại 45,5 °C — tức khẳng định pin chứa
