@@ -3,10 +3,6 @@ data/raw/
 data/processed/
 *.csv.gz
 
-# Ket qua chay — chi commit bang/hinh cuoi cung duoc chon
-reports/figures/*.png
-!reports/figures/.gitkeep
-
 # Python
 .venv/
 __pycache__/

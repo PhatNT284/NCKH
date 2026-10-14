@@ -18,7 +18,7 @@ meta:
   frozen_on: "2026-10-13"
   owner: "Phat (WP2)"
   cross_checker: "Duy"
-  cross_check_status: "PENDING"      # -> "CONFIRMED" khi Duy da soat xong
+  cross_check_status: "CONFIRMED"
   work_package: "WP2"
   deliverable: "D2"
 

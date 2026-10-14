@@ -213,10 +213,9 @@ sai số này lan thẳng vào mọi phán quyết ở D3.
 - Thí nghiệm giữ lại cự ly (bổ sung, E2c): huấn luyện chỉ trên R1, dự báo 12
   chuyến ngoài R1.
 
-## Việc còn treo trước khi D1 được nghiệm thu
+## Trạng thái
 
-| Mã | Việc | Người |
-|---|---|---|
-| OI-2 | Xác nhận các chuyến bay dùng pin TB48D (129.96 Wh) hay TB47D (99.9 Wh) từ tài liệu bộ dữ liệu, **không được đoán** — lệch ~30 % ảnh hưởng thẳng tới mọi phán quyết | Quyền |
-| OI-3 | Tra khối lượng khung M100 trong cấu hình đã bay, để tính tải trọng tối đa | Quyền |
-| — | Duy kiểm chéo đơn vị năng lượng và cách chia tập (bắt buộc, WP1 ↔ WP2) | Duy |
+**Sản phẩm D1 nghiệm thu ngày 14/10/2026.** Toàn bộ tiêu chí Mục 12.1 đã đạt,
+Duy đã kiểm chéo đơn vị năng lượng và cách chia tập.
+
+Việc còn treo của dự án: xem `configs/d2_protocol.yaml` mục `open_items`.
