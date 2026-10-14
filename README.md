@@ -20,12 +20,18 @@ Mọi `Eq (n)` trỏ tới `Proposal.docx` của nhóm.
 |---|---|---|---|---|
 | WP1 | Dữ liệu và dựng lại năng lượng | Phát | Duy | 1–3 |
 | WP2 | So sánh mô hình năng lượng | Phát | Duy | 4–6 |
-| WP3 | Ngân sách pin và luật quyết định | Quyền | Phát | 6–7 |
-| WP4 | Kịch bản và độ bền vững | Quyền | Duy | 8–10 |
-| WP5 | Bản ghi, tích hợp và bài viết | Phát | Quyền | 11–12 |
+| WP3 | Ngân sách pin và luật quyết định | Phát | Duy | 6–7 |
+| WP4 | Kịch bản và độ bền vững | Phát | Duy | 8–10 |
+| WP5 | Bản ghi, tích hợp và bài viết | Phát | Duy | 11–12 |
 
 Nguyên tắc bắt buộc của thầy: **người làm một phần không được là người duy nhất
 kiểm kết quả phần đó.**
+
+> **Cập nhật 14/10/2026 — thay đổi phân công.** Quyền chuyển sang một project
+> khác và không còn tham gia đề tài. Phát nhận WP3, WP4 và WP5; **Duy là người
+> kiểm chéo cho toàn bộ phần còn lại**. Thay đổi này giữ nguyên nguyên tắc trên:
+> không gói nào có người làm tự kiểm. Duy cần đọc `reports/parameter_table.md`
+> trước tuần 7 để kịp kiểm chéo sản phẩm D3.
 
 ---
 
@@ -117,9 +123,9 @@ Nhóm **không đổi ký hiệu** của thầy, để mọi thứ đối chiế
 |---|---|---|---|
 | D1 | Rà soát bộ dữ liệu | Phát | **Nghiệm thu 14/10/2026** |
 | D2 | Benchmark dự báo năng lượng | Phát | **Nghiệm thu — đạt 4/4 tiêu chí** |
-| D3 | Bộ máy quyết định | Quyền | Chưa bắt đầu — đọc `docs/san_pham/D2_benchmark_nang_luong.md` mục 8 trước |
-| D4 | Benchmark kịch bản | Quyền | Chưa bắt đầu |
-| D5 | Gói độ bền vững | Cả nhóm | Chưa bắt đầu |
+| D3 | Bộ máy quyết định | Phát | **Đang làm** — tuần 7. Đọc `docs/san_pham/D2_benchmark_nang_luong.md` mục 8 trước |
+| D4 | Benchmark kịch bản | Phát | Chưa bắt đầu — tuần 8–9 |
+| D5 | Gói độ bền vững | Phát | Chưa bắt đầu — tuần 10–11 |
 
 Tiến độ theo tab 11 của `NCKH.xlsx`: **xong tuần 1–6**. Sản phẩm tuần 6:
 `docs/cach_lam/D5_mo_hinh_vat_ly.md`, `reports/model_selection_report.md`,
@@ -133,7 +139,9 @@ mô hình năng lượng cho bộ máy quyết định.
 ## Quy ước làm việc
 
 1. Mọi hình trong bài sinh từ script trong `src/` hoặc `scripts/`, không vẽ tay.
-2. Mọi bảng truy ngược được về một file trong `reports/`.
+2. Mọi bảng truy ngược được về một file trong `reports/`. Số **phụ thuộc phần
+   cứng** (`inference_ms`) chỉ sống trong CSV; tài liệu chỉ được nói về tỉ lệ
+   giữa các mô hình, không chép con số cụ thể.
 3. Tập đặc trưng và thước đo đã **đóng băng** trong `configs/d2_protocol.yaml`.
    Đổi thì phải ghi lý do vào mục `change_log` của chính file đó và chạy lại
    toàn bộ thí nghiệm bị ảnh hưởng.

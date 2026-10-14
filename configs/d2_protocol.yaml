@@ -14,7 +14,7 @@
 # =============================================================================
 
 meta:
-  version: "1.3.0"
+  version: "1.4.0"
   frozen_on: "2026-10-13"
   owner: "Phat (WP2)"
   cross_checker: "Duy"
@@ -352,8 +352,17 @@ open_items:
       Draft Bao.docx dang mau thuan voi file thay: con dung E_nominal = 349.2 Wh
       (pin TB55 cua Matrice 210), diem bi chan S = min(1, ...), va "do tin cay da
       hieu chuan" — ca ba deu da bi thay loai o §5.6 va §5.8. Can dong bo lai.
-    owner: "Ca nhom"
+    owner: "Phat"
     blocks: "D8"
+  - id: "OI-6"
+    item: >
+      THAY DOI PHAN CONG 14/10/2026: Quyen chuyen sang project khac, khong con
+      tham gia de tai. Phat nhan WP3 (san pham D3), WP4 (san pham D4) va WP5.
+      Vai kiem cheo cho toan bo phan con lai chuyen sang Duy, de giu nguyen tac
+      Muc 10 (nguoi lam khong duoc la nguoi duy nhat kiem). Can Duy xac nhan va
+      doc reports/parameter_table.md truoc tuan 7.
+    owner: "Phat"
+    blocks: null
 
 # -----------------------------------------------------------------------------
 # 10. NHAT KY THAY DOI
@@ -425,3 +434,19 @@ change_log:
          1245 g. Dai hop le la 0-500 g theo do phu du lieu.
          Chi tiet: reports/parameter_table.md muc 3.1"
       - "Them reports/model_selection_report.md va reports/parameter_table.md"
+
+  - version: "1.4.0"
+    date: "2026-10-14"
+    author: "Phat"
+    changes: >
+      Cap nhat phan cong sau khi Quyen roi nhom. KHONG doi dinh nghia muc tieu,
+      tap dac trung, cach chia tap, danh sach mo hinh hay bat ky ket qua nao —
+      khong phai chay lai thi nghiem nao.
+    details:
+      - "Mo OI-6: Phat nhan WP3/WP4/WP5; Duy la nguoi kiem cheo cho toan bo phan
+         con lai. Giu nguyen tac Muc 10."
+      - "OI-5 doi owner tu 'Ca nhom' sang 'Phat'."
+      - "Quy uoc moi (README quy uoc 2): so phu thuoc phan cung (inference_ms)
+         chi song trong reports/*.csv, tai lieu chi noi ti le. Ly do: bang 7f va
+         model_selection_report.md dang mang so do tren may khac, lech ~2 lan so
+         voi d2_e2a_flight_level_cv.csv."
