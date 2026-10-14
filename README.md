@@ -75,6 +75,15 @@ pytest
 
 ---
 
+## Tìm sản phẩm bàn giao ở đâu
+
+**`reports/deliverables.md`** — bảng tra từng mục D1–D9 của Mục 12 ứng với file
+nào trong repo, kèm trạng thái nghiệm thu theo Mục 12.1.
+
+Mở file đó trước khi tìm bất cứ output nào.
+
+---
+
 ## ĐỌC TRƯỚC: hai hệ đánh số cùng dùng ký hiệu D
 
 Thầy dùng **hai hệ đặt tên riêng biệt, trùng ký hiệu**. Mục 2.4 của file thầy nói

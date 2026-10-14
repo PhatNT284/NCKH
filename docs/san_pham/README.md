@@ -1,4 +1,10 @@
-# Sản phẩm bàn giao — theo Mục 12
+# Giải thích các sản phẩm bàn giao
+
+> **Đây KHÔNG phải sản phẩm bàn giao.** Sản phẩm thật nằm ở `reports/`, `src/`,
+> `configs/` và `data/` — xem bảng tra **`reports/deliverables.md`**.
+>
+> Thư mục này là bài giải thích cho người trong nhóm: đã làm gì, làm thế nào, vì
+> sao. Thầy không yêu cầu nó.
 
 Thư mục này bám **Mục 12** của file thầy (*Expected deliverables*) và **Mục 12.1**
 (bảng tiêu chí nghiệm thu), cộng các mục liên quan: Mục 2.4 (cổng chặn), Mục 10

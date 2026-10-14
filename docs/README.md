@@ -4,6 +4,10 @@ Thư mục này giải thích **đã làm gì, làm thế nào, và vì sao**. V
 nhóm chưa theo dõi quá trình, nên không giả định bạn đã biết gì về code hay
 thống kê.
 
+> **Lưu ý:** thư mục `docs/` là bài giải thích, **không phải sản phẩm bàn giao**.
+> Sản phẩm thật ở `reports/`, `src/`, `configs/`, `data/` — bảng tra đầy đủ ở
+> `../reports/deliverables.md`.
+
 ## Hai thư mục, bám hai mục khác nhau của thầy
 
 Thầy dùng **hai hệ đánh số riêng biệt, trùng ký hiệu D**. Mục 2.4 nói rõ: *"Các mã
