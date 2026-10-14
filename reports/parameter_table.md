@@ -161,6 +161,13 @@ liệt kê khối lượng từng thành phần:
 | Máy tính trên khoang, cảm biến nhỏ, dây | 1.113 g |
 | **Tổng, chưa tải** | **3.680 g** |
 
+**Nguồn:** Rodrigues et al., *Scientific Data* 8, 155 (2021), mục Methods —
+*"The mass of the airframe is 1831 g… the battery 600 g… the anemometer and pole
+136 g… the onboard computer with small sensors and wiring 1113 g… totaling 3680 g"*
+và *"the total takeoff masses were 3680 g (no payload), 3930 g (with the 250-g
+payload) and 4180 g (with the 500-g payload)"*.
+DOI [10.1038/s41597-021-00930-x](https://doi.org/10.1038/s41597-021-00930-x)
+
 Đối chiếu với giới hạn DJI:
 
 | Cấu hình | Khối lượng cất cánh | So với MTOW 3.600 g |

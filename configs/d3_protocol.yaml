@@ -16,7 +16,7 @@
 # =============================================================================
 
 meta:
-  version: "1.0.0"
+  version: "1.1.0"
   frozen_on: "2026-10-14"
   owner: "Phat (WP3)"
   cross_checker: "Duy"
@@ -180,6 +180,47 @@ energy_required:
     enforcement: "xem muc 4.2 — day KHONG phai luat cung cua nha san xuat"
 
 # -----------------------------------------------------------------------------
+# 3b. HO SO MAY BAY — phai chon truoc khi ap luat cung
+# -----------------------------------------------------------------------------
+# May bay trong bo du lieu CMU KHONG phai M100 nguyen ban: no mang them 1249 g
+# thiet bi do (cam bien gio 136 g + may tinh tren khoang 1113 g). Tong chua tai
+# da la 3680 g, VUOT MTOW 3600 g cua DJI.
+#
+# He qua: ap thang luat HR-3 thi CA 192 CHUYEN deu thanh NO_FLY, ke ca chuyen
+# khong tai -> benchmark vo nghia. Nhung bo luat HR-3 di thi mat mot rang buoc
+# an toan that. Nen phai tach HAI HO SO.
+aircraft_profiles:
+  source_ref: "reports/parameter_table.md muc 3.1"
+  decision_ref: "B6"
+
+  M100_stock:
+    description: "M100 nguyen ban — ho so VAN HANH ma he thong D3 mo phong"
+    airframe_mass_g: {TB47D: 2355, TB48D: 2431}
+    mtow_g: 3600
+    max_payload_g: {TB47D: 1245, TB48D: 1169}
+    mtow_rule: "VETO — vuot MTOW thi NO_FLY"
+    note: "Day la ho so mac dinh. Moi ket qua D3/D4 bao cao tren ho so nay."
+
+  CMU_instrumented:
+    description: "May bay thuc te trong bo du lieu — co thiet bi do"
+    airframe_mass_g: 3680
+    instrumentation_mass_g: 1249
+    mtow_g: 3600
+    mtow_rule: "KNOWN_EXCEEDED — ghi nhan, KHONG veto"
+    rationale: >
+      Theo khuyen nghi reports/parameter_table.md muc 3.1: ghi MTOW vao bang
+      tham so nhu "rang buoc da biet bi vuot", neu trong phan han che cua bai,
+      KHONG dung lam luat chan trong benchmark. Neu veto thi 192/192 chuyen
+      NO_FLY va khong con gi de do.
+    payload_rule_instead: >
+      Thay vi MTOW, dung dai do phu du lieu 0-500 g (luat PD-2). Ngoai dai do
+      la ngoai suy, phai danh dau.
+    must_state_in_paper: >
+      TOAN BO 192 chuyen vuot MTOW nha san xuat cong bo (3680-4180 g so voi
+      3600 g). Bai Rodrigues khong nhac toi gioi han nay. Phai neu trong phan
+      han che.
+
+# -----------------------------------------------------------------------------
 # 4. LOP LUAT CUNG (khoi d)
 # -----------------------------------------------------------------------------
 hard_rules:
@@ -189,6 +230,15 @@ hard_rules:
     quyet. Nguyen van §4.6: "no score, no model output and no human approval
     may convert a hard-rule violation into FLY."
   veto: true
+  severity:
+    manufacturer: "VETO — vi pham thi NO_FLY, khong gi lat duoc"
+    project_derived: "DOWNGRADE — khong duoc tra FLY, cao nhat la CONDITIONAL
+                      kem nhan EXTRAPOLATED"
+    rationale: >
+      Hai loai co nguon goc khac nhau nen muc do khac nhau. Luat nha san xuat la
+      gioi han vat ly/chung nhan -> chan tuyet doi. Gioi han nhom rut ra tu thi
+      nghiem la gioi han HIEU LUC CUA MO HINH -> van bay duoc, nhung he thong
+      phai noi ro no dang ngoai suy va can nguoi duyet.
   no_score_aggregation: >
     §5.6 loai bo cach cham diem gop. KHONG duoc tron vi pham luat cung vao mot
     diem so roi de bien du tru cao bu lai.
@@ -197,7 +247,9 @@ hard_rules:
   manufacturer:
     - {id: "HR-1", check: "wind_forecast_ms <= 10.0",        unit: "m/s", source: "DJI"}
     - {id: "HR-2", check: "-10 <= ambient_temp_c <= 40",     unit: "C",   source: "DJI"}
-    - {id: "HR-3", check: "takeoff_mass_g <= 3600",          unit: "g",   source: "DJI"}
+    - {id: "HR-3", check: "takeoff_mass_g <= mtow_g",        unit: "g",   source: "DJI",
+       depends_on_profile: true,
+       note: "VETO voi M100_stock; KNOWN_EXCEEDED voi CMU_instrumented — xem muc 3b"}
     - {id: "HR-4", check: "speed_commanded_ms <= 17",        unit: "m/s", source: "DJI (che do GPS)"}
 
   payload_rule:
@@ -221,6 +273,13 @@ hard_rules:
         khong phai gioi han nha san xuat. Hai loai co nguon goc khac nhau va
         thay se hoi "nguong nay o dau ra".
       labelling_ref: "§6/E3: 'clearly label any extrapolated ranges'"
+    - id: "PD-2"
+      check: "0 <= payload_g <= 500"
+      source: "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+      on_violation: "khong duoc tra FLY; ha xuong CONDITIONAL kem nhan EXTRAPOLATED"
+      rationale: >
+        Thay cho luat MTOW o ho so CMU_instrumented. Bo du lieu chi phu 0-500 g;
+        tren 500 g la ngoai suy, mo hinh nang luong khong co du lieu do lung.
 
   # 4.3 — SoC toi thieu
   minimum_soc:
@@ -447,3 +506,28 @@ change_log:
         note: >
           §4.6 them mot tu ban dau nhom chua tinh: STALE (dau vao het han).
           Dan toi muc 6 workflow_state.
+
+
+  - version: "1.1.0"
+    date: "2026-10-14"
+    author: "Phat"
+    changes: >
+      Them muc 3b (ho so may bay) va luat PD-2. KHONG doi cong thuc, nguong hay
+      ket qua nao — chi lam ro cach ap HR-3, truoc do chua dinh nghia du.
+    decisions:
+      - id: "B6"
+        question: >
+          HR-3 (khoi luong cat canh <= 3600 g) ap the nao, khi may bay trong bo
+          du lieu nang 3680-4180 g va vuot MTOW o MOI cau hinh?
+        resolution: >
+          Tach hai ho so. M100_stock (khung 2355 g) la ho so VAN HANH, HR-3 veto
+          binh thuong. CMU_instrumented (khung 3680 g) dung khi chay lai 192
+          chuyen cua bo du lieu: HR-3 bao KNOWN_EXCEEDED, khong veto; thay bang
+          luat PD-2 (tai 0-500 g theo do phu du lieu).
+        basis: >
+          reports/parameter_table.md muc 3.1 da khuyen dung dung cach nay.
+          Veto thi 192/192 chuyen NO_FLY, khong con gi de do. Bo HR-3 di thi mat
+          mot rang buoc an toan that. Tach ho so giu duoc ca hai.
+        must_state_in_paper: >
+          Toan bo 192 chuyen vuot MTOW nha san xuat. Day la han che cua bo du
+          lieu, phai neu ro, khong duoc im lang.
