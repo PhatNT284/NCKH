@@ -1,0 +1,7 @@
+pin,tai_trong_g,eta_khop,du_bao_phut,cong_bo_phut,lech_pct,dung_de_khop
+TB47D,0,0.4449,22.0,22,0.0,True
+TB47D,500,0.4449,16.48,17,3.05,False
+TB47D,1000,0.4449,12.94,13,0.48,False
+TB48D,0,0.4565,28.0,28,0.0,True
+TB48D,500,0.4565,21.15,20,5.75,False
+TB48D,1000,0.4565,16.7,16,4.37,False

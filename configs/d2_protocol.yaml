@@ -14,7 +14,7 @@
 # =============================================================================
 
 meta:
-  version: "1.1.0"
+  version: "1.3.0"
   frozen_on: "2026-10-13"
   owner: "Phat (WP2)"
   cross_checker: "Duy"
@@ -222,6 +222,13 @@ models:
     required: false
     gate: "chi dua vao xep hang dinh luong sau khi qua bang kiem tuong thich M100"
     compatibility_checklist_ref: "§3.2"
+    checklist_status: >
+      DA LAM — ket qua: KHA THI MOT PHAN. Dung duoc cong suat cam ung va he so
+      hieu suat eta (khop tu thoi luong bay treo DJI cong bo, kiem cheo 4 tri so,
+      sai lech trung binh 3.4 %). KHONG dung duoc P_bl va P_par vi DJI khong cong
+      bo ti so dac, he so can canh quat va dien tich can than may bay.
+      => D5 KHONG vao xep hang dinh luong, bao cao nhu doi chung tai lieu.
+      Chi tiet: docs/cach_lam/D5_mo_hinh_vat_ly.md · ma: src/physics_m100.py
     rule: >
       Khong bia tham so. Thieu tham so co nguon tai lieu -> giu lam doi chung
       tai lieu va LOAI khoi xep hang dinh luong. Ban thich nghi phai dan nhan
@@ -334,17 +341,6 @@ prohibitions:
 # 9. VIEC CON TREO
 # -----------------------------------------------------------------------------
 open_items:
-  - id: "OI-2"
-    item: >
-      Xac nhan cac chuyen bay ghi lai dung pin TB48D (129.96 Wh) hay TB47D (99.9 Wh).
-      Proposal 4.4 yeu cau xac nhan tu tai lieu bo du lieu, KHONG duoc doan.
-      Lech ~30 % giua hai loai, anh huong thang toi moi phan quyet.
-    owner: "Quyen"
-    blocks: "D3"
-  - id: "OI-3"
-    item: "Khoi luong khung M100 trong cau hinh da bay, de tinh tai trong toi da"
-    owner: "Quyen"
-    blocks: "D3 (lop luat cung)"
   - id: "OI-4"
     item: >
       Bao cao thay ve quyet dinh hai bien the D2 (kem con so R^2 = 0.73).
@@ -398,3 +394,34 @@ change_log:
       - "Them nhat ky thi nghiem (§8 muc 6) — src/experiment_log.py, ghi vao
          reports/experiment_log.jsonl."
       - "Dong OI-1: giay phep bo du lieu da xac nhan la CC BY 4.0."
+
+  - version: "1.2.0"
+    date: "2026-10-14"
+    author: "Phat"
+    changes: >
+      Hoan tat bang kiem tuong thich D5 (§3.2). KHONG doi dinh nghia muc tieu,
+      tap dac trung, cach chia tap hay ket qua D0-D3 — khong phai chay lai thi
+      nghiem nao.
+    details:
+      - "D5: bang kiem 8 muc da dien. Ket luan kha thi mot phan, khong vao xep
+         hang dinh luong. Ma: src/physics_m100.py"
+      - "Dong OI-3: khoi luong may bay M100 = 2355 g (TB47D) / 2431 g (TB48D),
+         khoi luong cat canh toi da 3600 g => tai trong toi da 1245 g / 1169 g.
+         Nguon: trang ho tro chinh thuc DJI."
+
+  - version: "1.3.0"
+    date: "2026-10-14"
+    author: "Phat"
+    changes: >
+      Hoan tat bao cao chot mo hinh va bang tham so nang luong kha dung (tuan 6).
+      Dong OI-2. KHONG doi ket qua D0-D3.
+    details:
+      - "Dong OI-2: bai Rodrigues TU MAU THUAN ve loai pin. Methods>Airframe ghi
+         4500 mAh / 22 phut / pin 600 g (= TB47D); Methods>Safety ghi ten TB48D.
+         Nhom chot E_nominal = 99.9 Wh (TB47D) vi 3/4 bang chung va vi do la huong
+         bao thu. BAT BUOC chay do nhay voi 129.96 Wh o san pham D4."
+      - "PHAT HIEN: may bay trong bo du lieu nang 3680-4180 g, VUOT MTOW 3600 g
+         cua DJI o moi cau hinh. Luat cung ve tai trong KHONG duoc dung con so
+         1245 g. Dai hop le la 0-500 g theo do phu du lieu.
+         Chi tiet: reports/parameter_table.md muc 3.1"
+      - "Them reports/model_selection_report.md va reports/parameter_table.md"

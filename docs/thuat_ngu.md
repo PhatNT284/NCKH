@@ -1,6 +1,6 @@
 # Thuật ngữ
 
-Tra nhanh khi gặp từ lạ trong `D1_du_lieu.md` hoặc `D2_mo_hinh.md`.
+Tra nhanh khi gặp từ lạ trong `san_pham/D1_ra_soat_du_lieu.md` hoặc `san_pham/D2_benchmark_nang_luong.md`.
 
 ---
 
@@ -113,7 +113,7 @@ Nếu |bias| ≈ MAE thì mô hình sai lệch về **một phía duy nhất**.
 thực gần 0. Thầy khuyên dùng WAPE thay thế.
 
 **R²** — tỉ lệ biến thiên được giải thích. Từ 0 đến 1. Dùng ở mục 3 của
-`D2_mo_hinh.md` để kiểm xem thời lượng đo được có suy ra được từ kế hoạch không.
+`san_pham/D2_benchmark_nang_luong.md` để kiểm xem thời lượng đo được có suy ra được từ kế hoạch không.
 
 **Độ lệch chuẩn qua các fold** — kết quả dao động bao nhiêu giữa các lần chia. Nhỏ
 = ổn định, đáng tin.

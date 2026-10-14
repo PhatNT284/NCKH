@@ -106,14 +106,15 @@ Nhóm **không đổi ký hiệu** của thầy, để mọi thứ đối chiế
 
 | Mã | Tên | Người | Trạng thái |
 |---|---|---|---|
-| D1 | Rà soát bộ dữ liệu | Phát | 7/8 tiêu chí đạt — **chờ Duy kiểm chéo** |
-| D2 | Benchmark dự báo năng lượng | Phát | Đạt 4/4 tiêu chí — tạm thời tới khi D1 nghiệm thu |
-| D3 | Bộ máy quyết định | Quyền | Chưa bắt đầu — đọc `docs/D2_mo_hinh.md` mục 8 trước |
+| D1 | Rà soát bộ dữ liệu | Phát | **Nghiệm thu 14/10/2026** |
+| D2 | Benchmark dự báo năng lượng | Phát | **Nghiệm thu — đạt 4/4 tiêu chí** |
+| D3 | Bộ máy quyết định | Quyền | Chưa bắt đầu — đọc `docs/san_pham/D2_benchmark_nang_luong.md` mục 8 trước |
 | D4 | Benchmark kịch bản | Quyền | Chưa bắt đầu |
 | D5 | Gói độ bền vững | Cả nhóm | Chưa bắt đầu |
 
-Tiến độ theo tab 11 của `NCKH.xlsx`: xong tuần 1–5, tuần 6 chưa bắt đầu
-(kiểm tương thích mô hình vật lý D5, chốt mô hình năng lượng, bảng tham số).
+Tiến độ theo tab 11 của `NCKH.xlsx`: **xong tuần 1–6**. Sản phẩm tuần 6:
+`docs/cach_lam/D5_mo_hinh_vat_ly.md`, `reports/model_selection_report.md`,
+`reports/parameter_table.md`.
 
 **Cổng chặn:** chưa đạt D1 thì không báo điểm mô hình. Chưa đạt D2 thì không chốt
 mô hình năng lượng cho bộ máy quyết định.

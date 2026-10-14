@@ -1,68 +1,70 @@
 # Tài liệu giải thích — đọc cái này trước
 
-Thư mục này giải thích **đã làm gì, làm thế nào, và vì sao** cho từng sản phẩm
-bàn giao D1–D9. Viết cho người trong nhóm chưa theo dõi quá trình, nên không
-giả định bạn đã biết gì về code hay thống kê.
+Thư mục này giải thích **đã làm gì, làm thế nào, và vì sao**. Viết cho người trong
+nhóm chưa theo dõi quá trình, nên không giả định bạn đã biết gì về code hay
+thống kê.
 
-## Đọc theo thứ tự
+## Hai thư mục, bám hai mục khác nhau của thầy
 
-| File | Nội dung | Ai nên đọc |
+Thầy dùng **hai hệ đánh số riêng biệt, trùng ký hiệu D**. Mục 2.4 nói rõ: *"Các mã
+sản phẩm bàn giao là cột mốc dự án; các mã mô hình D0–D5 ở Mục 5 và 7 chỉ các
+thuật toán dự báo và là một hệ đặt tên riêng biệt."*
+
+Nên tài liệu cũng chia làm hai:
+
+| Thư mục | Bám mục nào của thầy | Nội dung |
 |---|---|---|
-| `D1_du_lieu.md` | Dựng lại năng lượng từ điện áp và dòng điện, lọc chuyến bay, các lỗi tìm thấy trong bộ dữ liệu | Tất cả. Duy bắt buộc đọc (kiểm chéo WP1) |
-| `D2_mo_hinh.md` | So sánh mô hình dự báo năng lượng, ý nghĩa từng con số | Tất cả. Quyền cần đọc phần cuối (ràng buộc cho D3) |
-| `thuat_ngu.md` | Giải nghĩa MAE, bias, cross-validation, rò rỉ dữ liệu... | Ai thấy mơ hồ ở hai file trên |
+| **`cach_lam/`** | §5.2, §5.3, §4.3, §8 | Từng **mô hình** dự báo năng lượng |
+| **`san_pham/`** | Mục 12, 12.1, 2.4, 10, 11 | Từng **sản phẩm bàn giao** |
 
-D3–D9 sẽ có file riêng khi làm tới.
+### Bảng đối chiếu hai hệ
 
-## Hai hệ đánh số cùng dùng ký hiệu D
-
-Thầy dùng hai hệ riêng biệt, trùng ký hiệu (Mục 2.4 của file thầy nói rõ điều này).
-
-| Mã | **Sản phẩm bàn giao** | **Mô hình** (§5.2) |
+| Mã | **Sản phẩm bàn giao** (Mục 12) | **Mô hình** (§5.2) |
 |---|---|---|
 | D0 | *(không có)* | Trung bình hằng |
 | D1 | Rà soát bộ dữ liệu | Hồi quy chỉ cự ly |
-| D2 | Benchmark dự báo năng lượng | Ridge |
+| D2 | Benchmark dự báo năng lượng | Ridge regression |
 | D3 | Bộ máy quyết định | Random Forest |
 | D4 | Benchmark kịch bản | Gradient boosting |
 | D5 | Gói độ bền vững | Mô hình vật lý Gong |
 
-Luôn viết **"sản phẩm D2"** hoặc **"mô hình D2"**, không viết "D2" trần.
-Chi tiết ở `README.md` ngoài gốc repo.
+**Chỗ dễ nhầm nhất:** "sản phẩm D2" là cuộc so sánh các mô hình; "mô hình D2" là
+Ridge. Câu *"sản phẩm D2 kết luận mô hình D2 thắng mô hình D3"* là đúng.
+
+Quy ước: luôn viết **"sản phẩm D2"** hoặc **"mô hình D2"**, không viết "D2" trần.
+Trong mã nguồn thì mô hình luôn mang tên đầy đủ (`D2_ridge_preflight`,
+`D3_rf_preflight`) nên không nhầm được.
+
+## Đọc gì trước
+
+| Bạn muốn | Đọc |
+|---|---|
+| Hiểu tổng thể đã làm gì | `san_pham/README.md` |
+| Hiểu một mô hình cụ thể | `cach_lam/README.md` rồi vào file tương ứng |
+| **Duy — kiểm chéo WP1** | `san_pham/D1_ra_soat_du_lieu.md` mục 8 và 9 |
+| **Quyền — trước khi làm sản phẩm D3** | `san_pham/D2_benchmark_nang_luong.md` mục 8 |
+| Gặp từ lạ | `thuat_ngu.md` |
 
 ## Quy ước tham chiếu
-
-Trong toàn bộ tài liệu và mã nguồn:
 
 - **§x.y** → mục trong `Delivery_UAV_Preflight_Feasibility_Proposal_updated.md`
   (file thầy hướng dẫn gửi sau khi nhận xét)
 - **Eq (n)** → công thức đánh số trong `Proposal.docx` (bản nhóm đã sửa)
 
-Mọi quyết định kỹ thuật trong dự án đều phải trỏ được về một trong hai nguồn
-trên. Nếu một quyết định không có chỗ dựa, nó phải được khai báo rõ là **bổ
-sung ngoài giao thức** — hiện có đúng một trường hợp như vậy, là thí nghiệm
-E2c, giải thích trong `D2_mo_hinh.md`.
-
-## Trạng thái hiện tại
-
-| Sản phẩm | Người | Trạng thái |
-|---|---|---|
-| D1 — Rà soát bộ dữ liệu | Phát | Gần xong. Còn từ điển biến và chữ ký kiểm chéo của Duy |
-| D2 — Benchmark dự báo năng lượng | Phát | Kết quả đã có. Còn sai số theo nhóm và hình vẽ |
-| D3 — Bộ máy quyết định | Quyền | Chưa bắt đầu. Đọc phần cuối `D2_mo_hinh.md` trước khi làm |
-| D4 — Benchmark kịch bản | Quyền | Chưa bắt đầu |
-| D5 — Gói độ bền vững | Cả nhóm | Chưa bắt đầu |
+Mọi quyết định kỹ thuật phải trỏ được về một trong hai nguồn trên. Nếu không có
+chỗ dựa, phải khai báo rõ là **bổ sung ngoài giao thức** — hiện có đúng một trường
+hợp, là thí nghiệm E2c.
 
 ## Chạy lại toàn bộ
 
 ```bash
 source .venv/bin/activate
 pytest                                              # 56 test
-python3 -m src.features --verify reports/flight_level_week3.csv   # D1
-python3 -m src.evaluation_energy                    # D2, khoảng 10–15 phút
-python3 -m src.subgroup_analysis                    # D2 sai số theo nhóm, vài giây
-python3 -m src.interpretability                     # D2/D3 diễn giải mô hình
-python3 -m src.bootstrap_ci                         # khoảng tin cậy, vài giây
-python3 -m src.figures                              # 5 hình cho bài
-python3 -m src.experiment_log                       # xem nhật ký các lần chạy
+python3 -m src.features --verify reports/flight_level_week3.csv
+python3 -m src.evaluation_energy                    # 10–15 phút
+python3 -m src.subgroup_analysis
+python3 -m src.interpretability
+python3 -m src.bootstrap_ci
+python3 -m src.figures
+python3 -m src.experiment_log
 ```

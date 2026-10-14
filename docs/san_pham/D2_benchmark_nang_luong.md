@@ -1,4 +1,8 @@
-# D2 — So sánh mô hình dự báo năng lượng
+# Sản phẩm D2 — Benchmark dự báo năng lượng
+
+> Tài liệu này về **sản phẩm bàn giao D2** — cuộc so sánh giữa các **mô hình
+> D0–D5** của §5.2. Hai hệ đánh số khác nhau, xem `README.md` ở gốc repo.
+> Mô tả từng mô hình riêng lẻ: thư mục `../cach_lam/`.
 
 **Người làm:** Phát (WP2) · **Người kiểm chéo:** Duy · **Tuần 4–6**
 
@@ -29,47 +33,27 @@ D2 phục vụ ba chỗ khác nhau trong dự án:
 
 ---
 
-## 2. Bảy mô hình, và vì sao chọn chúng
+## 2. Bảy mô hình được so sánh
 
-Danh sách lấy nguyên từ §5.2 của thầy. **Không thêm mô hình nào ngoài danh sách**
-— thầy cấm nhồi thêm thuật toán chỉ để bảng so sánh trông dày.
+Danh sách lấy nguyên từ §5.2. **Không thêm mô hình nào ngoài danh sách** — thầy
+cấm nhồi thêm thuật toán chỉ để bảng so sánh trông dày.
 
-### D0 — Trung bình hằng
+**Mô tả chi tiết từng mô hình nằm ở `../cach_lam/`**, mỗi mô hình một file: thầy yêu
+cầu gì, cài đặt thế nào, kết quả riêng, điểm mạnh yếu.
 
-Luôn đoán 21,3 Wh, bất kể chuyến bay nào.
+| Mô hình §5.2 | Tài liệu | Biến thể chạy | Trạng thái |
+|---|---|---|---|
+| D0 Trung bình hằng | `../cach_lam/D0_trung_binh_hang.md` | 1 | Xong |
+| D1 Chỉ cự ly | `../cach_lam/D1_chi_cu_ly.md` | OLS, Huber | Xong |
+| D2 Ridge | `../cach_lam/D2_ridge.md` | D2-a, D2-b | Xong — **được chọn** |
+| D3 Random Forest | `../cach_lam/D3_random_forest.md` | D3-a, D3-b | Xong |
+| D4 Gradient boosting | *(xem `../cach_lam/README.md`)* | — | Chưa — bị chặn |
+| D5 Mô hình vật lý | `../cach_lam/D5_mo_hinh_vat_ly.md` | — | **Đang làm** — tuần 6 |
 
-Nghe có vẻ vô nghĩa, nhưng nó là **mốc bắt buộc**. Mọi mô hình khác phải thắng
-được nó, nếu không thì phức tạp hoá vô ích. Thầy gọi là *sanity check*.
+Bảy biến thể, vì D2 và D3 mỗi cái chạy hai phiên bản đặc trưng (mục 3).
 
-### D1 — Chỉ cự ly
-
-Vẽ một đường thẳng qua dữ liệu: năng lượng ≈ a × cự ly + b.
-
-Đại diện cho cách nghĩ đơn giản nhất: *bay xa hơn thì tốn nhiều pin hơn*. Chạy hai
-biến thể như thầy yêu cầu — hồi quy thường (OLS) và hồi quy bền vững (Huber, ít
-bị các điểm bất thường kéo lệch).
-
-### D2 — Ridge regression
-
-Dùng cả 6 đặc trưng cùng lúc, vẫn là quan hệ tuyến tính nhưng nhiều chiều.
-
-"Ridge" là hồi quy tuyến tính có thêm **hình phạt** cho các hệ số quá lớn. Nó
-ngăn mô hình phản ứng thái quá với nhiễu. Thầy ưu tiên Ridge vì dữ liệu nhỏ —
-192 dòng, nếu dùng đa thức bậc cao thì mô hình sẽ học thuộc nhiễu thay vì học quy
-luật.
-
-### D3 — Random Forest
-
-Xây 300 cây quyết định, mỗi cây học từ một phần dữ liệu, rồi lấy trung bình.
-
-Khác D2 ở chỗ nó bắt được **quan hệ phi tuyến** và **tương tác** giữa các yếu tố —
-ví dụ "tăng tải ảnh hưởng mạnh hơn khi bay cao". Giới hạn độ sâu cây để chống học
-vẹt, theo yêu cầu §5.3.
-
-### D4, D5 — chưa làm
-
-D4 (gradient boosting) là tuỳ chọn, thầy cho phép bỏ. D5 (mô hình vật lý của
-Gong) phải qua bảng kiểm tương thích M100 ở §3.2 trước — việc của tuần 6.
+Tài liệu này chỉ giữ những gì **chỉ có nghĩa khi đặt các mô hình cạnh nhau**: bảng
+xếp hạng, khoảng tin cậy, giữ lại cấu hình, ngoại suy cự ly, và hình vẽ.
 
 ---
 
@@ -143,7 +127,7 @@ hình chỉ cần nhớ, không cần hiểu.
 
 ### Đường 3 — biến hậu nghiệm
 
-Đã nói ở `D1_du_lieu.md` mục 7. Hàm `assert_no_leakage` trong
+Đã nói ở `D1_ra_soat_du_lieu.md` mục 7. Hàm `assert_no_leakage` trong
 `evaluation_energy.py` chặn tự động, và có unit test kiểm luôn file cấu hình.
 
 ### Chuẩn hoá và tinh chỉnh

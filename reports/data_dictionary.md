@@ -146,7 +146,7 @@ Tên cột dễ gây hiểu nhầm. Giữ nguyên để khớp bảng tuần 3, 
 ### Vì sao hai loại thời lượng
 
 Thầy liệt kê "duration" trong tập đặc trưng D2 (§5.2) nhưng không nói rõ loại nào.
-Nhóm chạy **hai phiên bản** — chi tiết trong `docs/D2_mo_hinh.md` mục 3.
+Nhóm chạy **hai phiên bản** — chi tiết trong `docs/san_pham/D2_benchmark_nang_luong.md` mục 3.
 
 Bằng chứng số: hồi quy `duration_s` theo các biến biết trước khi bay cho
 **R² = 0,73**, tức 27% thông tin không suy ra được từ kế hoạch bay. Hai biến thể

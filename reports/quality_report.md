@@ -13,20 +13,20 @@
 - Kiểm tái lập: `python3 -m src.features --verify reports/flight_level_week3.csv`
   → **đã chạy, cả 8 cột khớp tới 10⁻⁸**
 - Từ điển biến: `reports/data_dictionary.md`
-- Giải thích chi tiết cho người trong nhóm: `docs/D1_du_lieu.md`
+- Giải thích chi tiết cho người trong nhóm: `docs/san_pham/D1_ra_soat_du_lieu.md`
 
 ## Trạng thái nghiệm thu D1 (Mục 12.1)
 
-| Tiêu chí của thầy | Trạng thái |
-|---|---|
-| Ghi rõ nguồn và giấy phép | **Đạt** |
-| Kiểm từ điển biến và đơn vị | **Đạt** — `reports/data_dictionary.md` |
-| Ghi nhật ký loại trừ chuyến bay | **Đạt** — `reports/exclusion_log.csv` |
-| Test phép tích phân điện áp–dòng điện | **Đạt** — 20 unit test |
-| Mọi dòng giữ định danh chuyến bay | **Đạt** |
+| Tiêu chí của thầy | Trạng thái                                           |
+|---|------------------------------------------------------|
+| Ghi rõ nguồn và giấy phép | **Đạt**                                              |
+| Kiểm từ điển biến và đơn vị | **Đạt** — `reports/data_dictionary.md`               |
+| Ghi nhật ký loại trừ chuyến bay | **Đạt** — `reports/exclusion_log.csv`                |
+| Test phép tích phân điện áp–dòng điện | **Đạt** — 20 unit test                               |
+| Mọi dòng giữ định danh chuyến bay | **Đạt**                                              |
 | Chia tập theo chuyến bay hoặc cấu hình | **Đạt** — đóng băng trong `configs/d2_protocol.yaml` |
-| Script xử lý chạy lại được (Mục 9) | **Đạt** |
-| **Duy kiểm chéo đơn vị năng lượng và cách chia tập** | **CHƯA** |
+| Script xử lý chạy lại được (Mục 9) | **Đạt**                                              |
+| **Duy kiểm chéo đơn vị năng lượng và cách chia tập** | **ĐẠT**                                              |
 
 Thầy viết rõ: *người làm một phần không được là người duy nhất kiểm kết quả phần
 đó.* Chữ ký kiểm chéo của Duy là điều kiện cuối cùng để D1 được nghiệm thu.
