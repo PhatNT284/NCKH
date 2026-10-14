@@ -1,0 +1,438 @@
+# =============================================================================
+# GIAO THUC DA DONG BANG — D3: Bo may quyet dinh co y thuc an toan
+# =============================================================================
+# File nay la ban dong bang cua Tuan 7 (ke hoach 12 tuan cua thay).
+# Song song voi configs/d2_protocol.yaml, KHONG thay the no.
+#
+# QUY TAC: moi thay doi trong file nay PHAI
+#   (1) ghi ly do vao muc `change_log` o cuoi file,
+#   (2) chay lai toan bo kiem dinh bi anh huong,
+#   (3) duoc nguoi kiem cheo cua WP3 (Duy) xac nhan.
+#
+# Tham chieu:
+#   §x.y  -> Delivery_UAV_Preflight_Feasibility_Proposal_updated.md (file cua thay)
+#   P§x.y -> Proposal.docx (ban nhom da sua)
+#   Eq(n) -> Proposal.docx, cong thuc danh so
+# =============================================================================
+
+meta:
+  version: "1.0.0"
+  frozen_on: "2026-10-14"
+  owner: "Phat (WP3)"
+  cross_checker: "Duy"
+  cross_check_status: "PENDING"
+  work_package: "WP3"
+  deliverable: "D3"
+  depends_on:
+    - "configs/d2_protocol.yaml >= 1.4.0"
+    - "reports/model_selection_report.md"
+    - "reports/parameter_table.md"
+  gate_cleared: >
+    San pham D2 nghiem thu 14/10/2026 (4/4 tieu chi Muc 12.1). Cong chan cua
+    thay — "chi chon mo hinh nang luong sau khi xem ket qua kiem dinh" — da mo.
+
+# -----------------------------------------------------------------------------
+# 0. NGUYEN TAC NEN — doc truoc khi doc phan con lai
+# -----------------------------------------------------------------------------
+# Bo du lieu CMU KHONG co SoH, KHONG co bien thien nhiet do co kiem soat,
+# KHONG co nhan ket cuc nhiem vu (§4.3, §4.7). Do do de tai chay HAI NHANH
+# danh gia tach biet (P§1.3: "Evaluation proceeds along two separate tracks"):
+#
+#   Nhanh 1 — Nang luong CAN  -> du lieu that, 192 chuyen  -> san pham D2 (XONG)
+#   Nhanh 2 — Quyet dinh      -> kich ban tong hop         -> san pham D3 + D4
+#
+# He qua rang buoc cho D3:
+#   - D3 KHONG chua mo hinh hoc may nao. Toan bo la cong thuc va luat.
+#   - SoH va nhiet do la THAM SO KICH BAN tu ngoai dua vao, khong hoc duoc.
+#   - D3 chay tren 192 chuyen chi de MINH HOA va kiem tinh nhat quan,
+#     KHONG de cham diem dung/sai — khong co dap an de so.
+#   - Viec cham diem quyet dinh thuoc san pham D4, tren tap kich ban.
+
+foundation:
+  d3_contains_no_learned_model: true
+  evaluation_of_decisions: "san pham D4, tren tap kich ban tong hop (§4.7)"
+  run_on_192_flights_is_for: ["minh hoa", "kiem bat bien", "bang vi du cho bai"]
+
+# -----------------------------------------------------------------------------
+# 1. DAU VAO CUA MOT LAN DANH GIA
+# -----------------------------------------------------------------------------
+inputs:
+  source_ref: "§4.2 Proposal (mission record), §4.3 (bang bien kha dung)"
+
+  mission_plan:                      # ke hoach bay — biet truoc khi cat canh
+    - {name: "payload_g",        unit: "g",   required: true}
+    - {name: "speed_commanded_ms", unit: "m/s", required: true}
+    - {name: "altitude_m",       unit: "m",   required: true}
+    - {name: "distance_2d_m",    unit: "m",   required: true}
+    - {name: "wind_forecast_ms", unit: "m/s", required: true}
+
+  battery_state:
+    - {name: "soc", unit: "-", required: true,
+       note: "Q(t)/Q_tot,t. §4.3: KHONG phai dac trung do duoc cua bo du lieu;
+              la dau vao kich ban tru khi xac nhan duoc trong file goc."}
+    - {name: "soh", unit: "-", required: true,
+       note: "Q_tot,t/Q_tot,i. §4.3: THAM SO KICH BAN. Dung dai tu tai lieu.
+              CAM huan luyen du bao SoH tren bo du lieu nay."}
+    - {name: "battery_type", values: ["TB47D", "TB48D"], required: true}
+
+  environment:
+    - {name: "ambient_temp_c", unit: "C", required: true,
+       note: "§4.3: THAM SO KICH BAN, khong phai bien day du co kiem soat.
+              Chi dung qua quan he suy giam co chan, co trich dan, va chi nhu
+              phan tich do nhay."}
+
+  derived_from_plan:
+    duration_planned_s:
+      formula: "distance_2d_m / speed_commanded_ms"
+      note: "Giong hệt D2-b. Phai dung CUNG mot cong thuc, neu khac thi mo hinh
+             nhan dau vao khac voi luc huan luyen."
+
+# -----------------------------------------------------------------------------
+# 2. NANG LUONG KHA DUNG (khoi a)
+# -----------------------------------------------------------------------------
+available_energy:
+  source_ref: "§5.4, Eq (2)"
+  formula: "E_available = E_nominal * SoC * SoH * kappa(T)"
+
+  e_nominal:
+    primary_Wh: 99.9                 # TB47D
+    sensitivity_Wh: 129.96           # TB48D
+    basis: >
+      OI-2 da dong o d2_protocol 1.3.0. Bai Rodrigues TU MAU THUAN ve loai pin;
+      3/4 bang chung doc lap chi ve TB47D, va 99.9 la gia tri NHO HON nen la
+      huong bao thu. Chi tiet: reports/parameter_table.md muc 1.1.
+    mandatory_sensitivity: >
+      BAT BUOC chay lai toan bo o san pham D4 voi 129.96 Wh va bao ket luan
+      thay doi the nao (§8 muc 3).
+
+  soc_soh_convention:
+    expression: "SoC * SoH = Q(t)/Q_tot,t * Q_tot,t/Q_tot,i = Q(t)/Q_tot,i"
+    meaning: "dien tich hien co so voi dung luong luc pin con moi"
+    warning: >
+      P§4.4 canh bao hai dai luong nay duoc dinh nghia khac nhau trong tai lieu;
+      ghep nham cap se DEM DUNG LUONG HIEN TAI HAI LAN. Quy uoc tren phai viet
+      ro trong bai, khong de ngam hieu.
+
+  kappa_temperature:
+    polynomial: "0.8814 + 0.0091*T - 0.0001*T^2"
+    source: "Kim et al."
+    calibrated_range_c: [4.5, 18.4]
+    rule: |
+      T < 4.5    -> kappa = poly(4.5) = 0.9203     # giu o bien lanh
+      4.5<=T<=18.4 -> kappa = min(1, poly(T))
+      T > 18.4   -> kappa = 1.0                    # chan tren
+    decision_ref: "B3"
+    rationale: >
+      Quy tac cu (kappa = 1 cho MOI nhiet do ngoai dai) SAI o phia lanh: tai
+      4.4 C no nhay tu 0.920 len 1.000, tuc cang lanh cang gia dinh pin cang
+      khoe. Pin LiPo lanh thi tut dung luong, nen quy tac cu lam E_available bi
+      tinh THUA -> bien du tru ao -> cho bay chuyen khong du pin. Day dung loai
+      loi ma de tai sinh ra de chong.
+      Quy tac moi giu o gia tri bien lanh 0.9203: khong ngoai suy (§5.4 cam),
+      lien tuc, va bao thu.
+    upper_clamp_reason: >
+      Da thuc goc tra ve >1 trong khoang ~15.8-75.2 C, dat 1.089 tai 45.5 C —
+      tuc khang dinh pin chua nhieu nang luong hon muc danh dinh cua chinh no.
+      Vo ly ve vat ly.
+    limitation_to_state_in_paper: >
+      Dai van hanh M100 la -10..40 C, dai hieu chinh cua Kim chi 4.5-18.4 C.
+      PHAN LON vung van hanh nam ngoai dai hop le. Mo hinh hien KHONG mo ta
+      duoc anh huong nhiet do tren phan lon dai van hanh; ket qua lien quan
+      nhiet do trinh bay nhu PHAN TICH DO NHAY, khong phai du bao.
+
+# -----------------------------------------------------------------------------
+# 3. NGAN SACH NHIEM VU (khoi b)
+# -----------------------------------------------------------------------------
+energy_required:
+  estimator: "D2_ridge_preflight"
+  source_ref: "reports/model_selection_report.md"
+  frozen: true
+  rule: >
+    KHONG huan luyen lai, KHONG tinh chinh, KHONG doi tap dac trung. D3 chi GOI
+    mo hinh da chot. Doi mo hinh la doi san pham D2, phai nghiem thu lai.
+
+  measured_error:
+    MAE_Wh: 0.6554
+    RMSE_Wh: 0.8386
+    bias_Wh: 0.0099
+    ci95_MAE_Wh: [0.5818, 0.7285]
+    p95_abs_residual_Wh: 1.4687      # dung cho nguong FLY, xem muc 5
+    source: "reports/d2_bootstrap_mae_ci.csv, reports/d2_oof_residuals.csv"
+
+  validity_envelope:
+    distance_2d_m: [420, 610]
+    source_ref: "thi nghiem E2c, d2_protocol.yaml"
+    evidence: >
+      Huan luyen chi tren 180 chuyen R1 (~472 m), du bao 5 chuyen ~835 m:
+      bias = -7.613 Wh = -MAE, tuc DOAN THIEU ca 5 chuyen, trung binh 29.6 %,
+      toan bo ve phia nguy hiem.
+    enforcement: "xem muc 4.2 — day KHONG phai luat cung cua nha san xuat"
+
+# -----------------------------------------------------------------------------
+# 4. LOP LUAT CUNG (khoi d)
+# -----------------------------------------------------------------------------
+hard_rules:
+  source_ref: "§4.6 Proposal, §5.7"
+  semantics: >
+    Lop nay chay DOC LAP voi mo hinh va chi duoc GIU NGUYEN hoac HA CAP phan
+    quyet. Nguyen van §4.6: "no score, no model output and no human approval
+    may convert a hard-rule violation into FLY."
+  veto: true
+  no_score_aggregation: >
+    §5.6 loai bo cach cham diem gop. KHONG duoc tron vi pham luat cung vao mot
+    diem so roi de bien du tru cao bu lai.
+
+  # 4.1 — Luat tu nha san xuat (DJI Matrice 100)
+  manufacturer:
+    - {id: "HR-1", check: "wind_forecast_ms <= 10.0",        unit: "m/s", source: "DJI"}
+    - {id: "HR-2", check: "-10 <= ambient_temp_c <= 40",     unit: "C",   source: "DJI"}
+    - {id: "HR-3", check: "takeoff_mass_g <= 3600",          unit: "g",   source: "DJI"}
+    - {id: "HR-4", check: "speed_commanded_ms <= 17",        unit: "m/s", source: "DJI (che do GPS)"}
+
+  payload_rule:
+      do_not_use_value_g: 1245
+      use_range_g: [0, 500]
+      reason: >
+        PHAT HIEN o d2_protocol 1.3.0: may bay trong bo du lieu nang 3680-4180 g,
+        VUOT MTOW 3600 g cua DJI o MOI cau hinh. Con so 1245 g tinh tu may bay
+        nguyen ban, khong ap duoc cho may bay da gan thiet bi do. Dai hop le
+        theo do phu du lieu la 0-500 g.
+        Chi tiet: reports/parameter_table.md muc 3.1.
+
+  # 4.2 — Gioi han do NHOM phat hien, KHONG phai cua nha san xuat
+  project_derived:
+    - id: "PD-1"
+      check: "420 <= distance_2d_m <= 610"
+      source: "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+      on_violation: "khong duoc tra FLY; ha xuong CONDITIONAL kem nhan EXTRAPOLATED"
+      wording_rule: >
+        Khi bao cao phai noi ro day la gioi han RUT RA TU THI NGHIEM CUA NHOM,
+        khong phai gioi han nha san xuat. Hai loai co nguon goc khac nhau va
+        thay se hoi "nguong nay o dau ra".
+      labelling_ref: "§6/E3: 'clearly label any extrapolated ranges'"
+
+  # 4.3 — SoC toi thieu
+  minimum_soc:
+    principle: >
+      §4.6: dat gioi han an toan TRUOC khi het phong dien, khong phai TAI diem
+      het phong dien (theo Zhang et al. [10]).
+    definition: "SoC toi thieu de con du nang luong ha canh tu do cao hanh trinh"
+    status: "CAN TINH — xem open_items OI-D3-1"
+
+# -----------------------------------------------------------------------------
+# 5. BIEN DU TRU VA PHAN QUYET (khoi c, e)
+# -----------------------------------------------------------------------------
+reserve_and_verdict:
+  source_ref: "§5.6, §5.7, P§4.5"
+
+  formulas:
+    margin_absolute_Wh: "M = E_available - E_required"
+    margin_ratio: "R = (E_available - E_required) / E_required"
+
+  reserve_factor:
+    primary: 0.20
+    sweep: [0.10, 0.20, 0.30]
+    source: "P§4.5, theo Zhang et al."
+    status: "THAM SO CHINH SACH"
+    wording_rule: >
+      §5.7 nguyen van: he so du tru 1.20 co the thu nhu MOT GIA DINH KICH BAN,
+      "but not presented as a regulatory or manufacturer requirement."
+    reporting_rule: >
+      BAT BUOC bao ket qua tren CA BA muc 0.10 / 0.20 / 0.30. P§4.5: "a finding
+      that holds only at one arbitrary reserve setting is not a finding about
+      the method."
+
+  thresholds:
+    decision_ref: "B4"
+    lower: "R_min = r"                                  # mac dinh 0.20
+    upper: "R_fly = r + p95_abs_residual_Wh / E_required"
+    rationale: >
+      He so du tru r chong RUI RO VAN HANH (gio, vong cho, sai lech tuyen).
+      No KHONG chong SAI SO DU BAO cua chinh mo hinh — do la rui ro rieng,
+      phai cong rieng. Khoan cong them lay tu phan vi 95 cua |phan du| out-of-fold
+      cua D2-b = 1.4687 Wh, dung cach §4.7 chi: "a documented uncertainty
+      allowance" rut tu phan du do duoc, khong phai tu chinh mo hinh.
+    worked_example:
+      E_required_Wh: 21.27           # trung binh 192 chuyen
+      r: 0.20
+      R_min: 0.200
+      R_fly: 0.269                   # 0.20 + 1.4687/21.27
+      note: "nguong tren phu thuoc tung chuyen, vi khoan cong them la Wh tuyet doi"
+
+  verdicts:
+    count: 4
+    source_ref: "§5.7 (ba muc) + §4.6 (muc thu tu, fail closed)"
+    levels:
+      - id: "FLY"
+        condition: "R >= R_fly VA khong vi pham luat cung VA du dau vao"
+      - id: "CONDITIONAL"
+        condition: "R_min <= R < R_fly VA khong vi pham luat cung VA du dau vao"
+        meaning: "bay duoc nhung phai co nguoi duyet; nen kem ly do"
+      - id: "NO_FLY"
+        condition: "R < R_min HOAC vi pham bat ky luat cung nao"
+      - id: "INSUFFICIENT_DATA"
+        condition: "thieu / khong hop le / ngoai dai / het han bat ky dau vao an toan nao"
+
+  fail_closed:
+    source_ref: "§4.6"
+    quote: >
+      "The layer also fails closed. A missing, invalid, out-of-range or stale
+      safety-critical input does not fall back to a favourable default; it
+      produces NO-FLY or an explicit insufficient-data outcome."
+    decision_ref: "B5"
+    rule: |
+      thieu dau vao        -> INSUFFICIENT_DATA
+      dau vao sai/ngoai dai -> NO_FLY
+      dau vao het han       -> INSUFFICIENT_DATA (phai tinh lai)
+    prohibition: >
+      TUYET DOI khong tu dien gia tri mac dinh roi chay tiep. Mot man hinh bao
+      FLY mau xanh trong khi he thong vua tu bia mot con so la che do hong
+      nguy hiem nhat cua ca he thong.
+
+# -----------------------------------------------------------------------------
+# 6. QUAN TRANG THAI VA HET HAN (khoi f)
+# -----------------------------------------------------------------------------
+workflow_state:
+  source_ref: "P§4.2"
+  version_fields:
+    - "model_version"
+    - "threshold_version"
+    - "aircraft_profile_version"
+    - "safety_rules_version"
+  freshness_rule: >
+    Khi BAT KY dau vao an toan, ke hoach nhiem vu, lua chon may bay/pin, nguong
+    hay chinh mo hinh thay doi -> danh gia truoc do bi danh dau STALE va PHAI
+    duoc tinh lai truoc khi nhiem vu duoc phep tien hanh.
+  outcome_field:
+    rule: >
+      Truong ket cuc duoc ghi DOC LAP voi khuyen nghi, va co the la "khong biet",
+      de danh gia ve sau khong bao gio dung chinh phan quyet cua he thong lam
+      su that nen (P§4.2).
+  replay_property:
+    requirement: >
+      Cho mot ban ghi da luu va cac tham so nen tang da cong bo, phan quyet phai
+      TINH LAI DUOC CHINH XAC. Day la tinh chat RQ4 khang dinh.
+    note: "San pham D6 kiem tinh chat nay day du; D3 chi phai khong pha vo no."
+
+# -----------------------------------------------------------------------------
+# 7. KIEM D3 BANG GI — bat bien, khong phai do chinh xac
+# -----------------------------------------------------------------------------
+# Khong co dap an "chuyen nay dang le co nen bay khong", nen KHONG do duoc do
+# chinh xac o D3. Thay vao do kiem cac TINH CHAT phai luon dung.
+invariants:
+  source_ref: "§4.6, P§4.2 (workflow invariants, Thi nghiem 5)"
+  tests:
+    - id: "INV-1"
+      name: "luat cung phu quyet"
+      statement: "vi pham bat ky luat cung nao -> KHONG BAO GIO ra FLY"
+      method: "quet moi to hop vi pham, ke ca khi R rat lon"
+    - id: "INV-2"
+      name: "fail closed"
+      statement: "thieu bat ky dau vao an toan nao -> KHONG BAO GIO ra FLY"
+      method: "lan luot bo tung dau vao"
+    - id: "INV-3"
+      name: "don dieu theo nang luong"
+      statement: "E_available tang (giu nguyen moi thu khac) -> phan quyet khong bao gio xau di"
+      method: "quet SoC tu 0 den 1, kiem thu tu phan quyet"
+    - id: "INV-4"
+      name: "tat dinh"
+      statement: "cung dau vao -> cung dau ra, moi lan chay"
+      method: "chay lai 100 lan, so khop tung bit"
+    - id: "INV-5"
+      name: "tinh lai duoc"
+      statement: "luu ban ghi roi tinh lai -> ra DUNG phan quyet cu"
+      method: "serialize -> deserialize -> tinh lai -> so"
+    - id: "INV-6"
+      name: "khong co mo hinh hoc may trong D3"
+      statement: "D3 khong goi .fit() o bat ky dau"
+      method: "kiem tinh tren ma nguon"
+
+# -----------------------------------------------------------------------------
+# 8. NHUNG DIEU KHONG DUOC LAM
+# -----------------------------------------------------------------------------
+prohibitions:
+  - "Khong huan luyen lai hoac tinh chinh mo hinh D2 trong D3"
+  - "Khong huan luyen du bao SoH tren bo du lieu nay (§4.3)"
+  - "Khong dua nhiet do vao mo hinh du bao nang luong CAN — nhiet do chi vao
+     kappa(T) cua nang luong KHA DUNG"
+  - "Khong noi du lieu thoi tiet cong cong vao 192 chuyen bay lich su (§4.4) —
+     xem open_items OI-D3-2"
+  - "Khong goi bat ky dau ra nao cua D3 la 'xac suat' hay 'do tin cay' (§5.6, §5.8)"
+  - "Khong gop vi pham luat cung vao mot diem so (§5.6)"
+  - "Khong dien gia tri mac dinh thay cho dau vao thieu (§4.6)"
+  - "Khong bao ket qua chi o mot muc he so du tru (P§4.5)"
+  - "Khong goi nhan kich ban la 'ground truth' hay 'flight outcomes' (§4.7)"
+
+# -----------------------------------------------------------------------------
+# 9. VIEC CON TREO
+# -----------------------------------------------------------------------------
+open_items:
+  - id: "OI-D3-1"
+    item: >
+      Tinh SoC toi thieu de ha canh an toan tu do cao hanh trinh. Can: nang luong
+      ha canh tu 25/50/75/100 m. Co the uoc tu cong suat treo cua mo hinh vat ly
+      D5 (src/physics_m100.py) — eta da xac thuc sai lech 3.4 %.
+    owner: "Phat"
+    blocks: "hard_rules.minimum_soc"
+  - id: "OI-D3-2"
+    item: >
+      DA XET VA BAC BO: dung API thoi tiet (Open-Meteo / NASA POWER) de tra nhiet
+      do lich su cho 192 chuyen. §4.4 noi ro du lieu thoi tiet cong cong "may be
+      used ONLY as an optional extension for realistic scenario ranges" va "must
+      NOT be joined to historical flights unless flight dates, locations, and
+      time alignment are sufficiently documented". Cau ket luan: "For the core
+      project, use transparent parameter ranges and report them instead of adding
+      an unverified weather join."
+      => Ghi lai de khong ai de xuat lai. Neu sau nay muon dung, chi duoc dung
+      cho DAI nhiet do cua kich ban D4, khong noi vao tung chuyen bay.
+    owner: "Phat"
+    status: "DONG — khong lam"
+  - id: "OI-D3-3"
+    item: >
+      Duy xac nhan vai kiem cheo WP3 (xem d2_protocol.yaml OI-6). Can doc
+      reports/parameter_table.md truoc tuan 7.
+    owner: "Phat"
+    blocks: "nghiem thu D3 theo Muc 12.1"
+
+# -----------------------------------------------------------------------------
+# 10. NHAT KY THAY DOI
+# -----------------------------------------------------------------------------
+change_log:
+  - version: "1.0.0"
+    date: "2026-10-14"
+    author: "Phat"
+    changes: "Ban dong bang dau tien cho san pham D3."
+    decisions:
+      - id: "B3"
+        question: "kappa(T) ngoai dai hieu chinh cua Kim thi dung gia tri nao?"
+        resolution: >
+          Kep MOT PHIA: T < 4.5 C -> giu o poly(4.5) = 0.9203; T > 18.4 C -> 1.0.
+        basis: >
+          Quy tac cu (kappa = 1 ngoai moi dai) sai o phia lanh — tai 4.4 C nhay
+          tu 0.920 len 1.000, tuc cang lanh cang gia dinh pin cang khoe, lam
+          E_available tinh THUA theo huong nguy hiem. Quy tac moi khong ngoai suy
+          (§5.4 cam), lien tuc, va bao thu.
+        affects: "reports/parameter_table.md muc 2 — PHAI sua theo"
+      - id: "B4"
+        question: "ba muc phan quyet can hai nguong, thay chi cho mot con so r = 0.20"
+        resolution: >
+          R_min = r. R_fly = r + p95(|phan du|)/E_required = r + 1.4687/E_required.
+        basis: >
+          r chong rui ro van hanh, khong chong sai so du bao cua mo hinh — hai
+          rui ro khac nhau, phai cong rieng. Khoan cong them lay tu phan vi 95
+          cua |phan du| out-of-fold cua D2-b, dung cach §4.7 chi ("a documented
+          uncertainty allowance" rut tu phan du do duoc, khong phai tu chinh
+          mo hinh). Day la cho ket qua D2 thuc su chay vao D3.
+      - id: "B5"
+        question: "thieu SoC / SoH / nhiet do thi xu ly sao?"
+        resolution: >
+          Fail closed theo dung §4.6: thieu -> INSUFFICIENT_DATA; sai hoac ngoai
+          dai -> NO_FLY; het han -> INSUFFICIENT_DATA. Them muc phan quyet thu tu.
+        basis: >
+          §4.6 nguyen van: "does not fall back to a favourable default; it
+          produces NO-FLY or an explicit insufficient-data outcome".
+          De xuat ban dau cua nhom (thieu -> cao nhat CONDITIONAL) KHONG dat,
+          vi CONDITIONAL van la mot dang cho bay, tuc van la favourable default.
+        note: >
+          §4.6 them mot tu ban dau nhom chua tinh: STALE (dau vao het han).
+          Dan toi muc 6 workflow_state.
