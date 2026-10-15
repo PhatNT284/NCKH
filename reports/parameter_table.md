@@ -97,17 +97,8 @@ tình huống mùa đông).
 
 | Dải nhiệt độ | Dùng gì | Căn cứ |
 |---|---|---|
-| 4,5 – 18,4 °C | `min(1; 0,8814 + 0,0091·T − 0,0001·T²)` | trong dải hiệu chỉnh |
-| **Dưới 4,5 °C** | **0,9203** — giữ ở giá trị biên lạnh | §5.4 cấm ngoại suy. Quyết định B3 |
-| **Trên 18,4 °C** | **1,000** — chặn trên | xem lý do ngay dưới |
-
-**Vì sao phía lạnh không cho về 1 (sửa ngày 14/10/2026, quyết định B3):**
-quy tắc cũ cho κ = 1 với mọi nhiệt độ ngoài dải. Ở phía nóng thì đúng, ở phía
-lạnh thì sai: tại 4,4 °C nó nhảy từ 0,920 lên 1,000, tức càng lạnh càng giả
-định pin càng khoẻ. Pin LiPo lạnh thì tụt dung lượng, nên quy tắc cũ làm
-`E_available` bị tính thừa → biên dự trữ ảo → cho bay chuyến không đủ pin.
-Giữ ở giá trị biên 0,9203 thì vẫn không ngoại suy, vẫn bảo thủ, và liên tục.
-Chi tiết: `configs/d3_protocol.yaml` mục `available_energy.kappa_temperature`.
+| 4,5 – 18,4 °C | `0,8814 + 0,0091·T − 0,0001·T²` | trong dải hiệu chỉnh |
+| Ngoài dải đó | **κ = 1** | cận bảo thủ, §5.4 |
 
 **Vì sao phải chặn trên bằng 1:** đa thức gốc trả về giá trị **lớn hơn 1** trong
 khoảng xấp xỉ 15,8 – 75,2 °C, đạt 1,089 tại 45,5 °C — tức khẳng định pin chứa
@@ -160,13 +151,6 @@ liệt kê khối lượng từng thành phần:
 | Cảm biến gió và cột | 136 g |
 | Máy tính trên khoang, cảm biến nhỏ, dây | 1.113 g |
 | **Tổng, chưa tải** | **3.680 g** |
-
-**Nguồn:** Rodrigues et al., *Scientific Data* 8, 155 (2021), mục Methods —
-*"The mass of the airframe is 1831 g… the battery 600 g… the anemometer and pole
-136 g… the onboard computer with small sensors and wiring 1113 g… totaling 3680 g"*
-và *"the total takeoff masses were 3680 g (no payload), 3930 g (with the 250-g
-payload) and 4180 g (with the 500-g payload)"*.
-DOI [10.1038/s41597-021-00930-x](https://doi.org/10.1038/s41597-021-00930-x)
 
 Đối chiếu với giới hạn DJI:
 
@@ -233,10 +217,22 @@ dữ liệu đỡ lưng, dải nào là ngoại suy.
 | Gió | 2,81 – 6,67 m/s | tối đa 10 m/s | Chưa bao giờ chạm gần giới hạn |
 | Độ cao | 25 – 100 m | — | Bốn mức rời rạc |
 | Tốc độ ra lệnh | 4 – 12 m/s | tối đa 17 m/s | Phủ phần lớn dải hữu dụng |
-| Cự ly | **~472 m (94 % số chuyến)** | — | Xem cảnh báo dưới |
+| Cự ly | **~472 m (94 % số chuyến), VÒNG KÍN** | — | Xem cảnh báo dưới |
 | Nhiệt độ | **không ghi nhận** | −10 … 40 °C | Hoàn toàn không có dữ liệu |
 
 ### Hai cảnh báo cho bộ sinh kịch bản ở sản phẩm D4
+
+**Cự ly là KHỨ HỒI, không phải một chiều** (quyết định B7). Chuyến bay CMU là
+vòng kín tam giác quay về điểm cất cánh, tải mang suốt chuyến. Nên envelope đọc
+được hai cách:
+
+| Cách đọc | Dải |
+|---|---|
+| Tổng quãng bay (như dữ liệu) | 420–610 m |
+| Cự ly giao hàng một chiều | **≈ 210–305 m** |
+
+Bộ sinh kịch bản ở sản phẩm D4 phải khai rõ đang lấy mẫu theo cách đọc nào.
+Chi tiết: `data_dictionary.md` mục "Cự ly là MỘT CHIỀU hay KHỨ HỒI".
 
 **Cự ly** — bộ dữ liệu gần như chỉ có một cự ly. Mô hình năng lượng được chọn chỉ
 đáng tin trong dải khoảng **420 – 610 m**; ngoài dải đó nó **đoán thiếu có hệ

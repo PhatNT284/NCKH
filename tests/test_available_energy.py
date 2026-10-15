@@ -334,9 +334,9 @@ class TestProtocolD3:
     def test_envelope_khop_d2(self, protocol):
         assert protocol["energy_required"]["validity_envelope"]["distance_2d_m"] == [420, 610]
 
-    def test_du_sau_bat_bien(self, protocol):
+    def test_du_bay_bat_bien(self, protocol):
         ids = [t["id"] for t in protocol["invariants"]["tests"]]
-        assert ids == [f"INV-{i}" for i in range(1, 7)]
+        assert ids == [f"INV-{i}" for i in range(1, 8)]
 
     def test_cam_noi_du_lieu_thoi_tiet(self, protocol):
         """§4.4 — ghi lai de khong ai de xuat lai."""

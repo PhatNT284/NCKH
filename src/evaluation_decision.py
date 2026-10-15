@@ -46,6 +46,7 @@ from src.decision_rules import (
     assess, load_protocol,
 )
 from src.safety_invariants import PROFILE_CMU
+from src.mitigations import propose
 from src.workflow_state import evaluate, replay_matches, scan_for_learned_models
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -62,6 +63,21 @@ SOH_MAIN, TEMP_MAIN, R_MAIN = 1.00, 15.0, 0.20
 
 
 # ---------------------------------------------------------------------------
+
+def _uoc_luong_ridge(kw: dict) -> float:
+    """
+    Xap xi tuyen tinh tu he so Ridge o reports/d2_ridge_coefficients.csv, dung
+    cho bien phap nhom B khi kiem INV-7.
+
+    KHONG phai mo hinh D2 that — D3 khong duoc import sklearn (INV-6). Chay
+    that thi truyen mo hinh da chot vao. O day chi can mot ham DON DIEU dung
+    chieu de kiem bat bien.
+    """
+    return max(0.1, kw["e_required_Wh"]
+               + 0.008121 * (kw["payload_g"] - 250)
+               + 0.235256 * (kw["speed_commanded_ms"] - 8)
+               - 0.001305 * (kw["distance_2d_m"] - 472))
+
 
 def load_missions() -> pd.DataFrame:
     """
@@ -279,6 +295,21 @@ def run_invariants(df: pd.DataFrame, protocol: dict) -> pd.DataFrame:
     # INV-6 — khong co mo hinh hoc may trong D3
     vp = scan_for_learned_models()
     kq.append(("INV-6", "D3 khong chua mo hinh hoc may", 1, len(vp)))
+
+    # INV-7 — moi bien phap de xuat phai cai thien duoc phan quyet
+    n = m = 0
+    for row in df.itertuples():
+        # Lay muc SoC sat nguong de co nhieu CONDITIONAL ma kiem
+        kw = _mission_kwargs(row, 0.27, SOH_MAIN, TEMP_MAIN)
+        kw.pop("profile", None)
+        goc = assess(**kw, protocol=protocol)
+        dx, _ = propose(kw, estimator=_uoc_luong_ridge, protocol=protocol)
+        m += len(dx)
+        for p_ in dx:
+            if (VERDICT_ORDER.index(p_.after)
+                    <= VERDICT_ORDER.index(goc.verdict)):
+                n += 1
+    kq.append(("INV-7", "bien phap giam thieu co tac dung", m, n))
 
     return pd.DataFrame(
         [{"invariant": a, "noi_dung": b, "so_truong_hop": c, "vi_pham": d,

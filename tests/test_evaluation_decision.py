@@ -125,8 +125,8 @@ class TestInvariantsOnRealData:
     def kq(self, df, protocol):
         return run_invariants(df, protocol)
 
-    def test_du_sau_bat_bien(self, kq):
-        assert list(kq["invariant"]) == [f"INV-{i}" for i in range(1, 7)]
+    def test_du_bay_bat_bien(self, kq):
+        assert list(kq["invariant"]) == [f"INV-{i}" for i in range(1, 8)]
 
     def test_khong_bat_bien_nao_bi_vi_pham(self, kq):
         xau = kq[kq["vi_pham"] > 0]

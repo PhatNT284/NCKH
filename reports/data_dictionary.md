@@ -70,11 +70,51 @@ E   = Σ V_t × I_t × Δt        → joule, chia 3600 ra Wh
 
 | Cột | Đơn vị | Dùng được | Nhỏ nhất | Trung vị | Lớn nhất | Ghi chú |
 |---|---|---|---|---|---|---|
-| `distance_2d_m` | m | **TRƯỚC** | 427,45 | 472,63 | 841,40 | Tổng đường đi trên mặt đất |
+| `distance_2d_m` | m | **TRƯỚC** | 427,45 | 472,63 | 841,40 | Tổng đường đi trên mặt đất của **cả vòng kín** — xem ghi chú dưới bảng |
 | `distance_3d_m` | m | SAU | 470,98 | 607,36 | 979,55 | Gồm cả thành phần dựng |
 | `climb_m` | m | SAU | 28,25 | 62,46 | 118,17 | Tổng mét leo **đo được** |
 | `descent_m` | m | SAU | 30,05 | 65,17 | 117,09 | Tổng mét hạ **đo được** |
 | `alt_mean_m` | m | SAU | 277,53 | 302,45 | 334,28 | **So với mực nước biển**, không phải mặt đất |
+
+### Cự ly là MỘT CHIỀU hay KHỨ HỒI — phải đọc trước khi dùng
+
+Mục 12.1 của thầy đòi nêu rõ điều này (*"one-way versus round-trip distance
+explicit"*), và §4.3 cảnh báo *"out-and-back mission distance is not the same as
+one-way distance"*.
+
+**Chuyến bay trong bộ dữ liệu là VÒNG KÍN.** Rodrigues et al., *Scientific Data*
+8, 155 (2021), mục Methods:
+
+> *"tracks a triangular wind-neutral path while recording the data"* ·
+> *"reaches the launch point again, the UAV stops and descends at approximately
+> 1.5 m/s"*
+
+UAV cất cánh, bay hết tam giác, **quay về đúng điểm xuất phát**. Tải trọng gắn
+bằng dây Velcro, **mang suốt chuyến, không thả xuống** — bài không mô tả cơ cấu
+thả hàng nào. Bộ dữ liệu **không có khái niệm điểm giao hàng**; đây là đường bay
+thử, không phải nhiệm vụ giao hàng.
+
+Ba hệ quả:
+
+1. **`distance_2d_m` ≈ 472 m là vòng kín, không phải cự ly tới khách.** Một
+   nhiệm vụ giao hàng thật "472 m tới khách" sẽ bay khoảng 944 m khứ hồi.
+2. **Envelope hiệu lực của mô hình đọc được hai cách:**
+
+   | Cách đọc | Dải |
+   |---|---|
+   | Tổng quãng bay (như dữ liệu) | 420–610 m |
+   | Cự ly giao hàng một chiều | **≈ 210–305 m** |
+
+   Khi viết bài **phải nói rõ đang dùng cách đọc nào**, nếu không sẽ sai gấp đôi.
+3. **Khối lượng không đổi suốt chuyến.** Giao hàng thật thì chặng về nhẹ hơn, nên
+   mô hình sẽ đoán thừa năng lượng chặng về — lệch về phía an toàn, nhưng vẫn
+   phải khai báo.
+
+**Một lệch số chưa giải thích được (RS-3):** tổng `distance_2d_m` của 192 chuyến
+là **92,8 km**, trong khi bài gốc ghi bộ dữ liệu phủ *"approximately 65
+kilometres"* cho 209 chuyến — cao hơn khoảng 43 %. Hai khả năng: bài tính theo
+tuyến danh nghĩa còn nhóm tính theo quỹ đạo GPS thật; hoặc phép cộng haversine
+theo từng mẫu **cộng dồn cả nhiễu GPS lúc treo**, làm phồng cự ly. Chưa kết luận.
 
 ### Cách tính cự ly — phần quan trọng, phải ghi vào bài
 

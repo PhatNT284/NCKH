@@ -101,6 +101,8 @@ class MissionRecord:
     r_min: float | None = None
     r_fly: float | None = None
     extrapolated: bool = False
+    actionable: bool = False
+    mitigation_applied: str | None = None
 
     # Phien ban — thieu cai nao la mat kha nang tinh lai
     versions: dict = field(default_factory=dict)
@@ -122,10 +124,14 @@ class MissionRecord:
         """
         Nhiem vu co duoc phep tien hanh khong.
 
-        Het han thi KHONG, du phan quyet cu la FLY — P§4.2 doi phai tinh lai
-        truoc khi tien hanh.
+        Ba dieu kien, tat ca phai dung:
+            1. con han           — P§4.2, het han thi phai tinh lai
+            2. phan quyet cho bay — FLY hoac CONDITIONAL
+            3. da thuc thi duoc   — Muc 12.1: CONDITIONAL phai co bien phap
         """
-        return self.is_fresh and self.verdict in ("FLY", "CONDITIONAL")
+        return (self.is_fresh
+                and self.verdict in ("FLY", "CONDITIONAL")
+                and self.actionable)
 
     def to_json(self, indent: int = 2) -> str:
         return json.dumps(asdict(self), ensure_ascii=False, indent=indent,
@@ -169,6 +175,8 @@ def evaluate(mission_id: str, protocol: dict | None = None,
         r_min=d.r_min,
         r_fly=d.r_fly,
         extrapolated=d.extrapolated,
+        actionable=d.actionable,
+        mitigation_applied=d.mitigation_applied,
         versions=capture_versions(protocol, d.reserve_factor),
     )
 
@@ -265,8 +273,9 @@ def replay(record: MissionRecord, protocol: dict | None = None) -> MissionRecord
     protocol = protocol or load_protocol()
     r = record.versions.get("reserve_factor")
     moi = evaluate(record.mission_id, protocol=protocol,
-                   created_at=record.created_at,
-                   reserve_factor=r, **record.inputs)
+                   created_at=record.created_at, reserve_factor=r,
+                   mitigation_applied=record.mitigation_applied,
+                   **record.inputs)
     moi.outcome = record.outcome
     moi.outcome_note = record.outcome_note
     return moi

@@ -97,12 +97,31 @@ class Decision:
 
     # Nhan
     extrapolated: bool = False
+    mitigation_applied: str | None = None
     hard_rule_report: SafetyReport | None = None
     available: AvailableEnergy | None = None
 
     @property
     def may_fly(self) -> bool:
         return self.verdict in (FLY, CONDITIONAL)
+
+    @property
+    def actionable(self) -> bool:
+        """
+        Phan quyet nay da THUC THI DUOC chua — Muc 12.1, §2.3.
+
+        Nguyen van §2.3: "CONDITIONAL / DEGRADED is actionable only when an
+        approved mitigation is selected and the scenario is re-evaluated where
+        the mitigation changes energy demand or constraints."
+
+        Nen CONDITIONAL ma chua chon bien phap thi CHUA thuc thi duoc: no moi la
+        mot nhan, chua phai mot trang thai co duong ra. Xem src/mitigations.py.
+        """
+        if self.verdict == FLY:
+            return True
+        if self.verdict == CONDITIONAL:
+            return self.mitigation_applied is not None
+        return False
 
     def __str__(self) -> str:
         if self.margin_ratio is None:
@@ -127,6 +146,7 @@ def assess(payload_g: float | None = None,
            profile: str = PROFILE_STOCK,
            e_required_Wh: float | None = None,
            reserve_factor: float | None = None,
+           mitigation_applied: str | None = None,
            protocol: dict | None = None) -> Decision:
     """
     Danh gia kha thi nang luong cho mot nhiem vu.
@@ -137,6 +157,10 @@ def assess(payload_g: float | None = None,
 
     `reserve_factor` None -> dung gia tri chinh trong giao thuc (0.20). Truyen
     0.10 hoac 0.30 de quet — P§4.5 BAT BUOC bao ca ba muc.
+
+    `mitigation_applied` la ma bien phap giam thieu da duoc duyet va ap dung.
+    CONDITIONAL khong kem bien phap thi `actionable` = False (Muc 12.1, §2.3).
+    Dung src/mitigations.py de de xuat va ap dung.
     """
     protocol = protocol or load_protocol()
     cfg = protocol["reserve_and_verdict"]
@@ -158,7 +182,8 @@ def assess(payload_g: float | None = None,
     d = Decision(verdict=NO_FLY, hard_rule_report=hard, available=avail,
                  reserve_factor=r, r_min=r,
                  uncertainty_allowance_Wh=allowance,
-                 extrapolated=hard.extrapolated)
+                 extrapolated=hard.extrapolated,
+                 mitigation_applied=mitigation_applied)
 
     # --- Buoc 2: vi pham VETO -> NO_FLY, khong gi lat duoc -----------------
     # Xet TRUOC thieu du lieu: mot vi pham da biet chac chan van la vi pham,

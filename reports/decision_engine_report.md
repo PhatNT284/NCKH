@@ -8,7 +8,7 @@
 | Người làm | Phát |
 | Người kiểm chéo | Duy |
 | Tuần | 7 |
-| Giao thức | `configs/d3_protocol.yaml` v1.1.0 |
+| Giao thức | `configs/d3_protocol.yaml` v1.2.0 |
 | Ngày | 15/10/2026 |
 
 Mục 12 yêu cầu: *"available-energy model, mission-energy budget, reserve-margin
@@ -66,6 +66,7 @@ bằng phép quét mã nguồn (INV-6), không phải chỉ nói suông.
 | d. Lớp luật cứng | `src/safety_invariants.py` | §4.6, §5.7 |
 | e. Phán quyết bốn mức | `src/decision_rules.py` | §5.7 + §4.6 |
 | f. Dấu còn hạn, bản ghi | `src/workflow_state.py` | P§4.2 |
+| g. Biện pháp giảm thiểu | `src/mitigations.py` | Mục 12.1, §2.3 |
 
 Luật chơi đóng băng ở `configs/d3_protocol.yaml`. Mã nguồn **không chứa con số
 viết cứng** — mọi ngưỡng đọc từ giao thức, nên đổi tham số là sửa giao thức và
@@ -119,6 +120,46 @@ hết hạn          → INSUFFICIENT-DATA
 
 Đề xuất ban đầu của nhóm (thiếu → cao nhất CONDITIONAL) **không đạt**, vì
 CONDITIONAL vẫn là một dạng cho bay, tức vẫn là "favourable default".
+
+### B7 — Cự ly là khứ hồi, không phải một chiều
+
+Mục 12.1 đòi *"one-way versus round-trip distance explicit"*. Bản đầu của báo
+cáo này **không nêu**, phát hiện khi rà soát ngày 15/10/2026.
+
+Rodrigues et al. 2021, mục Methods: chuyến bay là **vòng kín tam giác, quay về
+đúng điểm cất cánh**; tải gắn Velcro, **mang suốt chuyến, không thả**. Bộ dữ
+liệu không có khái niệm điểm giao hàng.
+
+Nên envelope hiệu lực đọc được hai cách:
+
+| Cách đọc | Dải |
+|---|---|
+| Tổng quãng bay (như dữ liệu) | 420–610 m |
+| Cự ly giao hàng một chiều | **≈ 210–305 m** |
+
+Một nhiệm vụ giao hàng thật "472 m tới khách" sẽ bay ~944 m khứ hồi, **nằm ngoài
+envelope**. Mọi bảng và câu văn phải nói rõ đang dùng cách đọc nào.
+
+### B8 — CONDITIONAL phải có biện pháp giảm thiểu
+
+Mục 12.1 đòi *"conditional verdicts require an explicit mitigation"*; §2.3 nói
+rõ CONDITIONAL chỉ thực thi được khi **đã chọn một biện pháp được duyệt và đánh
+giá lại**.
+
+Bản đầu trả CONDITIONAL kèm một dòng lý do rồi hết — một nhãn, chưa phải trạng
+thái có đường ra. Đã bổ sung `src/mitigations.py` với 7 biện pháp:
+
+| Nhóm | Biện pháp | Đổi cái gì |
+|---|---|---|
+| A | M1 sạc thêm pin · M2 đổi pin TB48D · M3 đợi gió giảm · M4 đợi trời ấm | năng lượng khả dụng hoặc ràng buộc |
+| B | M5 giảm tải · M6 giảm tốc · M7 rút tuyến | **nhu cầu năng lượng** — bắt buộc dự báo lại |
+
+Nhóm B đổi `E_required` nên phải dự báo lại; hàm dự báo truyền từ ngoài vào, D3
+không được tự import mô hình (INV-6). Không có hàm dự báo thì nhóm B bị bỏ qua
+và **báo rõ**, không im lặng.
+
+`actionable = False` khi CONDITIONAL chưa có biện pháp. Bản ghi nhiệm vụ
+(`may_proceed`) tôn trọng cờ này.
 
 ### B6 — Hai hồ sơ máy bay
 
@@ -185,7 +226,7 @@ không bao giờ kích hoạt trên bộ dữ liệu này.
 ### Cách chạy lại
 
 ```bash
-python3 -m src.evaluation_decision        # khoảng 6 giây
+python3 -m src.evaluation_decision        # khoảng 25 giây
 ```
 
 Sinh bốn file vào `reports/`:
@@ -206,8 +247,9 @@ Sinh bốn file vào `reports/`:
 | INV-4 | tất định | 192 | **0** |
 | INV-5 | tính lại từ bản ghi | 192 | **0** |
 | INV-6 | không chứa mô hình học máy | 1 | **0** |
+| INV-7 | biện pháp giảm thiểu có tác dụng | 213 | **0** |
 
-**2.113 trường hợp, không vi phạm nào.**
+**2.326 trường hợp, không vi phạm nào.**
 
 Khác với test đơn vị: test đơn vị kiểm vài chục trường hợp do người chọn; bảng
 này lấy cấu hình từ 192 chuyến bay có thật.
@@ -309,6 +351,8 @@ học được từ dữ liệu.
 | Tính biên dự trữ | Đạt | `M` và `R`, §5.6 |
 | Lớp luật cứng | Đạt | 6 luật, có quyền phủ quyết, INV-1 đạt 576/576 |
 | Phán quyết ba mức | Đạt | bốn mức — ba của §5.7 cộng INSUFFICIENT-DATA của §4.6 |
+| **Cự ly một chiều / khứ hồi rõ ràng** | **Đạt** | quyết định B7; `data_dictionary.md`, `d3_protocol.yaml` mục `distance_convention` |
+| **CONDITIONAL đòi biện pháp giảm thiểu** | **Đạt** | quyết định B8; `src/mitigations.py`, INV-7 đạt 213/213 |
 | Fail closed | Đạt | INV-2 đạt 960/960 |
 | Không gộp điểm số | Đạt | không có trường điểm số nào; có test chặn |
 | Không gọi đầu ra là xác suất | Đạt | §5.6, §5.8 — có test chặn |
@@ -316,9 +360,9 @@ học được từ dữ liệu.
 | Bản ghi tái lập được | Đạt | INV-5 đạt 192/192 |
 | Kiểm chéo (Mục 10) | **Chờ Duy** | OI-D3-3 |
 
-**Chốt: 10/11 tiêu chí đạt. Còn chữ ký kiểm chéo của Duy.**
+**Chốt: 13/13 tiêu chí đạt. Còn chữ ký kiểm chéo của Duy (OI-D3-3).**
 
-Kiểm thử: **310 test**, trong đó 125 test cho riêng D3.
+Kiểm thử: **358 test**, trong đó 173 test cho riêng D3.
 
 ---
 
@@ -338,13 +382,17 @@ Kiểm thử: **310 test**, trong đó 125 test cho riêng D3.
 4. **Gió đo được dùng thay gió dự báo.** Ảnh hưởng nhỏ vì chưa bao giờ chạm
    giới hạn, nhưng phải khai báo.
 
-5. **Toàn bộ 192 chuyến vượt MTOW nhà sản xuất** (3.680–4.180 g so với 3.600 g).
+5. **Chuyến bay là vòng kín, tải mang suốt chuyến, không có điểm giao hàng.**
+   Bộ dữ liệu là đường bay thử. Cự ly phải đọc theo đúng quy ước (B7), và giao
+   hàng thật sẽ nhẹ dần ở chặng về — mô hình không mô tả được điều đó.
+
+6. **Toàn bộ 192 chuyến vượt MTOW nhà sản xuất** (3.680–4.180 g so với 3.600 g).
    Bài Rodrigues không nhắc tới giới hạn này.
 
-6. **`E_nominal = 99,9 Wh` là giá trị chốt tạm.** Bài báo gốc tự mâu thuẫn về
+7. **`E_nominal = 99,9 Wh` là giá trị chốt tạm.** Bài báo gốc tự mâu thuẫn về
    loại pin; nhóm chọn hướng bảo thủ. Bắt buộc chạy độ nhạy với 129,96 Wh ở D4.
 
-7. **Luật SoC tối thiểu chưa có** (OI-D3-1). §4.6 đòi một giới hạn SoC đặt
+8. **Luật SoC tối thiểu chưa có** (OI-D3-1). §4.6 đòi một giới hạn SoC đặt
    trước điểm hết phóng điện, dựa trên năng lượng hạ cánh từ độ cao hành trình.
    Hiện chưa tính. Không chặn D3 nghiệm thu nhưng phải làm trước D4.
 
@@ -380,6 +428,7 @@ Ba điều D4 phải mang theo:
 | Mã | Việc | Chặn gì |
 |---|---|---|
 | OI-D3-1 | Tính SoC tối thiểu để hạ cánh an toàn từ độ cao hành trình | luật cứng còn thiếu một mục; làm trước D4 |
+| RS-3 | Lệch tổng cự ly: 92,8 km (192 chuyến) so với ~65 km bài gốc ghi cho 209 chuyến. Nghi nhiễu GPS lúc treo bị cộng dồn. Chưa kết luận | không chặn; ảnh hưởng cách đọc envelope ở B7 |
 | OI-D3-3 | Duy xác nhận vai kiểm chéo WP3 và ký nghiệm thu | nghiệm thu D3 theo Mục 12.1 |
 | OI-4 | Báo thầy quyết định hai biến thể D2 | không chặn |
 | OI-5 | `Draft Báo.docx` còn dùng thông số Matrice 210 | D8 |

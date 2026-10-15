@@ -16,7 +16,7 @@
 # =============================================================================
 
 meta:
-  version: "1.1.0"
+  version: "1.2.0"
   frozen_on: "2026-10-14"
   owner: "Phat (WP3)"
   cross_checker: "Duy"
@@ -80,6 +80,34 @@ inputs:
        note: "§4.3: THAM SO KICH BAN, khong phai bien day du co kiem soat.
               Chi dung qua quan he suy giam co chan, co trich dan, va chi nhu
               phan tich do nhay."}
+
+  distance_convention:
+    decision_ref: "B7"
+    source_ref: "Muc 12.1 (D3): 'one-way versus round-trip distance explicit'; §4.3"
+    dataset_is: "ROUND_TRIP"
+    evidence: >
+      Rodrigues et al., Scientific Data 8, 155 (2021), muc Methods:
+      "tracks a triangular wind-neutral path while recording the data" va
+      "reaches the launch point again, the UAV stops and descends at
+      approximately 1.5 m/s". Chuyen bay la VONG KIN tam giac, quay ve dung
+      diem cat canh. Tai trong gan bang Velcro, MANG SUOT CHUYEN, khong tha.
+      Bo du lieu KHONG co khai niem diem giao hang — day la duong bay thu.
+    definition: >
+      distance_2d_m = tong quang duong bay thuc te cua CA VONG KIN, cong don
+      haversine theo tung mau GPS. KHONG phai cu ly mot chieu toi diem giao hang.
+    envelope_two_readings:
+      total_path_m: [420, 610]          # nhu du lieu, vong kin
+      one_way_delivery_m: [210, 305]    # xap xi, chia doi
+      rule: >
+        Khi bao cao PHAI noi ro dang dung cach doc nao. Mot nhiem vu giao hang
+        that "472 m toi khach" se bay ~944 m khu hoi, NAM NGOAI envelope.
+        Viet nham thi bai bao noi sai gap doi.
+    mass_mismatch_to_state_in_paper: >
+      Giao hang that thi chang ve nhe hon vi da tha hang; bo du lieu mang tai
+      suot chuyen. Mo hinh se DOAN THUA nang luong chang ve — lech ve phia an
+      toan, nhung van phai khai bao.
+    open_check: "RS-3 — tong cu ly 92.8 km (192 chuyen) vs ~65 km bai goc neu
+                 cho 209 chuyen; chua giai thich duoc, xem open_items"
 
   derived_from_plan:
     duration_planned_s:
@@ -343,6 +371,31 @@ reserve_and_verdict:
       - id: "INSUFFICIENT_DATA"
         condition: "thieu / khong hop le / ngoai dai / het han bat ky dau vao an toan nao"
 
+  conditional_mitigation:
+    decision_ref: "B8"
+    source_ref: "Muc 12.1 (D3): 'conditional verdicts require an explicit
+                 mitigation'; §2.3"
+    quote: >
+      "CONDITIONAL / DEGRADED is actionable only when an approved mitigation is
+      selected and the scenario is re-evaluated where the mitigation changes
+      energy demand or constraints."
+    rule: >
+      CONDITIONAL khong kem bien phap -> actionable = False. Phan quyet van la
+      CONDITIONAL (giu thong tin), nhung KHONG duoc tien hanh nhiem vu cho toi
+      khi chon mot bien phap va DANH GIA LAI.
+    validity_conditions:
+      - "bien phap phai doi NHU CAU NANG LUONG hoac RANG BUOC — khong duoc la
+         loi hua suong kieu 'can than hon khi bay'"
+      - "bien phap phai THUC SU cai thien phan quyet khi ap dung (INV-7)"
+    catalogue_ref: "src/mitigations.py"
+    groups:
+      A: "doi nang luong kha dung hoac rang buoc — tinh duoc ngay (M1-M4)"
+      B: "doi nhu cau nang luong — phai du bao lai bang mo hinh D2 (M5-M7)"
+    estimator_rule: >
+      Nhom B doi E_required nen BAT BUOC du bao lai. Ham du bao truyen tu ngoai
+      vao, D3 KHONG duoc tu import mo hinh (INV-6). Khong co ham du bao thi nhom
+      B bi bo qua va BAO RO trong ket qua, khong im lang.
+
   fail_closed:
     source_ref: "§4.6"
     quote: >
@@ -416,6 +469,14 @@ invariants:
       name: "khong co mo hinh hoc may trong D3"
       statement: "D3 khong goi .fit() o bat ky dau"
       method: "kiem tinh tren ma nguon"
+    - id: "INV-7"
+      name: "bien phap giam thieu phai co tac dung"
+      statement: "moi bien phap duoc de xuat PHAI cai thien phan quyet khi ap dung"
+      method: "propose() chay thu tung bien phap truoc khi de xuat; test quet
+               moi nhiem vu trong 192 chuyen"
+      rationale: >
+        De xuat mot bien phap khong doi duoc gi la lua nguoi dung. Va mot danh
+        sach bien phap khong bao gio duoc kiem thi som muon se chua rac.
 
 # -----------------------------------------------------------------------------
 # 8. NHUNG DIEU KHONG DUOC LAM
@@ -431,6 +492,9 @@ prohibitions:
   - "Khong gop vi pham luat cung vao mot diem so (§5.6)"
   - "Khong dien gia tri mac dinh thay cho dau vao thieu (§4.6)"
   - "Khong bao ket qua chi o mot muc he so du tru (P§4.5)"
+  - "Khong coi CONDITIONAL la thuc thi duoc khi chua chon bien phap (Muc 12.1)"
+  - "Khong de xuat bien phap ma khong chay thu truoc (INV-7)"
+  - "Khong noi 'cu ly' ma khong noi ro mot chieu hay khu hoi (Muc 12.1)"
   - "Khong goi nhan kich ban la 'ground truth' hay 'flight outcomes' (§4.7)"
 
 # -----------------------------------------------------------------------------
@@ -457,6 +521,17 @@ open_items:
       cho DAI nhiet do cua kich ban D4, khong noi vao tung chuyen bay.
     owner: "Phat"
     status: "DONG — khong lam"
+  - id: "RS-3"
+    item: >
+      Tong distance_2d_m cua 192 chuyen = 92.8 km; bai Rodrigues ghi bo du lieu
+      phu "approximately 65 kilometres" cho 209 chuyen — lech ~43 %. Hai kha
+      nang: bai tinh theo tuyen danh nghia con nhom tinh theo quy dao GPS that;
+      HOAC phep cong haversine theo tung mau cong don ca NHIEU GPS luc treo,
+      lam phong cu ly. Kha nang thu hai dang lo hon va kiem duoc: so voi khoang
+      cach duong thang giua cac diem moc, hoac loc cac buoc nho hon nguong nhieu.
+      Chua ket luan gi. Anh huong cach doc envelope o B7.
+    owner: "Phat"
+    blocks: null
   - id: "OI-D3-3"
     item: >
       Duy xac nhan vai kiem cheo WP3 (xem d2_protocol.yaml OI-6). Can doc
@@ -531,3 +606,36 @@ change_log:
         must_state_in_paper: >
           Toan bo 192 chuyen vuot MTOW nha san xuat. Day la han che cua bo du
           lieu, phai neu ro, khong duoc im lang.
+
+  - version: "1.2.0"
+    date: "2026-10-15"
+    author: "Phat"
+    changes: >
+      Vá hai thieu sot phat hien khi ra soat doi chieu Muc 12.1. KHONG doi cong
+      thuc, nguong hay ket qua nao da cong bo — cac bang trong reports/ giu
+      nguyen, khong phai chay lai.
+    decisions:
+      - id: "B7"
+        question: "cu ly trong bo du lieu la mot chieu hay khu hoi?"
+        resolution: >
+          KHU HOI (vong kin tam giac, quay ve diem cat canh). Khai bao ro trong
+          giao thuc, data_dictionary va bao cao. Envelope dien giai theo HAI cach
+          doc: tong quang bay 420-610 m, hoac cu ly giao hang mot chieu ~210-305 m.
+        basis: >
+          Muc 12.1 doi "one-way versus round-trip distance explicit" va truoc
+          ban va nay KHONG CHO NAO trong repo noi toi. Tra bai Rodrigues et al.
+          2021 muc Methods xac nhan duong bay vong kin va tai mang suot chuyen.
+        impact: >
+          Khong doi con so nao, nhung doi CACH DOC envelope. Mot nhiem vu giao
+          hang "472 m toi khach" bay ~944 m khu hoi, NGOAI envelope.
+      - id: "B8"
+        question: "CONDITIONAL can gi de thuc thi duoc?"
+        resolution: >
+          Phai chon mot bien phap giam thieu hop le VA danh gia lai. Chua chon
+          thi actionable = False. Them src/mitigations.py voi 7 bien phap chia
+          hai nhom, va bat bien INV-7.
+        basis: >
+          Muc 12.1 doi "conditional verdicts require an explicit mitigation";
+          §2.3 noi ro "actionable only when an approved mitigation is selected
+          and the scenario is re-evaluated". Ban truoc tra CONDITIONAL kem mot
+          dong ly do roi het — mot nhan, chua phai trang thai co duong ra.
