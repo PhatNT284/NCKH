@@ -8,8 +8,8 @@
 | Người làm | Phát |
 | Người kiểm chéo | Duy |
 | Tuần | 7 |
-| Giao thức | `configs/d3_protocol.yaml` v1.2.0 |
-| Ngày | 15/10/2026 |
+| Giao thức | `configs/d3_protocol.yaml` v1.3.0 |
+| Ngày | 19/10/2026 |
 
 Mục 12 yêu cầu: *"available-energy model, mission-energy budget, reserve-margin
 calculation, hard-rule layer, three-level verdict"*.
@@ -74,7 +74,7 @@ ghi `change_log`, không sửa code.
 
 ---
 
-## 3. Ba quyết định đã chốt
+## 3. Bảy quyết định đã chốt
 
 ### B3 — κ(T) ngoài dải hiệu chỉnh
 
@@ -102,7 +102,13 @@ Khoản cộng thêm lấy từ phân vị 95 của phần dư out-of-fold của
 §4.7 chỉ: *"a documented uncertainty allowance"* rút từ phần dư **đo được**,
 không phải từ chính mô hình.
 
-Với chuyến trung bình 21,3 Wh thì vạch trên ≈ 26,9%.
+Với chuyến trung bình 21,3 Wh thì vạch trên ≈ 26,9%. Vì khoản cộng thêm là một
+lượng Wh **tuyệt đối**, vạch trên **khác nhau ở từng chuyến** — chuyến cần ít Wh
+thì phần dự phòng bất định chiếm tỷ lệ cao hơn.
+
+**Điều `r` KHÔNG bao gồm:** năng lượng cất cánh và hạ cánh. Hai khoản đó nằm
+trong `E_required`, không nằm trong `r` — xem quyết định B9. Nâng `r` để bù cho
+hạ cánh là đếm hai lần.
 
 **Đây là chỗ kết quả D2 thực sự chảy vào D3.** Không có D2 thì con số này là bịa.
 
@@ -160,6 +166,52 @@ và **báo rõ**, không im lặng.
 
 `actionable = False` khi CONDITIONAL chưa có biện pháp. Bản ghi nhiệm vụ
 (`may_proceed`) tôn trọng cờ này.
+
+### B9 — Quy ước ngân sách năng lượng, chống đếm hai lần
+
+P§4.5 cho công thức ngân sách:
+
+```
+E_required = E_outbound + E_return + E_hover          (4)
+```
+
+và kèm một ràng buộc nguyên văn: *"subject to an explicit convention that
+prevents double counting. Whether the stated route distance is one-way or
+round-trip, **whether take-off and landing energy is already contained in the
+estimator's output**, whether the return leg carries the payload, and what
+cruise speed and altitude are assumed are all recorded in the mission record
+and fixed before evaluation."*
+
+Bốn quy ước. Bản trước chỉ khai một (cự ly khứ hồi, B7).
+
+| | Quy ước | Chốt |
+|---|---|---|
+| 1 | cự ly một chiều hay khứ hồi | **khứ hồi** (B7) |
+| 2 | năng lượng cất/hạ cánh đã trong output chưa | **đã có** |
+| 3 | chặng về có mang tải không | **có** |
+| 4 | giả định tốc độ và độ cao hành trình | tốc độ ra lệnh, độ cao kế hoạch |
+| + | số hạng `E_hover` | **= 0** |
+
+**Quy ước (2) là quy ước quan trọng nhất.** Mục tiêu dự báo của D2 là **tổng
+năng lượng cả chuyến bay**, không phân đoạn theo pha — §4.2 bước 4 cho phép:
+*"If phase segmentation is unreliable, use total flight energy as the primary
+target"*. Chuyến bay CMU là vòng kín đầy đủ: cất cánh, leo, hành trình, hạ, đáp
+đất.
+
+Nên `E_required` **đã bao gồm** năng lượng cất cánh và hạ cánh. Hệ quả là
+**tuyệt đối không được** cộng thêm một khoản hạ cánh, và không được nâng `r` để
+"bù cho hạ cánh" — làm vậy là đếm hai lần.
+
+`E_hover = 0` vì bộ dữ liệu không có điểm giao hàng (tải mang suốt chuyến, không
+thả). Không phải nhóm bỏ sót số hạng thứ ba của công thức (4); nó bằng 0 vì
+nhiệm vụ không có pha treo giao hàng. Nếu sau này áp cho giao hàng thật thì phải
+cộng lại, và phải khai lại quy ước (3) vì lúc đó chặng về không mang tải.
+
+**Phát hiện thế nào:** khi rà câu hỏi *"hệ số dự trữ r = 0,20 bù cho những rủi
+ro nào?"*. Tra P§4.5 thì thấy câu trả lời không nằm ở `r` mà nằm ở `E_required`,
+và thầy có bắt khai báo rõ — mà repo chưa khai.
+
+Chi tiết: `configs/d3_protocol.yaml` mục `energy_required.budget_conventions`.
 
 ### B6 — Hai hồ sơ máy bay
 
@@ -223,6 +275,18 @@ Chạy ở đây để minh hoạ, kiểm bất biến trên dữ liệu thật,
 bay trong dải 2,81–6,67 m/s, **chưa bao giờ chạm giới hạn 10 m/s**, nên HR-1
 không bao giờ kích hoạt trên bộ dữ liệu này.
 
+### Quy ước ngân sách năng lượng đang áp dụng
+
+Theo quyết định B9 và `d3_protocol.yaml` mục `budget_conventions`:
+
+| Quy ước | Giá trị |
+|---|---|
+| Cự ly | khứ hồi (vòng kín) |
+| Năng lượng cất cánh và hạ cánh | **đã nằm trong** `E_required` |
+| Chặng về mang tải | có |
+| Tốc độ / độ cao hành trình | tốc độ ra lệnh / độ cao kế hoạch |
+| `E_hover` | 0 Wh — không có điểm giao hàng |
+
 ### Cách chạy lại
 
 ```bash
@@ -237,7 +301,7 @@ Sinh bốn file vào `reports/`:
 
 ## 6. Kết quả
 
-### 6.1 — Sáu bất biến, trên dữ liệu thật
+### 6.1 — Bảy bất biến, trên dữ liệu thật
 
 | Bất biến | Nội dung | Số trường hợp | Vi phạm |
 |---|---|---|---|
@@ -347,7 +411,7 @@ học được từ dữ liệu.
 | Tiêu chí | Trạng thái | Bằng chứng |
 |---|---|---|
 | Mô hình năng lượng khả dụng | Đạt | `src/available_energy.py`, §5.4 Eq (2) |
-| Ngân sách năng lượng nhiệm vụ | Đạt | gọi `D2_ridge_preflight` đã chốt, không huấn luyện lại |
+| Ngân sách năng lượng nhiệm vụ | Đạt | gọi `D2_ridge_preflight` đã chốt, không huấn luyện lại; quy ước ngân sách khai ở B9 |
 | Tính biên dự trữ | Đạt | `M` và `R`, §5.6 |
 | Lớp luật cứng | Đạt | 6 luật, có quyền phủ quyết, INV-1 đạt 576/576 |
 | Phán quyết ba mức | Đạt | bốn mức — ba của §5.7 cộng INSUFFICIENT-DATA của §4.6 |
@@ -384,7 +448,9 @@ Kiểm thử: **358 test**, trong đó 173 test cho riêng D3.
 
 5. **Chuyến bay là vòng kín, tải mang suốt chuyến, không có điểm giao hàng.**
    Bộ dữ liệu là đường bay thử. Cự ly phải đọc theo đúng quy ước (B7), và giao
-   hàng thật sẽ nhẹ dần ở chặng về — mô hình không mô tả được điều đó.
+   hàng thật sẽ nhẹ dần ở chặng về — mô hình không mô tả được điều đó. Số hạng
+   `E_hover` của công thức (4) bằng 0 vì không có pha treo giao hàng; áp cho
+   nhiệm vụ thật thì phải cộng lại (B9).
 
 6. **Toàn bộ 192 chuyến vượt MTOW nhà sản xuất** (3.680–4.180 g so với 3.600 g).
    Bài Rodrigues không nhắc tới giới hạn này.
@@ -392,9 +458,18 @@ Kiểm thử: **358 test**, trong đó 173 test cho riêng D3.
 7. **`E_nominal = 99,9 Wh` là giá trị chốt tạm.** Bài báo gốc tự mâu thuẫn về
    loại pin; nhóm chọn hướng bảo thủ. Bắt buộc chạy độ nhạy với 129,96 Wh ở D4.
 
-8. **Luật SoC tối thiểu chưa có** (OI-D3-1). §4.6 đòi một giới hạn SoC đặt
-   trước điểm hết phóng điện, dựa trên năng lượng hạ cánh từ độ cao hành trình.
-   Hiện chưa tính. Không chặn D3 nghiệm thu nhưng phải làm trước D4.
+8. **Chưa có sàn an toàn cho tình huống sự cố** (OI-D3-1). §4.6 đòi một giới hạn
+   an toàn đặt **trước** điểm hết phóng điện. Hiện hệ thống chưa có luật riêng
+   cho việc này.
+
+   Phân biệt rõ: năng lượng hạ cánh **bình thường** ở cuối chuyến **không
+   thiếu** — nó đã nằm trong `E_required` (quyết định B9). Việc còn thiếu là sàn
+   cho tình huống phải **huỷ chuyến giữa đường và đáp gấp**.
+
+   Hai cách đặt luật, cho kết quả khác nhau: ngưỡng SoC cố định, hoặc năng lượng
+   hạ cánh dự phòng tính theo độ cao hành trình. Đang chờ thầy chốt một lựa
+   chọn. Không chặn D3 nghiệm thu — Mục 12.1 không có tiêu chí này — nhưng phải
+   xong trước D4.
 
 ---
 
@@ -409,7 +484,7 @@ Bốn thứ D4 cần, đã có sẵn:
 | Bản ghi nhiệm vụ | `src/workflow_state.py` → `MissionRecord` |
 | Dải tham số có dữ liệu đỡ lưng | `reports/parameter_table.md` mục 5 |
 
-Ba điều D4 phải mang theo:
+Bốn điều D4 phải mang theo:
 
 1. **Nhãn tham chiếu phải độc lập với mô hình đang đánh giá.** §4.7 cảnh báo nếu
    dùng chính D2 sinh nhãn rồi lại dùng D2 dự báo thì đánh giá là vòng tròn và
@@ -421,13 +496,17 @@ Ba điều D4 phải mang theo:
 
 3. **Chạy độ nhạy `E_nominal = 129,96 Wh`** — bắt buộc, §8 mục 3.
 
+4. **Giữ nguyên quy ước ngân sách năng lượng của B9.** Bộ sinh kịch bản không
+   được cộng thêm năng lượng hạ cánh vào `E_required`, và phải khai rõ đang lấy
+   mẫu cự ly theo cách đọc nào (tổng quãng bay hay một chiều).
+
 ---
 
 ## 10. Việc còn treo
 
 | Mã | Việc | Chặn gì |
 |---|---|---|
-| OI-D3-1 | Tính SoC tối thiểu để hạ cánh an toàn từ độ cao hành trình | luật cứng còn thiếu một mục; làm trước D4 |
+| OI-D3-1 | Sàn an toàn khi có sự cố — chờ thầy chốt cách đặt luật. Hạ cánh bình thường đã trong `E_required` (B9) | không chặn nghiệm thu; làm trước D4 |
 | RS-3 | Lệch tổng cự ly: 92,8 km (192 chuyến) so với ~65 km bài gốc ghi cho 209 chuyến. Nghi nhiễu GPS lúc treo bị cộng dồn. Chưa kết luận | không chặn; ảnh hưởng cách đọc envelope ở B7 |
 | OI-D3-3 | Duy xác nhận vai kiểm chéo WP3 và ký nghiệm thu | nghiệm thu D3 theo Mục 12.1 |
 | OI-4 | Báo thầy quyết định hai biến thể D2 | không chặn |
@@ -443,4 +522,4 @@ Ba điều D4 phải mang theo:
 | Mã nguồn | `src/available_energy.py`, `src/safety_invariants.py`, `src/decision_rules.py`, `src/workflow_state.py`, `src/evaluation_decision.py` |
 | Kết quả | `reports/d3_min_soc_per_flight.csv`, `d3_verdict_grid.csv`, `d3_scenario_sensitivity.csv`, `d3_invariant_check.csv` |
 | Kiểm thử | `tests/test_available_energy.py`, `test_safety_invariants.py`, `test_decision_rules.py`, `test_workflow_state.py` |
-| Giải thích cho nhóm | `docs/san_pham/D3_bo_may_quyet_dinh.md` — **chưa viết** |
+| Giải thích cho nhóm | `docs/san_pham/D3_bo_may_quyet_dinh.md` |

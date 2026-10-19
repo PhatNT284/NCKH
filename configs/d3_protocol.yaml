@@ -16,8 +16,8 @@
 # =============================================================================
 
 meta:
-  version: "1.2.0"
-  frozen_on: "2026-10-14"
+  version: "1.3.0"
+  frozen_on: "2026-10-19"
   owner: "Phat (WP3)"
   cross_checker: "Duy"
   cross_check_status: "PENDING"
@@ -179,6 +179,77 @@ energy_required:
     KHONG huan luyen lai, KHONG tinh chinh, KHONG doi tap dac trung. D3 chi GOI
     mo hinh da chot. Doi mo hinh la doi san pham D2, phai nghiem thu lai.
 
+  # ---------------------------------------------------------------------------
+  # 3.1 — QUY UOC NGAN SACH NANG LUONG — §4.5, chong dem hai lan
+  # ---------------------------------------------------------------------------
+  # P§4.5 nguyen van: cong thuc (4) la
+  #     E_required = E_outbound + E_return + E_hover
+  # "subject to an explicit convention that prevents double counting. Whether
+  #  the stated route distance is one-way or round-trip, whether take-off and
+  #  landing energy is already contained in the estimator's output, whether the
+  #  return leg carries the payload, and what cruise speed and altitude are
+  #  assumed are all recorded in the mission record and fixed before evaluation."
+  #
+  # Bon quy uoc do khai o day. Thieu mot cai la mo duong cho loi dem hai lan.
+  budget_conventions:
+    decision_ref: "B9"
+    source_ref: "P§4.5, Eq (4)"
+
+    # (1) — da khai o inputs.distance_convention, nhac lai cho du bon
+    distance_convention: "ROUND_TRIP"
+    distance_convention_ref: "inputs.distance_convention, quyet dinh B7"
+
+    # (2) — nang luong cat canh va ha canh
+    takeoff_landing_energy: "INCLUDED_IN_ESTIMATOR_OUTPUT"
+    takeoff_landing_rationale: >
+      Muc tieu du bao cua D2 la TONG nang luong CA CHUYEN BAY, khong phan doan
+      theo pha. §4.2 buoc 4 cho phep: "If phase segmentation is unreliable, use
+      total flight energy as the primary target" — nhom chon phuong an do vi cot
+      vi tri o don vi do kem nhieu GPS, va cot van toc lech 2.4 % so voi vi tri,
+      nen khong cat duoc ranh gioi pha mot cach nhat quan.
+      Chuyen bay CMU la vong kin day du: cat canh, leo, hanh trinh, ha, dap dat
+      (Rodrigues et al., Methods: "reaches the launch point again, the UAV stops
+      and descends at approximately 1.5 m/s").
+      => E_required DA BAO GOM nang luong cat canh va ha canh.
+    takeoff_landing_prohibition: >
+      TUYET DOI khong cong them mot khoan nang luong ha canh vao E_required, va
+      khong nang he so du tru r de "bu cho ha canh". Lam vay la DEM HAI LAN,
+      dung loi ma §4.5 sinh ra de chong.
+      Phan ha canh KHAN CAP giua chuyen la viec khac — xem hard_rules.minimum_soc.
+
+    # (3) — chang ve co mang tai khong
+    return_leg_carries_payload: true
+    return_leg_rationale: >
+      Tai trong gan bang Velcro va MANG SUOT CHUYEN, khong tha. Bo du lieu
+      KHONG co khai niem diem giao hang — day la duong bay thu.
+    return_leg_bias_direction: >
+      Nhiem vu giao hang THAT thi chang ve nhe hon vi da tha hang, nen mo hinh
+      huan luyen tren bo du lieu nay se DOAN THUA nang luong chang ve. Lech ve
+      phia AN TOAN (tu choi thua, khong phai cho bay nham), nhung van phai
+      khai bao va neu trong phan han che cua bai.
+
+    # (4) — gia dinh toc do va do cao hanh trinh
+    cruise_speed_assumption: "speed_commanded_ms (toc do RA LENH, khong phai do duoc)"
+    cruise_altitude_assumption: "altitude_m (do cao ke hoach)"
+    cruise_rationale: >
+      Ca hai la tham so KE HOACH, biet truoc khi cat canh, va ca hai nam trong
+      tap dac trung cua D2_ridge_preflight. §5.5 bat khai bao gia dinh toc do
+      hanh trinh — day la cho khai.
+      duration_planned_s = distance_2d_m / speed_commanded_ms, xem
+      inputs.derived_from_plan.
+
+    # So hang thu ba cua cong thuc (4)
+    e_hover_Wh: 0.0
+    e_hover_rationale: >
+      Cong thuc (4) co so hang E_hover cho thoi gian treo TAI DIEM GIAO HANG.
+      Bo du lieu CMU khong co diem giao hang (tai mang suot chuyen, khong tha),
+      nen so hang nay = 0 trong moi danh gia chay tren 192 chuyen.
+      KHONG phai nhom bo sot: no bang 0 vi nhiem vu khong co pha treo giao hang.
+    e_hover_future_rule: >
+      Neu sau nay ap he thong cho nhiem vu giao hang THAT (co tha hang) thi
+      PHAI cong E_hover tro lai, va phai khai lai quy uoc (3) vi luc do chang
+      ve khong mang tai.
+
   measured_error:
     # NHAT QUAN: moi con so duoi day tinh tu PHAN DU OUT-OF-FOLD GOP
     # (reports/d2_oof_residuals.csv, cot D2_ridge_preflight, 192 dong).
@@ -309,13 +380,24 @@ hard_rules:
         Thay cho luat MTOW o ho so CMU_instrumented. Bo du lieu chi phu 0-500 g;
         tren 500 g la ngoai suy, mo hinh nang luong khong co du lieu do lung.
 
-  # 4.3 — SoC toi thieu
+  # 4.3 — SoC toi thieu — SAN AN TOAN KHI CO SU CO
   minimum_soc:
     principle: >
       §4.6: dat gioi han an toan TRUOC khi het phong dien, khong phai TAI diem
       het phong dien (theo Zhang et al. [10]).
-    definition: "SoC toi thieu de con du nang luong ha canh tu do cao hanh trinh"
-    status: "CAN TINH — xem open_items OI-D3-1"
+    definition: >
+      SAN AN TOAN KHI CO SU CO: SoC toi thieu de con ha canh duoc neu phai HUY
+      CHUYEN GIUA DUONG, tu do cao hanh trinh.
+    not_to_be_confused_with: >
+      KHAC HAN nang luong ha canh BINH THUONG o cuoi chuyen. Cai do DA NAM
+      TRONG E_required — xem energy_required.budget_conventions muc (2).
+      Cong them mot lan nua la DEM HAI LAN.
+      San nay la cho tinh huong BAT THUONG: dang bay nua duong, phai dap gap.
+    status: "CHO THAY QUYET — xem open_items OI-D3-1"
+    does_not_block_acceptance: >
+      Da doi chieu bang tieu chi nghiem thu Muc 12.1 cho san pham D3: KHONG co
+      tieu chi nao doi luat SoC toi thieu. D3 van dat 13/13 khi chua co luat
+      nay. Day la viec BO SUNG, khong phai loi phai va.
 
 # -----------------------------------------------------------------------------
 # 5. BIEN DU TRU VA PHAN QUYET (khoi c, e)
@@ -339,6 +421,12 @@ reserve_and_verdict:
       BAT BUOC bao ket qua tren CA BA muc 0.10 / 0.20 / 0.30. P§4.5: "a finding
       that holds only at one arbitrary reserve setting is not a finding about
       the method."
+    does_not_cover: >
+      r KHONG bao gom hai khoan sau — ghi ro de khong dem hai lan:
+        (a) nang luong cat canh va ha canh -> nam trong E_required, xem
+            energy_required.budget_conventions muc (2), quyet dinh B9;
+        (b) sai so du bao cua mo hinh -> nam trong nguong tren R_fly, xem
+            thresholds duoi day, quyet dinh B4.
 
   thresholds:
     decision_ref: "B4"
@@ -496,6 +584,8 @@ prohibitions:
   - "Khong de xuat bien phap ma khong chay thu truoc (INV-7)"
   - "Khong noi 'cu ly' ma khong noi ro mot chieu hay khu hoi (Muc 12.1)"
   - "Khong goi nhan kich ban la 'ground truth' hay 'flight outcomes' (§4.7)"
+  - "Khong cong them nang luong ha canh vao E_required, va khong nang r de bu
+     cho ha canh — DEM HAI LAN (P§4.5, quyet dinh B9)"
 
 # -----------------------------------------------------------------------------
 # 9. VIEC CON TREO
@@ -503,11 +593,22 @@ prohibitions:
 open_items:
   - id: "OI-D3-1"
     item: >
-      Tinh SoC toi thieu de ha canh an toan tu do cao hanh trinh. Can: nang luong
-      ha canh tu 25/50/75/100 m. Co the uoc tu cong suat treo cua mo hinh vat ly
-      D5 (src/physics_m100.py) — eta da xac thuc sai lech 3.4 %.
+      San an toan khi co su co — CHO THAY QUYET MOT LUA CHON THIET KE.
+      Da lam ro pham vi: nang luong ha canh BINH THUONG khong thieu, no da nam
+      trong E_required (energy_required.budget_conventions muc 2). Viec con lai
+      la san an toan cho tinh huong phai HUY CHUYEN GIUA DUONG.
+      Hai cach dat luat, cho ket qua khac nhau:
+        (a) nguong SoC co dinh — vi du khong bao gio xuong duoi 15 %
+        (b) nang luong ha canh du phong tu do cao hanh trinh, tinh tu cong suat
+            treo cua mo hinh vat ly D5 (src/physics_m100.py, eta xac thuc 3.4 %),
+            toc do ha 1.5 m/s theo Rodrigues et al.
+      Uoc so bo theo cach (b), toc do ha 1.5 m/s:
+        25 m -> 1.5 Wh  |  50 m -> 2.9 Wh  |  75 m -> 4.4 Wh  |  100 m -> 5.9 Wh
+      altitude_m la tham so KE HOACH nen tinh duoc o thoi diem pre-flight.
+      Cau hoi cho thay: dat theo (a) hay (b)?
     owner: "Phat"
     blocks: "hard_rules.minimum_soc"
+    does_not_block: "nghiem thu D3 theo Muc 12.1 — da doi chieu, 13/13 khong can muc nay"
   - id: "OI-D3-2"
     item: >
       DA XET VA BAC BO: dung API thoi tiet (Open-Meteo / NASA POWER) de tra nhiet
@@ -639,3 +740,50 @@ change_log:
           §2.3 noi ro "actionable only when an approved mitigation is selected
           and the scenario is re-evaluated". Ban truoc tra CONDITIONAL kem mot
           dong ly do roi het — mot nhan, chua phai trang thai co duong ra.
+
+  - version: "1.3.0"
+    date: "2026-10-19"
+    author: "Phat"
+    changes: >
+      Khai day du bon quy uoc ngan sach nang luong theo P§4.5 (truoc do chi khai
+      mot: cu ly khu hoi, B7). Lam ro pham vi minimum_soc. KHONG doi cong thuc,
+      nguong hay ket qua nao — moi bang trong reports/ giu nguyen, khong phai
+      chay lai.
+    decisions:
+      - id: "B9"
+        question: >
+          P§4.5 bat khai bon quy uoc ngan sach nang luong de chong dem hai lan.
+          Giao thuc 1.2.0 chi khai mot. Ba cai con lai la gi?
+        resolution: >
+          (1) cu ly: ROUND_TRIP (da co, B7).
+          (2) nang luong cat/ha canh: DA NAM TRONG output cua mo hinh, vi muc
+              tieu D2 la tong nang luong ca chuyen (§4.2 buoc 4). KHONG cong them.
+          (3) chang ve mang tai: CO (Velcro, mang suot chuyen). Lech ve phia
+              an toan nhung phai khai.
+          (4) gia dinh hanh trinh: toc do = speed_commanded_ms, do cao =
+              altitude_m, ca hai la tham so ke hoach va nam trong tap dac trung.
+          Them: E_hover = 0 vi bo du lieu khong co diem giao hang.
+        basis: >
+          P§4.5 nguyen van: "subject to an explicit convention that prevents
+          double counting... are all recorded in the mission record and fixed
+          before evaluation."
+        impact: >
+          KHONG doi hanh vi he thong. Day la khai bao dieu he thong DANG lam.
+          Nhung no chan mot loi that: truoc ban va nay, mot nguoi doc giao thuc
+          co the ket luan rang nang luong ha canh chua duoc tinh, roi cong them
+          vao E_required hoac nang r len — tuc DEM HAI LAN theo huong lam he
+          thong qua thuan trong (tu choi thua), hoac nguoc lai.
+        found_how: >
+          Phat hien khi ra soat cau hoi "he so du tru r = 0.20 bu cho nhung rui
+          ro nao?". Tra P§4.5 thi thay cau tra loi khong nam o r ma nam o
+          E_required, va thay bat khai bao ro — ma repo chua khai.
+      - id: "B9b"
+        question: "minimum_soc dinh nghia the nao de khong lan voi ha canh thuong?"
+        resolution: >
+          Dinh nghia lai ro: SAN AN TOAN KHI CO SU CO (huy chuyen giua duong),
+          KHONG phai ha canh binh thuong cuoi chuyen. Ghi lien ket cheo sang
+          energy_required.budget_conventions muc (2).
+        basis: >
+          Dinh nghia cu — "SoC toi thieu de con du nang luong ha canh tu do cao
+          hanh trinh" — doc ra nghia ha canh thuong, ma cai do da trong
+          E_required. Giu nguyen la mo duong cho loi dem hai lan.

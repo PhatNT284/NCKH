@@ -98,15 +98,23 @@ tình huống mùa đông).
 | Dải nhiệt độ | Dùng gì | Căn cứ |
 |---|---|---|
 | 4,5 – 18,4 °C | `0,8814 + 0,0091·T − 0,0001·T²` | trong dải hiệu chỉnh |
-| Ngoài dải đó | **κ = 1** | cận bảo thủ, §5.4 |
+| **Dưới 4,5 °C** | **κ = poly(4,5) = 0,9203** | kẹp ở biên lạnh, quyết định B3 |
+| Trên 18,4 °C | **κ = 1** | cận bảo thủ, §5.4 |
 
 **Vì sao phải chặn trên bằng 1:** đa thức gốc trả về giá trị **lớn hơn 1** trong
 khoảng xấp xỉ 15,8 – 75,2 °C, đạt 1,089 tại 45,5 °C — tức khẳng định pin chứa
 nhiều năng lượng hơn mức danh định của chính nó. Vô lý về vật lý.
 
+**Vì sao phía lạnh phải kẹp ở 0,9203 chứ không phải 1** (quyết định B3, giao
+thức D3 v1.0.0): quy tắc cũ cho κ = 1 với **mọi** nhiệt độ ngoài dải. Đúng ở
+phía nóng nhưng sai ở phía lạnh — tại 4,4 °C nó nhảy từ 0,920 lên 1,000, tức
+càng lạnh càng giả định pin càng khoẻ. Pin LiPo lạnh thì tụt dung lượng, nên quy
+tắc cũ làm `E_available` tính **thừa** → biên dự trữ ảo → cho bay chuyến không
+đủ pin. Giữ ở giá trị biên thì không ngoại suy, liên tục, và bảo thủ.
+
 **Hệ quả thực tế, phải nêu trong bài:** dải nhiệt độ vận hành M100 là −10 đến
 40 °C, trong khi dải hiệu chỉnh của Kim chỉ 4,5 – 18,4 °C. Nghĩa là **phần lớn
-vùng vận hành nằm ngoài dải hợp lệ**, và ở đó κ bị giữ ở 1.
+vùng vận hành nằm ngoài dải hợp lệ**, và ở đó κ bị giữ ở giá trị biên.
 
 Nói cách khác: mô hình hiện **không mô tả được ảnh hưởng của nhiệt độ** trên phần
 lớn dải vận hành. §5.4 ghi rõ nhiệt độ chỉ là **phân tích độ nhạy**, không phải
@@ -181,6 +189,9 @@ thành NO-FLY**, kể cả chuyến không tải — benchmark vô nghĩa.
 3. Nếu sau này áp dụng hệ thống cho máy bay thật ở cấu hình nguyên bản, lúc đó luật
    `tải trọng ≤ 1.245 g` mới đúng.
 
+Đã thực hiện ở giao thức D3 v1.1.0 (quyết định B6): tách hai hồ sơ máy bay,
+`M100_stock` và `CMU_instrumented`.
+
 #### Hệ quả cho mô hình vật lý D5
 
 Hệ số η trong `src/physics_m100.py` khớp trên dải khối lượng **2.431 – 3.431 g**
@@ -204,6 +215,56 @@ nhưng không được trình bày như yêu cầu của cơ quan quản lý hay
 
 Và bắt buộc báo kết quả trên cả ba mức, không chỉ mức cho kết quả đẹp nhất.
 
+### `r` không bao gồm những gì
+
+Hai khoản **không** nằm trong `r`. Ghi rõ ở đây để không đếm hai lần:
+
+| Khoản | Nằm ở đâu | Quyết định |
+|---|---|---|
+| Năng lượng **cất cánh và hạ cánh** | trong `E_required` — mục tiêu dự báo của D2 là **tổng năng lượng cả chuyến bay** (§4.2 bước 4, không phân đoạn theo pha) | **B9** |
+| **Sai số dự báo** của mô hình | trong ngưỡng trên `R_fly = r + p95(phần dư) / E_required` | **B4** |
+
+Nên `r` chỉ bù cho **rủi ro vận hành** — gió đổi hướng, bay vòng chờ, lệch tuyến.
+
+**Hai điều tuyệt đối không được làm:**
+
+1. Cộng thêm một khoản năng lượng hạ cánh vào `E_required`.
+2. Nâng `r` lên để "bù cho hạ cánh".
+
+Cả hai là **đếm hai lần**. P§4.5 bắt khai bốn quy ước ngân sách năng lượng chính
+để chống lỗi này — *"subject to an explicit convention that prevents double
+counting"*. Bốn quy ước khai ở `configs/d3_protocol.yaml` mục
+`energy_required.budget_conventions`.
+
+### Việc còn treo liên quan `r`
+
+**OI-D3-1 — sàn an toàn khi có sự cố.** §4.6 đòi một giới hạn an toàn đặt
+**trước** điểm hết phóng điện (theo Zhang et al.). Việc này **khác** năng lượng
+hạ cánh bình thường — cái đó đã nằm trong `E_required` theo B9. Sàn này là cho
+tình huống phải **huỷ chuyến giữa đường và đáp gấp**.
+
+Hai cách đặt luật, cần thầy chốt:
+
+| Cách | Nội dung |
+|---|---|
+| (a) | ngưỡng SoC cố định — ví dụ không bao giờ xuống dưới 15 % |
+| (b) | năng lượng hạ cánh dự phòng tính theo độ cao hành trình |
+
+Ước sơ bộ theo cách (b), tốc độ hạ 1,5 m/s (Rodrigues et al.), dùng công suất
+treo của mô hình vật lý D5:
+
+| Độ cao | Năng lượng hạ cánh |
+|---|---|
+| 25 m | 1,5 Wh |
+| 50 m | 2,9 Wh |
+| 75 m | 4,4 Wh |
+| 100 m | 5,9 Wh |
+
+`altitude_m` là tham số **kế hoạch** nên tính được ở thời điểm pre-flight.
+
+Không chặn nghiệm thu D3 — đã đối chiếu Mục 12.1, không có tiêu chí nào đòi luật
+này. Nhưng phải xong trước D4.
+
 ---
 
 ## 5. Độ phủ của bộ dữ liệu so với giới hạn vận hành
@@ -220,7 +281,7 @@ dữ liệu đỡ lưng, dải nào là ngoại suy.
 | Cự ly | **~472 m (94 % số chuyến), VÒNG KÍN** | — | Xem cảnh báo dưới |
 | Nhiệt độ | **không ghi nhận** | −10 … 40 °C | Hoàn toàn không có dữ liệu |
 
-### Hai cảnh báo cho bộ sinh kịch bản ở sản phẩm D4
+### Ba cảnh báo cho bộ sinh kịch bản ở sản phẩm D4
 
 **Cự ly là KHỨ HỒI, không phải một chiều** (quyết định B7). Chuyến bay CMU là
 vòng kín tam giác quay về điểm cất cánh, tải mang suốt chuyến. Nên envelope đọc
@@ -246,6 +307,11 @@ là giả định thuần tuý, và κ(T) chỉ hợp lệ trên một phần nh
 Kết quả liên quan tới nhiệt độ phải trình bày như **phân tích độ nhạy**, không
 phải dự báo.
 
+**Ngân sách năng lượng** — bộ sinh kịch bản phải giữ nguyên bốn quy ước của B9.
+Không được cộng thêm năng lượng hạ cánh vào `E_required`. Nếu kịch bản mô phỏng
+giao hàng **thật** (có thả hàng) thì phải cộng lại `E_hover` và khai lại quy ước
+chặng về, vì lúc đó chặng về không mang tải.
+
 ---
 
 ## 6. Tóm tắt trạng thái
@@ -255,16 +321,19 @@ phải dự báo.
 | Năng lượng khả dụng | **Xong** — `E_nominal` = 99,9 Wh, kèm phân tích độ nhạy bắt buộc |
 | Hệ số nhiệt độ | Xong, kèm giới hạn sử dụng đã ghi rõ |
 | Luật cứng | **Xong toàn bộ** |
-| Tham số chính sách | Xong |
+| Tham số chính sách | Xong — kèm khai báo `r` không bao gồm gì (B9) |
+| Sàn an toàn sự cố | **Chờ thầy** — OI-D3-1, không chặn nghiệm thu D3 |
 
-**Bảng tham số đã đủ — Quyền bắt đầu sản phẩm D3 được ngay.**
+**Bảng tham số đã đủ cho sản phẩm D3.**
 
-Ba điều phải mang theo sang D3:
+Bốn điều phải mang theo sang D3 và D4:
 
 1. `E_nominal = 99,9 Wh` là **giá trị bảo thủ đã chốt**, không phải giá trị chắc
    chắn. Phải chạy độ nhạy với 129,96 Wh ở sản phẩm D4.
 2. **Không dùng luật `tải trọng ≤ 1.245 g`** — xem mục 3.1. Dải hợp lệ là 0 – 500 g.
 3. **Envelope cự ly 420 – 610 m** — xem mục 5.
+4. **Bốn quy ước ngân sách năng lượng của B9** — xem mục 4. Không cộng thêm năng
+   lượng hạ cánh, không nâng `r` để bù.
 
 ---
 
@@ -282,4 +351,7 @@ Ba điều phải mang theo sang D3:
   định lượng**
 - Zhang, J., et al. "Energy consumption models for delivery drones." *Transportation
   Research Part D*, 90, 2021. [DOI 10.1016/j.trd.2020.102668](https://doi.org/10.1016/j.trd.2020.102668)
+- Rodrigues, T. A., et al. "In-flight positional and energy use data set of a DJI
+  Matrice 100 quadcopter for small package delivery." *Scientific Data* 8, 155
+  (2021). [DOI 10.1038/s41597-021-00930-x](https://doi.org/10.1038/s41597-021-00930-x)
 - Khối lượng và tải trọng tối đa: `src/physics_m100.py`

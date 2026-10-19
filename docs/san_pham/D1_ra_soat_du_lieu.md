@@ -195,24 +195,123 @@ Nó cũng chính là giá trị mà mô hình D0 trung bình hằng luôn dự b
 
 ---
 
-## 4. Vì sao từ 209 chuyến còn 192
+## 4. Hai phép rút gọn — vì sao bảng cuối chỉ còn 192 dòng
 
-Loại 17 chuyến, mỗi chuyến có lý do ghi rõ trong `reports/exclusion_log.csv`:
+Chỗ này hay gây nhầm, vì **hai phép rút gọn khác nhau xảy ra cùng lúc**:
 
-| Lý do | Số chuyến | Giải thích |
-|---|---|---|
-| Không phải bay hành trình | 13 | Tuyến bắt đầu bằng `A` (chạy không tải) hoặc `H` (bay treo tại chỗ). Không phải nhiệm vụ giao hàng |
-| Độ cao ngoài lưới | 2 | Không thuộc 25/50/75/100 m |
-| Tải ngoài lưới | 1 | Không thuộc 0/250/500 g |
-| Cảm biến dòng hỏng | 1 | Dòng trung vị dưới 1,0 A — máy bay không thể bay với dòng nhỏ vậy, chắc chắn cảm biến lỗi |
+```
+flights.csv       242.019 dòng  ──┐
+                                  ├──→  flight_level.csv  192 dòng
+parameters.csv        209 dòng  ──┘
+```
 
-Thầy bắt buộc ghi nhật ký loại trừ (Mục 12.1). Lý do: người đọc phải kiểm được
-nhóm có loại bỏ chuyến bay một cách tuỳ tiện để làm đẹp kết quả hay không.
-
-Lưu ý thêm: mã chuyến bay chạy từ 1 đến 279 nhưng chỉ có 209 dòng — **70 chuyến
-đã bị chính tác giả loại từ trước**. Nhóm không biết lý do, phải nêu trong hạn chế.
+Hai con số giảm vì hai lý do hoàn toàn khác nhau. Tách ra sẽ rõ.
 
 ---
+
+### Rút gọn A — gộp nhiều dòng telemetry thành một dòng
+
+Đây là lý do từ **hàng trăm nghìn dòng** còn **vài trăm dòng**.
+
+Máy bay đo khoảng **5,3 đến 9,1 lần mỗi giây**, suốt chuyến bay dài 106–428 giây.
+Nên **một chuyến bay sinh ra rất nhiều dòng**:
+
+| | Số mẫu telemetry |
+|---|---|
+| Chuyến ít nhất | 708 |
+| Trung vị | 1.220 |
+| Chuyến nhiều nhất | 2.856 |
+| **Tổng 192 chuyến** | **242.019** |
+
+Một chuyến cụ thể trong `flights.csv` trông như sau:
+
+```
+flight  time    battery_voltage  battery_current  position_x    ...
+  5     0.00        22.41             8.3         -79.78231
+  5     0.17        22.40             9.1         -79.78232
+  5     0.34        22.38            12.7         -79.78234
+  ...                                                           ← 1.220 dòng
+  5   205.82        20.95             7.4         -79.78231
+```
+
+Cả 1.220 dòng đó **mô tả đúng một chuyến bay**.
+
+Việc của D1 là biến chúng thành **một dòng tóm tắt**:
+
+```
+flight  energy_Wh  distance_2d_m  duration_s  payload  speed  altitude
+  5       21.4         472.6        205.8       250      8       50
+```
+
+Trong đó `21.4 Wh` là **cộng dồn cả 1.220 mẫu** qua phép tích phân ở mục 3, và
+`472.6 m` là **cộng dồn từng bước GPS** bằng haversine.
+
+**Không mất thông tin nào** — nó được gộp lại thành đại lượng tổng của cả chuyến.
+
+#### Vì sao phải gộp — hai lý do, lý do thứ hai quan trọng hơn
+
+**Lý do thứ nhất, kỹ thuật.** Câu hỏi của đề tài là *"chuyến bay này tốn bao
+nhiêu Wh"*. Đơn vị của câu hỏi là **chuyến bay**. Một mẫu telemetry đơn lẻ không
+có "năng lượng của nó" — năng lượng chỉ có nghĩa khi cộng dồn theo thời gian.
+
+**Lý do thứ hai, chống rò rỉ.** §5.3 của thầy bắt chia tập ở cấp chuyến bay:
+
+> *"Keep all samples from one flight in the same data partition. Never split
+> time-series rows from one flight between training and testing."*
+
+Nếu giữ nguyên 242.019 dòng rồi chia ngẫu nhiên để huấn luyện và kiểm, thì 1.220
+dòng của **cùng một chuyến** sẽ nằm ở **cả hai phía**. Mô hình chỉ cần **nhớ**
+chuyến đó chứ không cần học quy luật, và điểm số sẽ đẹp một cách giả tạo.
+
+Gộp thành một dòng mỗi chuyến làm chuyện đó **không thể xảy ra về mặt cấu trúc**
+— chứ không phải nhờ một luật mà ai đó phải nhớ tuân thủ.
+
+---
+
+### Rút gọn B — loại chuyến không dùng được
+
+Đây là lý do từ **209 chuyến** còn **192 chuyến**, và nó xảy ra ở cấp **chuyến
+bay**, không liên quan gì tới telemetry.
+
+---
+
+### Hai phép này độc lập nhau
+
+```
+parameters.csv              flights.csv
+  209 chuyến              242.019 dòng telemetry
+      │                            │
+      │  rút gọn B                 │  rút gọn A
+      │  loại 17 chuyến            │  gộp ~1.220 dòng → 1 dòng
+      └──────────┬─────────────────┘
+                 ▼
+         flight_level.csv
+          192 dòng × 23 cột
+```
+
+Nếu **không loại chuyến nào** thì bảng cuối vẫn là **209 dòng**, không phải 209
+nghìn dòng. Phép gộp xảy ra bất kể có loại hay không.
+
+---
+
+### Một con số đáng nhớ khi trình bày
+
+Dữ liệu thô có **242 nghìn mẫu** — nghe rất nhiều. Nhưng sau khi gộp chỉ còn
+**192 chuyến**, và theo phân tích ở mục 6, cỡ mẫu hiệu dụng còn gần **60 cấu
+hình** hơn.
+
+```
+242.019 mẫu  →  192 chuyến  →  ~60 cấu hình độc lập
+```
+
+Chênh lệch từ 242 nghìn xuống 60 là lý do đề tài phải chọn Ridge chứ không phải
+mạng nơ-ron, và phải dùng CV lặp 25 lần chứ không phải một lần chia.
+
+**Ai nhìn 242 nghìn dòng rồi nói "dữ liệu nhiều" là đã đếm sai đơn vị.**
+
+---
+
+### Chi tiết rút gọn B — 17 chuyến bị loại
 
 ## 5. Ba lỗi tìm thấy trong bộ dữ liệu
 

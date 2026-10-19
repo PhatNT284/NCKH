@@ -10,7 +10,8 @@ Bám **Mục 12** và **Mục 12.1** của file thầy, cộng §5.4, §5.6, §5
 
 ## 1. Vì sao cần D3
 
-Sản phẩm D2 trả lời được *"chuyến này tốn bao nhiêu Wh"*. Câu trả lời là **22,0 Wh**.
+Sản phẩm D2 trả lời được *"chuyến này tốn bao nhiêu Wh"* — một con số riêng cho
+từng nhiệm vụ, trong dải khoảng 13–38 Wh, sai trung bình 0,66 Wh.
 
 Không người điều phối nào ra lệnh cất cánh dựa trên con số đó. Họ cần nghe:
 **bay được, bay có điều kiện, hay không được bay**.
@@ -24,6 +25,8 @@ trữ an toàn, luật cứng, và khai báo rõ giới hạn hiệu lực.
 ---
 
 ## 2. Một ví dụ chạy suốt
+
+Mọi con số dưới đây là của **riêng chuyến này** — chuyến khác thì ra số khác.
 
 Sáng mai có chuyến giao hàng:
 
@@ -41,7 +44,10 @@ Sáng mai có chuyến giao hàng:
 
 ### Bước 2 — Chuyến cần bao nhiêu
 
-Mô hình `D2_ridge_preflight` trả về **22,0 Wh**. Sai số trung bình 0,66 Wh.
+Mô hình `D2_ridge_preflight` trả về **22,0 Wh** cho chuyến này. Sai số trung
+bình 0,66 Wh.
+
+Con số đó **đã bao gồm** năng lượng cất cánh và hạ cánh — xem mục 3b.
 
 ### Bước 3 — Có được phép bay không
 
@@ -93,12 +99,95 @@ Cộng bao nhiêu? Lấy từ chính kết quả D2: 95 % số chuyến có sai 
 R_fly = r + p95(|phần dư|) / E_required
 ```
 
+Vì có phép **chia cho `E_required`**, vạch trên **khác nhau ở mỗi chuyến**.
+Con số 26,7 % là của riêng ví dụ này. Chuyến cần ít Wh thì phần dự phòng bất
+định chiếm tỷ lệ cao hơn.
+
 Cách này đúng chỉ dẫn §4.7 của thầy: *"a documented uncertainty allowance"* rút
 từ phần dư **đo được**, không phải từ chính mô hình. Lấy từ chính mô hình thì
 đánh giá thành vòng tròn và luôn cho kết quả đẹp.
 
 **Đây là lý do thầy bắt làm xong D2 mới được làm D3.** Không có D2 thì con số
 6,7 % kia là bịa.
+
+---
+
+## 3b. Điều `r` KHÔNG bao gồm — quyết định B9
+
+Đây là chỗ dễ hiểu sai nhất, nên ghi riêng một mục.
+
+Câu hỏi hay gặp: *"20 % đó có bao gồm năng lượng để hạ cánh không?"*
+
+**Không. Và không cần.** Năng lượng hạ cánh nằm ở chỗ khác.
+
+P§4.5 cho công thức ngân sách:
+
+```
+E_required = E_outbound + E_return + E_hover          (4)
+```
+
+và kèm một ràng buộc: *"subject to an explicit convention that prevents double
+counting. Whether the stated route distance is one-way or round-trip, **whether
+take-off and landing energy is already contained in the estimator's output**,
+whether the return leg carries the payload, and what cruise speed and altitude
+are assumed are all recorded in the mission record and fixed before
+evaluation."*
+
+Bốn quy ước phải khai. Nhóm chốt như sau:
+
+| | Quy ước | Chốt |
+|---|---|---|
+| 1 | cự ly một chiều hay khứ hồi | **khứ hồi** (B7) |
+| 2 | năng lượng cất/hạ cánh đã trong output chưa | **đã có** |
+| 3 | chặng về có mang tải không | **có** |
+| 4 | giả định tốc độ và độ cao hành trình | tốc độ ra lệnh, độ cao kế hoạch |
+| + | số hạng `E_hover` | **= 0** |
+
+### Vì sao quy ước (2) là "đã có"
+
+Mục tiêu dự báo của D2 là **tổng năng lượng cả chuyến bay**, không phân đoạn
+theo pha.
+
+Nhớ lại D1: §4.2 bước 4 cho phép *"If phase segmentation is unreliable, use
+total flight energy as the primary target"*, và nhóm chọn phương án đó vì cột
+vị trí ở đơn vị độ kèm nhiễu GPS, còn cột vận tốc lệch 2,4 % so với vị trí —
+không cắt được ranh giới pha một cách nhất quán.
+
+Mà chuyến bay CMU là vòng kín **đầy đủ**: cất cánh, leo, hành trình, hạ, đáp
+đất. Rodrigues et al., mục Methods: *"reaches the launch point again, the UAV
+stops and descends at approximately 1.5 m/s"*.
+
+Nên `E_required` **đã bao gồm** năng lượng cất cánh và hạ cánh.
+
+### Hệ quả — hai điều tuyệt đối không được làm
+
+1. **Không cộng thêm** một khoản năng lượng hạ cánh vào `E_required`.
+2. **Không nâng `r`** để "bù cho hạ cánh".
+
+Làm một trong hai là **đếm hai lần** — đúng lỗi mà §4.5 sinh ra để chống.
+
+### `E_hover` bằng 0, và vì sao không phải bỏ sót
+
+Công thức (4) có số hạng `E_hover` cho thời gian treo **tại điểm giao hàng**.
+
+Bộ dữ liệu CMU không có điểm giao hàng — tải gắn Velcro, mang suốt chuyến, không
+thả. Nên số hạng này bằng 0.
+
+Không phải nhóm bỏ sót. Nó bằng 0 vì nhiệm vụ không có pha treo giao hàng. Nếu
+sau này áp cho giao hàng thật thì phải cộng lại, **và phải khai lại quy ước (3)**
+vì lúc đó chặng về không mang tải.
+
+### Phát hiện quy ước này thiếu như thế nào
+
+Khi rà câu hỏi *"hệ số dự trữ r = 0,20 bù cho những rủi ro nào?"*. Tra P§4.5 thì
+thấy câu trả lời không nằm ở `r` mà nằm ở `E_required`, và thầy có bắt khai báo
+rõ — mà repo chưa khai.
+
+Trước bản vá này, một người đọc giao thức có thể kết luận rằng năng lượng hạ
+cánh chưa được tính, rồi cộng thêm vào. Đó là lỗi thật, và nó im lặng.
+
+Chi tiết: `../../configs/d3_protocol.yaml` mục
+`energy_required.budget_conventions`.
 
 ---
 
@@ -215,7 +304,7 @@ tự ghi "thành công" thì nó tự chấm điểm chính nó và luôn đư�
 Đây là câu hay bị hỏi: **không có đáp án thì kiểm kiểu gì?**
 
 Không đo được độ chính xác — bộ dữ liệu không có nhãn *"chuyến này đáng lẽ có nên
-bay không"*. Thay vào đó kiểm **sáu tính chất phải luôn đúng**:
+bay không"*. Thay vào đó kiểm **bảy tính chất phải luôn đúng**:
 
 | | Nội dung | Trường hợp | Vi phạm |
 |---|---|---|---|
@@ -283,7 +372,7 @@ SoC tối thiểu để bay, `r = 0,20`: **trung vị 26,5 %, p90 35,1 %, lớn 
 
 ---
 
-## 10. Sáu quyết định đã chốt
+## 10. Bảy quyết định đã chốt
 
 | Mã | Câu hỏi | Chốt |
 |---|---|---|
@@ -293,6 +382,7 @@ SoC tối thiểu để bay, `r = 0,20`: **trung vị 26,5 %, p90 35,1 %, lớn 
 | B6 | HR-3 áp sao khi máy bay vượt MTOW? | tách hai hồ sơ máy bay |
 | **B7** | cự ly là một chiều hay khứ hồi? | **khứ hồi** — envelope đọc hai cách |
 | **B8** | CONDITIONAL cần gì để thực thi được? | **phải chọn biện pháp và đánh giá lại** |
+| **B9** | ngân sách năng lượng gồm những gì? | **bốn quy ước §4.5 — xem mục 3b** |
 
 ### B3 đáng kể nhất
 
@@ -329,11 +419,12 @@ sensors and wiring 1113 g… totaling 3680 g"*.
 
 ---
 
-## 11. Hai thiếu sót phát hiện khi rà soát — đã vá
+## 11. Ba thiếu sót phát hiện khi rà soát — đã vá
 
-Ngày 15/10/2026 rà lại, đối chiếu **từng chữ** bảng Mục 12.1, phát hiện hai tiêu
-chí chưa đáp ứng. Cả hai **không phải lỗi code** — code chạy đúng điều đã thiết
-kế — mà là **thiếu một phần thiết kế**. Đã vá cùng ngày.
+Ngày 15/10/2026 và 19/10/2026 rà lại, đối chiếu **từng chữ** bảng Mục 12.1 và
+P§4.5, phát hiện ba tiêu chí chưa đáp ứng. Cả ba **không phải lỗi code** — code
+chạy đúng điều đã thiết kế — mà là **thiếu một phần thiết kế hoặc một phần khai
+báo**. Đã vá.
 
 Giữ lại mục này để truy vết, và vì nó là ví dụ tốt: đọc kỹ yêu cầu rồi đối chiếu
 từng dòng quan trọng hơn chạy thêm thí nghiệm.
@@ -415,6 +506,33 @@ Và biện pháp **không lật được NO-FLY**: áp M1 lên một chuyến vi
 NO-FLY, `actionable = False`. Có test riêng khoá điều này — nếu không, biện pháp
 sẽ thành cửa sau để lách lớp luật cứng.
 
+### RS-4 → quyết định B9 — quy ước ngân sách năng lượng
+
+P§4.5 đòi khai **bốn** quy ước ngân sách năng lượng vào mission record, để chống
+đếm hai lần. Repo chỉ khai **một** (cự ly khứ hồi, B7).
+
+Phát hiện khi rà câu hỏi *"hệ số dự trữ r = 0,20 bù cho những rủi ro nào?"*. Tra
+P§4.5 thì thấy câu trả lời không nằm ở `r` mà nằm ở `E_required`.
+
+Chi tiết đầy đủ ở **mục 3b** phía trên. Tóm lại:
+
+| Quy ước | Chốt |
+|---|---|
+| cự ly | khứ hồi (đã có, B7) |
+| năng lượng cất/hạ cánh | **đã nằm trong output mô hình** |
+| chặng về mang tải | có |
+| giả định hành trình | tốc độ ra lệnh, độ cao kế hoạch |
+| `E_hover` | 0 Wh |
+
+**Không đổi hành vi hệ thống.** Đây là khai báo điều hệ thống **đang** làm.
+
+Nhưng nó chặn một lỗi thật: trước bản vá, một người đọc giao thức có thể kết
+luận rằng năng lượng hạ cánh chưa được tính, rồi cộng thêm vào `E_required` hoặc
+nâng `r` lên — tức đếm hai lần, và không ai phát hiện ra vì cả hai hướng đều
+"trông có vẻ an toàn hơn".
+
+---
+
 ## 12. Bàn giao sang D4
 
 | Cần gì | Ở đâu |
@@ -424,21 +542,37 @@ sẽ thành cửa sau để lách lớp luật cứng.
 | Bản ghi nhiệm vụ | `src/workflow_state.py` → `MissionRecord` |
 | Dải tham số có dữ liệu đỡ lưng | `../../reports/parameter_table.md` mục 5 |
 
-Ba điều bắt buộc mang theo:
+Bốn điều bắt buộc mang theo:
 
 1. **Nhãn tham chiếu phải độc lập với D2.** Dùng D2 sinh nhãn rồi lại dùng D2 dự
    báo là vòng tròn, luôn cho kết quả đẹp. Lấy nhãn từ phân phối phần dư đo được.
 2. **SoH và nhiệt độ là ngoại suy thuần** — dán nhãn rõ (§6/E3).
 3. **Chạy độ nhạy `E_nominal = 129,96 Wh`** — bắt buộc, §8 mục 3.
+4. **Giữ nguyên quy ước ngân sách của B9.** Bộ sinh kịch bản không được cộng
+   thêm năng lượng hạ cánh, và phải khai rõ lấy mẫu cự ly theo cách đọc nào.
 
 ---
 
-## 13. Đọc tiếp
+## 13. Việc còn treo
+
+| Mã | Việc | Trạng thái |
+|---|---|---|
+| **OI-D3-1** | Sàn an toàn khi có **sự cố** — SoC tối thiểu để đáp gấp giữa đường. **Khác** hạ cánh bình thường, cái đó đã trong `E_required` (B9). Hai cách đặt luật, cần thầy chốt | **chờ thầy** |
+| OI-D3-3 | Duy ký kiểm chéo WP3 | chờ Duy |
+| RS-3 | Tổng cự ly 92,8 km vs ~65 km bài gốc | chưa kết luận |
+| OI-4 | Hai phiên bản thời lượng D2 | chờ thầy |
+
+OI-D3-1 **không chặn nghiệm thu** — đã đối chiếu Mục 12.1, không có tiêu chí
+nào đòi luật này, D3 vẫn đạt 13/13. Nhưng phải xong trước D4.
+
+---
+
+## 14. Đọc tiếp
 
 | Muốn gì | Đọc |
 |---|---|
 | Bản nộp thầy | `../../reports/decision_engine_report.md` |
-| Luật chơi đóng băng | `../../configs/d3_protocol.yaml` v1.2.0 |
+| Luật chơi đóng băng | `../../configs/d3_protocol.yaml` v1.3.0 |
 | Tham số và nguồn | `../../reports/parameter_table.md` |
 | Vì sao chọn Ridge | `../../reports/model_selection_report.md` |
 | Trạng thái mọi sản phẩm | `../../reports/deliverables.md` |
