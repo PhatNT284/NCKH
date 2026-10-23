@@ -12,8 +12,8 @@ import pytest
 
 from src.decision_rules import CONDITIONAL, FLY, VERDICT_ORDER, assess, load_protocol
 from src.evaluation_decision import (
-    ESTIMATOR, R_LEVELS, SOH_MAIN, TEMP_MAIN, _mission_kwargs, load_missions,
-    min_soc_for, run_invariants,
+    ESTIMATOR, KIEM_BAT_BIEN, R_LEVELS, SOH_MAIN, TEMP_MAIN,
+    _mission_kwargs, load_missions, min_soc_for, run_invariants,
 )
 
 
@@ -119,14 +119,34 @@ class TestMinSoc:
 
 
 class TestInvariantsOnRealData:
-    """Sau bat bien, chay tren cau hinh bay co that."""
+    """Toan bo bat bien khai trong giao thuc, chay tren cau hinh bay co that."""
 
     @pytest.fixture(scope="class")
     def kq(self, df, protocol):
         return run_invariants(df, protocol)
 
-    def test_du_bay_bat_bien(self, kq):
-        assert list(kq["invariant"]) == [f"INV-{i}" for i in range(1, 8)]
+    def test_bang_ket_qua_khop_giao_thuc(self, kq, protocol):
+        """
+        Bang CSV phai liet ke DUNG nhung bat bien ma giao thuc khai — khong
+        thieu, khong thua, dung thu tu.
+
+        Truoc ban 1.4.0 test nay viet cung `range(1, 8)`, nen moi lan them bat
+        bien la mot lan phai sua test — va DA SAI HAI LAN: them INV-7 roi INV-8
+        vao giao thuc nhung CSV van giu so dong cu. Gio so sanh truc tiep voi
+        giao thuc nen khong the lech nua.
+        """
+        khai = [t["id"] for t in protocol["invariants"]["tests"]]
+        assert list(kq["invariant"]) == khai
+
+    def test_moi_bat_bien_khai_deu_co_ham_kiem(self, protocol):
+        """
+        `run_invariants()` nem loi neu giao thuc khai mot bat bien ma khong co
+        ham kiem. Test nay kiem trong ca hai chieu, truoc khi chay.
+        """
+        khai = {t["id"] for t in protocol["invariants"]["tests"]}
+        assert khai == set(KIEM_BAT_BIEN), (
+            f"lech: giao thuc {sorted(khai - set(KIEM_BAT_BIEN))}, "
+            f"code {sorted(set(KIEM_BAT_BIEN) - khai)}")
 
     def test_khong_bat_bien_nao_bi_vi_pham(self, kq):
         xau = kq[kq["vi_pham"] > 0]
@@ -138,3 +158,13 @@ class TestInvariantsOnRealData:
 
     def test_tong_so_truong_hop_dang_ke(self, kq):
         assert kq["so_truong_hop"].sum() > 2000
+
+    def test_inv8_co_trong_bang(self, kq):
+        """
+        INV-8 (san nang luong ha canh, PH-1) phai co mat va duoc thu tren hang
+        tram truong hop — khong chi khai trong giao thuc roi de do.
+        """
+        hang = kq[kq["invariant"] == "INV-8"]
+        assert len(hang) == 1
+        assert hang.iloc[0]["so_truong_hop"] >= 500
+        assert hang.iloc[0]["vi_pham"] == 0

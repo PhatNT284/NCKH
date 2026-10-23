@@ -255,6 +255,10 @@ class TestProtocolD3:
         assert cfg["primary_Wh"] < cfg["sensitivity_Wh"], "gia tri chinh phai bao thu hon"
 
     def test_du_bon_luat_cung_nha_san_xuat(self, protocol):
+        """
+        Muc `manufacturer` chi duoc chua luat co so la SO DJI CONG BO.
+        PH-1 (san nang luong ha canh) nam o muc rieng `physics_derived`.
+        """
         ids = [r["id"] for r in protocol["hard_rules"]["manufacturer"]]
         assert ids == ["HR-1", "HR-2", "HR-3", "HR-4"]
 
@@ -334,9 +338,33 @@ class TestProtocolD3:
     def test_envelope_khop_d2(self, protocol):
         assert protocol["energy_required"]["validity_envelope"]["distance_2d_m"] == [420, 610]
 
-    def test_du_bay_bat_bien(self, protocol):
+    def test_du_tam_bat_bien(self, protocol):
+        """
+        Tam bat bien tu ban 1.4.0 (them INV-8 — san nang luong ha canh).
+
+        Test nay la cho phai sua moi khi them bat bien. Va src/evaluation_decision.py
+        giờ doc danh sach TU GIAO THUC roi nem loi neu thieu ham kiem, nen CSV
+        khong con lech so dong voi giao thuc nua.
+        """
         ids = [t["id"] for t in protocol["invariants"]["tests"]]
-        assert ids == [f"INV-{i}" for i in range(1, 8)]
+        assert ids == [f"INV-{i}" for i in range(1, 9)]
+
+    def test_quy_uoc_ngan_sach_nang_luong_day_du(self, protocol):
+        """
+        P§4.5 bat khai BON quy uoc de chong dem hai lan (quyet dinh B9).
+        Thieu mot cai la mo duong cho loi cong nang luong ha canh hai lan.
+        """
+        bc = protocol["energy_required"]["budget_conventions"]
+        assert bc["distance_convention"] == "ROUND_TRIP"
+        assert bc["takeoff_landing_energy"] == "INCLUDED_IN_ESTIMATOR_OUTPUT"
+        assert bc["return_leg_carries_payload"] is True
+        assert bc["cruise_speed_assumption"]
+        assert bc["cruise_altitude_assumption"]
+        assert bc["e_hover_Wh"] == 0.0
+
+    def test_cam_cong_hai_lan_nang_luong_ha_canh(self, protocol):
+        """Dieu cam nay la ket qua truc tiep cua quyet dinh B9."""
+        assert any("DEM HAI LAN" in p for p in protocol["prohibitions"])
 
     def test_cam_noi_du_lieu_thoi_tiet(self, protocol):
         """§4.4 — ghi lai de khong ai de xuat lai."""

@@ -60,6 +60,23 @@ class TestActionable:
         assert d.verdict == NO_FLY
         assert d.actionable is False
 
+    def test_bien_phap_khong_lat_duoc_ph1(self):
+        """
+        PH-1 (san nang luong ha canh) la VETO nen bien phap cung khong lat
+        duoc — giong HR-1. Khong co test nay thi M1 (sac them pin) thanh cua
+        sau de lach PH-1.
+
+        Chuyen bay cao 100 m, tai 500 g, ho so CMU: can 11.93 Wh de ha canh,
+        tuc SoC toi thieu 11.9 %. Dat SoC 5 % -> vi pham PH-1.
+        """
+        d = assess(**{**SAT_NGUONG, "payload_g": 500, "altitude_m": 100,
+                      "soc": 0.05, "soh": 1.0, "e_required_Wh": 5.0,
+                      "profile": "CMU_instrumented"},
+                   mitigation_applied="M1")
+        assert d.verdict == NO_FLY
+        assert d.actionable is False
+        assert "PH-1" in d.reasons[0]
+
     def test_insufficient_data_khong_thuc_thi_duoc(self):
         d = assess(**{**SAT_NGUONG, "soc": None}, mitigation_applied="M1")
         assert d.actionable is False
@@ -225,11 +242,51 @@ class TestProtocolMitigation:
         assert cfg["decision_ref"] == "B8"
         assert "mitigations.py" in cfg["catalogue_ref"]
 
-    def test_du_bay_bat_bien(self, protocol):
-        ids = [t["id"] for t in protocol["invariants"]["tests"]]
-        assert ids == [f"INV-{i}" for i in range(1, 8)]
+    def test_bat_bien_khai_khop_voi_ham_kiem(self, protocol):
+        """
+        Danh sach bat bien phai khop giua giao thuc va code — KHONG viet cung
+        con so o day.
+
+        Truoc ban nay test viet `range(1, 9)`. Do la cho thu NAM viet cung cung
+        mot danh sach, va loi lech danh sach da xay ra BA LAN (them INV-7, them
+        INV-8, roi test_evaluation_decision.py) — lan nao cung im lang: giao
+        thuc khai mot dang, bang bang chung in mot dang, khong ai bao gi.
+        Bay gio so truc tiep voi `KIEM_BAT_BIEN` nen them bat bien chi phai sua
+        DUNG HAI cho: giao thuc va ham kiem.
+        """
+        from src.evaluation_decision import KIEM_BAT_BIEN
+
+        khai = [t["id"] for t in protocol["invariants"]["tests"]]
+        assert len(khai) == len(set(khai)), f"co ma trung trong giao thuc: {khai}"
+        assert set(khai) == set(KIEM_BAT_BIEN), (
+            f"lech: giao thuc co {sorted(set(khai) - set(KIEM_BAT_BIEN))}, "
+            f"code co {sorted(set(KIEM_BAT_BIEN) - set(khai))}")
+
+    def test_khai_du_tu_inv1_khong_nhay_so(self, protocol):
+        """
+        Ma bat bien phai lien tuc tu INV-1, khong nhay so. Nhay so la dau hieu
+        mot bat bien bi xoa ma khong ai ghi lai vi sao.
+        """
+        so = sorted(int(t["id"].split("-")[1])
+                    for t in protocol["invariants"]["tests"])
+        assert so == list(range(1, len(so) + 1)), f"ma bat bien nhay so: {so}"
+
+    def test_inv8_khoa_ca_chieu_bien_phap(self, protocol):
+        """
+        INV-8 phai khai ro no kiem CA chieu bien phap, khong chi chieu SoC.
+        Neu thieu chieu do thi M1 thanh cua sau de lach PH-1.
+        """
+        inv8 = next(t for t in protocol["invariants"]["tests"]
+                    if t["id"] == "INV-8")
+        assert "bien phap" in inv8["method"]
 
     def test_quyet_dinh_b7_b8_duoc_ghi(self, protocol):
         ids = [d["id"] for c in protocol["change_log"]
                for d in c.get("decisions", [])]
         assert "B7" in ids and "B8" in ids
+
+    def test_quyet_dinh_b9_b10_duoc_ghi(self, protocol):
+        """B9 — quy uoc ngan sach nang luong. B10 — luat PH-1."""
+        ids = [d["id"] for c in protocol["change_log"]
+               for d in c.get("decisions", [])]
+        assert "B9" in ids and "B10" in ids

@@ -3,6 +3,7 @@ INV-1,luat cung phu quyet,576,0,DAT
 INV-2,fail closed,960,0,DAT
 INV-3,don dieu theo nang luong,192,0,DAT
 INV-4,tat dinh,192,0,DAT
-INV-5,tinh lai tu ban ghi,192,0,DAT
-INV-6,D3 khong chua mo hinh hoc may,1,0,DAT
-INV-7,bien phap giam thieu co tac dung,213,0,DAT
+INV-5,tinh lai duoc,192,0,DAT
+INV-6,khong co mo hinh hoc may trong D3,1,0,DAT
+INV-7,bien phap giam thieu phai co tac dung,213,0,DAT
+INV-8,khong du pin ha canh thi khong bao gio FLY,768,0,DAT

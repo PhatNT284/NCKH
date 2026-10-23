@@ -240,20 +240,59 @@ hard-rule violation into FLY."*
 | HR-2 | −10 ≤ T ≤ 40 °C | DJI | **NO-FLY** |
 | HR-3 | khối lượng cất cánh ≤ 3.600 g | DJI | **NO-FLY** |
 | HR-4 | tốc độ ≤ 17 m/s | DJI | **NO-FLY** |
+| **PH-1** | **pin đủ để hạ cánh** | **P§4.6 + mô hình vật lý nhóm** | **NO-FLY** |
 | PD-1 | cự ly 420–610 m | thí nghiệm E2c | không được FLY |
 | PD-2 | tải 0–500 g | độ phủ dữ liệu | không được FLY |
 
 **Hai mức khác nhau có chủ đích.**
 
-HR-* là giới hạn vật lý và chứng nhận → **chặn tuyệt đối**. Gió 14 m/s là máy
-bay không chịu nổi.
+HR-* và PH-1 là giới hạn vật lý → **chặn tuyệt đối**. Gió 14 m/s là máy bay
+không chịu nổi; không đủ pin đáp xuống đất cũng vậy.
 
 PD-* là **giới hạn hiệu lực của mô hình** → máy bay vẫn bay được, nhưng ở đó
 mô hình đoán thiếu 29,6 %, nên con số không đáng tin. Hệ thống phải **nói rõ**
 thay vì im lặng đưa ra một số sai.
 
-Khi trích dẫn phải tách hai nguồn: HR-* trích DJI, PD-* trích thí nghiệm của
-chính nhóm. Trộn lại là lỗi học thuật.
+**Ba họ mã, ba nguồn — không được trộn khi trích dẫn:**
+
+| Mã | Trích gì | Mức độ |
+|---|---|---|
+| HR-1…HR-4 | thông số DJI công bố | VETO |
+| **PH-1** | nguyên tắc P§4.6 của thầy + mô hình vật lý của **nhóm** | **VETO** |
+| PD-1, PD-2 | thí nghiệm E2c và độ phủ dữ liệu của **nhóm** | DOWNGRADE |
+
+Nguồn gốc và mức độ là **hai trục độc lập**. PH-1 nghiêm như luật DJI nhưng con
+số là của nhóm — nên nó mang mã riêng, không phải `HR-5`. Có test canh:
+`test_moi_luat_hr_co_ghi_nguon` bắt buộc mọi luật `HR-*` phải có `"DJI"` trong
+nguồn, và test đó đã bắt được lỗi này khi luật còn tên `HR-5`.
+
+### PH-1 — sàn năng lượng hạ cánh
+
+P§4.6: *"A minimum state of charge is added, set so that the aircraft retains the
+energy required to land from its cruise altitude."*
+
+```
+E_hạ = P_treo(khối lượng cất cánh) × (độ cao ÷ 1,5 m/s) ÷ 3600
+PH-1:  E_available(SoC, SoH, T)  ≥  E_hạ
+```
+
+Năng lượng hạ cánh, hồ sơ CMU (bảng đầy đủ ở `../../reports/d3_landing_energy.csv`):
+
+| Độ cao | tải 0 g | tải 500 g |
+|---|---|---|
+| 25 m | 2,46 Wh | 2,98 Wh |
+| 50 m | 4,93 Wh | 5,97 Wh |
+| 75 m | 7,39 Wh | 8,95 Wh |
+| 100 m | 9,86 Wh | **11,93 Wh** |
+
+**Đây KHÔNG phải năng lượng hạ cánh bình thường** ở cuối chuyến — cái đó đã nằm
+trong `E_required` (mục 3b). PH-1 là sàn cho tình huống **huỷ chuyến giữa đường
+và đáp gấp**.
+
+Trên 192 chuyến, PH-1 đòi SoC 2,5–12,0% còn luật dự trữ đòi 16,2–42,0%. Hai dải
+**không chồng nhau**, nên PH-1 không đổi phán quyết nào — nhưng ở mức pin 10% nó
+chặn 30 chuyến, tức không phải code chết. Tác dụng thật sẽ thấy ở D4, trên kịch
+bản "chuyến ngắn bay cao" mà bộ dữ liệu CMU không có.
 
 ---
 
@@ -315,8 +354,18 @@ bay không"*. Thay vào đó kiểm **bảy tính chất phải luôn đúng**:
 | INV-5 | lưu rồi tính lại → ra đúng phán quyết cũ | 192 | **0** |
 | INV-6 | D3 không chứa mô hình học máy nào | 1 | **0** |
 | INV-7 | biện pháp giảm thiểu đề xuất ra phải có tác dụng | 213 | **0** |
+| **INV-8** | **không đủ pin hạ cánh → không bao giờ FLY** | **768** | **0** |
 
-**2.326 trường hợp, 0 vi phạm**, chạy trên cấu hình của 192 chuyến bay có thật.
+**3.094 trường hợp, 0 vi phạm**, chạy trên cấu hình của 192 chuyến bay có thật.
+
+INV-8 kiểm **hai chiều**: SoC dưới ngưỡng hạ cánh thì phải NO-FLY, *và* áp biện
+pháp giảm thiểu thì **vẫn** NO-FLY. Chiều thứ hai quan trọng không kém — không
+có nó thì "sạc thêm pin" thành cửa sau để lách PH-1.
+
+Danh sách bất biến **đọc từ giao thức**, không viết cứng. `run_invariants()` lấy
+`invariants.tests` rồi tra hàm kiểm, và ném lỗi nếu giao thức khai một bất biến
+mà không có hàm. Trước đó viết cứng ở bốn chỗ, nên đã sai **ba lần** — giao thức
+khai 8 mà bảng chỉ in 7, im lặng.
 
 INV-6 đáng nói: nó **quét mã nguồn** tìm `.fit()`, `.predict()` và `import
 sklearn` trong bốn module D3. Khai "D3 không có mô hình học máy" rồi để đó thì
@@ -372,7 +421,7 @@ SoC tối thiểu để bay, `r = 0,20`: **trung vị 26,5 %, p90 35,1 %, lớn 
 
 ---
 
-## 10. Bảy quyết định đã chốt
+## 10. Tám quyết định đã chốt
 
 | Mã | Câu hỏi | Chốt |
 |---|---|---|
@@ -383,6 +432,7 @@ SoC tối thiểu để bay, `r = 0,20`: **trung vị 26,5 %, p90 35,1 %, lớn 
 | **B7** | cự ly là một chiều hay khứ hồi? | **khứ hồi** — envelope đọc hai cách |
 | **B8** | CONDITIONAL cần gì để thực thi được? | **phải chọn biện pháp và đánh giá lại** |
 | **B9** | ngân sách năng lượng gồm những gì? | **bốn quy ước §4.5 — xem mục 3b** |
+| **B10** | P§4.6 đòi sàn SoC, cài thế nào? | **luật `PH-1`, mức VETO — xem mục 5** |
 
 ### B3 đáng kể nhất
 
@@ -419,10 +469,10 @@ sensors and wiring 1113 g… totaling 3680 g"*.
 
 ---
 
-## 11. Ba thiếu sót phát hiện khi rà soát — đã vá
+## 11. Bốn thiếu sót phát hiện khi rà soát — đã vá
 
-Ngày 15/10/2026 và 19/10/2026 rà lại, đối chiếu **từng chữ** bảng Mục 12.1 và
-P§4.5, phát hiện ba tiêu chí chưa đáp ứng. Cả ba **không phải lỗi code** — code
+Ngày 15/10, 19/10 và 20/10/2026 rà lại, đối chiếu **từng chữ** bảng Mục 12.1,
+P§4.5 và P§4.6, phát hiện bốn chỗ chưa đáp ứng. Cả ba **không phải lỗi code** — code
 chạy đúng điều đã thiết kế — mà là **thiếu một phần thiết kế hoặc một phần khai
 báo**. Đã vá.
 
@@ -531,6 +581,37 @@ luận rằng năng lượng hạ cánh chưa được tính, rồi cộng thêm
 nâng `r` lên — tức đếm hai lần, và không ai phát hiện ra vì cả hai hướng đều
 "trông có vẻ an toàn hơn".
 
+### RS-5 → quyết định B10 — sàn năng lượng hạ cánh
+
+P§4.6 đòi *"a minimum state of charge… set so that the aircraft retains the
+energy required to land from its cruise altitude"*. Repo chưa cài.
+
+Phát hiện khi rà câu hỏi *"hệ số dự trữ 20% bù cho những gì"*. Nhóm **từng tưởng
+đây là việc cần hỏi thầy** — tra lại P§4.6 thì thấy thầy đã chọn sẵn cách làm,
+việc của nhóm chỉ là tính và cài đặt. Bài học: tra file trước khi kết luận là
+thiếu.
+
+Chi tiết ở **mục 5** phía trên. **Đổi hành vi hệ thống** nên đã chạy lại
+`evaluation_decision` và cập nhật bốn CSV — bảng phán quyết không đổi (187/5/0),
+đã xác nhận bằng số.
+
+#### Ba lỗi phát sinh khi cài, do chính bộ test bắt
+
+| | Lỗi | Test bắt |
+|---|---|---|
+| (a) | đặt tên `HR-5` trong khi nguồn không phải DJI | `test_moi_luat_hr_co_ghi_nguon` |
+| (b) | chữ ký hàm nhận `e_available_Wh`, phá §4.6 | `test_lop_nay_khong_nhan_dau_ra_mo_hinh` |
+| (c) | ngưỡng hạ cánh mặc định κ = 1, tức **lạc quan** | `test_dung_ngay_tai_nguong_thi_pass` |
+
+Lỗi (c) là lỗi trong test, nhưng nó phơi ra một cái bẫy thật: ở 0 °C thì
+κ = 0,9203 và ngưỡng thật cao hơn mặc định **8,66%**. Ai dùng
+`min_soc_for_landing()` mà quên truyền κ sẽ **ước thiếu** lượng pin cần. Đã thêm
+test khoá tính chất đó.
+
+Hai test (a) và (b) là loại đáng giá nhất trong repo: chúng không kiểm một con
+số, mà kiểm một **quy ước** (`HR-*` ⇒ nguồn DJI) và một **ràng buộc kiến trúc**
+(§4.6: lớp luật cứng không nhận đầu ra mô hình). Giữ lại, đừng xoá.
+
 ---
 
 ## 12. Bàn giao sang D4
@@ -557,13 +638,13 @@ Bốn điều bắt buộc mang theo:
 
 | Mã | Việc | Trạng thái |
 |---|---|---|
-| **OI-D3-1** | Sàn an toàn khi có **sự cố** — SoC tối thiểu để đáp gấp giữa đường. **Khác** hạ cánh bình thường, cái đó đã trong `E_required` (B9). Hai cách đặt luật, cần thầy chốt | **chờ thầy** |
-| OI-D3-3 | Duy ký kiểm chéo WP3 | chờ Duy |
-| RS-3 | Tổng cự ly 92,8 km vs ~65 km bài gốc | chưa kết luận |
-| OI-4 | Hai phiên bản thời lượng D2 | chờ thầy |
+| ~~OI-D3-1~~ | ~~Sàn an toàn khi có sự cố~~ | **ĐÓNG 20/10** — luật `PH-1`, quyết định B10 |
+| ~~OI-D3-3~~ | ~~Duy ký kiểm chéo WP3~~ | **ĐÓNG 20/10** |
+| RS-3 | Tổng cự ly 92,8 km vs ~65 km bài gốc | chưa kết luận, không chặn |
+| OI-4 | Hai phiên bản thời lượng D2 | chờ thầy, không chặn |
 
-OI-D3-1 **không chặn nghiệm thu** — đã đối chiếu Mục 12.1, không có tiêu chí
-nào đòi luật này, D3 vẫn đạt 13/13. Nhưng phải xong trước D4.
+**Sản phẩm D3 nghiệm thu 20/10/2026** — 13/13 tiêu chí Mục 12.1, Duy đã kiểm
+chéo. Cổng chặn sang D4 đã mở.
 
 ---
 
@@ -572,7 +653,7 @@ nào đòi luật này, D3 vẫn đạt 13/13. Nhưng phải xong trước D4.
 | Muốn gì | Đọc |
 |---|---|
 | Bản nộp thầy | `../../reports/decision_engine_report.md` |
-| Luật chơi đóng băng | `../../configs/d3_protocol.yaml` v1.3.0 |
+| Luật chơi đóng băng | `../../configs/d3_protocol.yaml` v1.4.0 |
 | Tham số và nguồn | `../../reports/parameter_table.md` |
 | Vì sao chọn Ridge | `../../reports/model_selection_report.md` |
 | Trạng thái mọi sản phẩm | `../../reports/deliverables.md` |

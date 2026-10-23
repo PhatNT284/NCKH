@@ -22,6 +22,14 @@ Khoan cong them lay tu phan vi 95 cua |phan du| out-of-fold cua D2-b = 1.4687 Wh
 dung cach §4.7 chi: "a documented uncertainty allowance" rut tu phan du DO DUOC,
 khong phai tu chinh mo hinh (neu lay tu chinh mo hinh thi danh gia thanh vong tron).
 
+DIEU r KHONG BAO GOM (quyet dinh B9 va B10):
+
+    - Nang luong cat canh va ha canh BINH THUONG -> nam trong E_required, vi
+      muc tieu du bao cua D2 la tong nang luong ca chuyen bay (§4.2 buoc 4).
+      Xem d3_protocol.yaml muc energy_required.budget_conventions.
+      Cong them hoac nang r de "bu cho ha canh" la DEM HAI LAN.
+    - San nang luong ha canh khi co SU CO -> luat cung PH-1 (P§4.6).
+
 THU TU XET — bat buoc, khong duoc doi:
 
     1. Thieu dau vao        -> INSUFFICIENT_DATA   (§4.6 fail closed)
@@ -50,7 +58,7 @@ from src.available_energy import (
     available_energy,
 )
 from src.safety_invariants import (
-    PROFILE_STOCK, SafetyReport, check_hard_rules,
+    PASS, PROFILE_STOCK, SafetyReport, check_hard_rules,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -170,11 +178,15 @@ def assess(payload_g: float | None = None,
         protocol["energy_required"]["measured_error"]["p95_abs_residual_Wh"])
 
     # --- Buoc 1: luat cung (chay TRUOC, doc lap voi mo hinh — §4.6) --------
+    # Lop nay nhan DAU VAO THO (ke ca soc/soh cho luat PH-1) va tu tinh nang
+    # luong kha dung bang cong thuc §5.4. No KHONG nhan dau ra mo hinh nao va
+    # khong biet gi ve E_required — xem quyet dinh B10b.
     hard = check_hard_rules(
         payload_g=payload_g, speed_commanded_ms=speed_commanded_ms,
         distance_2d_m=distance_2d_m, wind_forecast_ms=wind_forecast_ms,
-        ambient_temp_c=ambient_temp_c, battery_type=battery_type,
-        profile=profile, protocol=protocol)
+        ambient_temp_c=ambient_temp_c, altitude_m=altitude_m,
+        soc=soc, soh=soh,
+        battery_type=battery_type, profile=profile, protocol=protocol)
 
     avail = available_energy(soc=soc, soh=soh, temp_c=ambient_temp_c,
                              battery_type=battery_type, protocol=protocol)
@@ -185,31 +197,45 @@ def assess(payload_g: float | None = None,
                  extrapolated=hard.extrapolated,
                  mitigation_applied=mitigation_applied)
 
-    # --- Buoc 2: vi pham VETO -> NO_FLY, khong gi lat duoc -----------------
+    # --- Buoc 3: vi pham VETO -> NO_FLY, khong gi lat duoc -----------------
     # Xet TRUOC thieu du lieu: mot vi pham da biet chac chan van la vi pham,
     # du cac dau vao khac co thieu hay khong.
     if hard.must_no_fly:
         d.verdict = NO_FLY
-        d.reasons = [f"vi pham luat cung: {r_}" for r_ in hard.reasons()]
+        # Luat THUC SU chan phai dung DAU danh sach. Neu khong, mot muc
+        # KNOWN_EXCEEDED (vi du HR-3 o ho so CMU_instrumented, von "ghi nhan,
+        # khong chan") co the chiem cho reasons[0] va che mat ly do that.
+        d.reasons = [f"vi pham luat cung: {c.rule_id}: {c.detail}"
+                     for c in hard.checks if c.forces_no_fly]
+        d.reasons += [f"ghi nhan them: {c.rule_id}: {c.detail}"
+                      for c in hard.checks
+                      if c.status != PASS and not c.forces_no_fly]
         return d
 
-    # --- Buoc 3: thieu dau vao -> INSUFFICIENT_DATA (§4.6 fail closed) -----
+    # --- Buoc 4: dau vao pin SAI DAI -> NO_FLY (quyet dinh B5) ------------
+    # Xet TRUOC phan thieu du lieu: "biet chac la sai" la thong tin manh hon
+    # "khong biet". Mot SoC = 1.5 la sai chu khong phai thieu, nen phai ra
+    # NO_FLY. Neu de sau thi PH-1 (bao MISSING vi khong tinh duoc nang luong
+    # kha dung) se chiem truoc va cho ra INSUFFICIENT_DATA — sai quyet dinh B5.
+    if avail.status == STATUS_OUT_OF_RANGE:
+        d.verdict = NO_FLY
+        d.reasons = [f"dau vao pin ngoai dai: {x}" for x in avail.reasons]
+        return d
+
+    # --- Buoc 5: thieu dau vao -> INSUFFICIENT_DATA (§4.6 fail closed) -----
+    # Thu tu: NGUYEN NHAN GOC truoc, TRIEU CHUNG KEO THEO sau.
+    # Thieu SoC lam PH-1 khong tinh duoc nang luong ha canh, nen PH-1 cung bao
+    # thieu. Neu in PH-1 truoc thi nguoi doc di sua sai cho.
     thieu: list[str] = []
-    if hard.missing:
-        thieu += [f"{c.rule_id}: {c.detail}" for c in hard.missing]
     if avail.status == STATUS_MISSING:
         thieu += avail.reasons
     if e_required_Wh is None:
         thieu.append("thieu du bao nang luong can (E_required)")
+    if hard.missing:
+        thieu += [f"{c.rule_id}: {c.detail}" for c in hard.missing]
     if thieu:
         d.verdict = INSUFFICIENT_DATA
         d.reasons = thieu
-        return d
-
-    # Dau vao nang luong sai dai -> NO_FLY
-    if avail.status == STATUS_OUT_OF_RANGE:
-        d.verdict = NO_FLY
-        d.reasons = [f"dau vao pin ngoai dai: {x}" for x in avail.reasons]
         return d
 
     if avail.status != STATUS_OK:                        # pragma: no cover
@@ -220,7 +246,7 @@ def assess(payload_g: float | None = None,
         d.reasons = [f"E_required = {e_required_Wh} Wh khong hop le"]
         return d
 
-    # --- Buoc 4: bien du tru ----------------------------------------------
+    # --- Buoc 5: bien du tru ----------------------------------------------
     d.e_available_Wh = avail.value_Wh
     d.e_required_Wh = float(e_required_Wh)
     d.margin_Wh = d.e_available_Wh - d.e_required_Wh
@@ -243,7 +269,7 @@ def assess(payload_g: float | None = None,
         d.verdict = FLY
         d.reasons = [f"bien du tru {d.margin_ratio:.1%} >= {d.r_fly:.1%}"]
 
-    # --- Buoc 5: dang ngoai suy -> ha FLY xuong CONDITIONAL ---------------
+    # --- Buoc 6: dang ngoai suy -> ha FLY xuong CONDITIONAL ---------------
     if hard.blocks_fly and d.verdict == FLY:
         d.verdict = CONDITIONAL
         d.reasons = [f"ngoai dai co du lieu do lung: {r_}"
@@ -302,6 +328,20 @@ def _demo() -> None:
         print(f"  {ten:<16} -> {d.verdict}")
         print(f"       {d.reasons[0]}")
 
+    print("\n\nPH-1 — san nang luong ha canh (P§4.6)\n")
+    from src.physics_m100 import min_soc_for_landing
+    from src.safety_invariants import PROFILE_CMU
+    for alt in (50, 100):
+        nguong = min_soc_for_landing(alt, 3680 + 500)
+        for he_so in (0.5, 1.5):
+            soc = min(1.0, nguong * he_so)
+            d = assess(**{**goc, "payload_g": 500, "altitude_m": alt,
+                          "soc": soc, "soh": 1.0, "e_required_Wh": 5.0,
+                          "profile": PROFILE_CMU})
+            print(f"  cao {alt} m, tai 500 g, SoC {soc:.1%} "
+                  f"(nguong ha canh {nguong:.1%}) -> {d.verdict}")
+            print(f"       {d.reasons[0]}")
+
     print("\n\nNgoai suy ha cap FLY -> CONDITIONAL\n")
     d = assess(**{**goc, "soc": 1.0, "distance_2d_m": 835})
     print(f"  cu ly 835 m, pin day -> {d.verdict}, ngoai suy = {d.extrapolated}")
@@ -312,6 +352,7 @@ def _demo() -> None:
         ("thieu SoC",       {"soc": None}),
         ("thieu nhiet do",  {"soc": 0.8, "ambient_temp_c": None}),
         ("thieu du bao D2", {"soc": 0.8, "e_required_Wh": None}),
+        ("thieu do cao",    {"soc": 0.8, "altitude_m": None}),
     ):
         d = assess(**{**goc, **kw})
         print(f"  {ten:<18} -> {d.verdict}: {d.reasons[0]}")

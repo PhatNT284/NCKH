@@ -6,10 +6,10 @@
 |---|---|
 | Gói công việc | WP3 |
 | Người làm | Phát |
-| Người kiểm chéo | Duy |
+| Người kiểm chéo | Duy — **đã xác nhận 20/10/2026** |
 | Tuần | 7 |
-| Giao thức | `configs/d3_protocol.yaml` v1.3.0 |
-| Ngày | 19/10/2026 |
+| Giao thức | `configs/d3_protocol.yaml` v1.4.0 |
+| Ngày | 20/10/2026 |
 
 Mục 12 yêu cầu: *"available-energy model, mission-energy budget, reserve-margin
 calculation, hard-rule layer, three-level verdict"*.
@@ -74,7 +74,7 @@ ghi `change_log`, không sửa code.
 
 ---
 
-## 3. Bảy quyết định đã chốt
+## 3. Tám quyết định đã chốt
 
 ### B3 — κ(T) ngoài dải hiệu chỉnh
 
@@ -213,6 +213,56 @@ và thầy có bắt khai báo rõ — mà repo chưa khai.
 
 Chi tiết: `configs/d3_protocol.yaml` mục `energy_required.budget_conventions`.
 
+### B10 — Sàn năng lượng hạ cánh, luật `PH-1`
+
+P§4.6 đòi một sàn cho SoC, nguyên văn: *"A minimum state of charge is added,
+**set so that the aircraft retains the energy required to land from its cruise
+altitude**, following the principle of placing a safety limit ahead of the end
+of discharge rather than at it [10]."*
+
+Bản trước chưa cài. Nhóm từng tưởng đây là việc cần hỏi thầy — tra lại P§4.6
+thì thấy thầy **đã chọn sẵn cách làm**, việc của nhóm chỉ là tính và cài đặt.
+
+**Công thức:**
+
+```
+E_landing = P_treo(khối lượng cất cánh) × (độ cao ÷ 1,5 m/s) ÷ 3600
+PH-1:  E_available(SoC, SoH, T)  ≥  E_landing
+```
+
+Tốc độ hạ 1,5 m/s lấy từ Rodrigues et al. (2021), mục Methods. Công suất khi hạ
+lấy **bằng** công suất bay treo — cận bảo thủ, vì thiếu hệ số cản cánh quạt để
+tính phần cánh quạt thu lại được. Hướng sai lệch là **ước thừa**, tức thận trọng
+hơn.
+
+**Năng lượng hạ cánh** (hồ sơ `CMU_instrumented`, bảng đầy đủ ở
+`reports/d3_landing_energy.csv`):
+
+| Độ cao | tải 0 g | tải 500 g |
+|---|---|---|
+| 25 m | 2,46 Wh | 2,98 Wh |
+| 50 m | 4,93 Wh | 5,97 Wh |
+| 75 m | 7,39 Wh | 8,95 Wh |
+| 100 m | 9,86 Wh | **11,93 Wh** |
+
+**Mức độ: VETO.** Không đủ pin để đáp xuống đất là một thực tế vật lý, không
+phải giới hạn hiệu lực của mô hình — nên nó chặn tuyệt đối như `HR-1…HR-4`, và
+biện pháp giảm thiểu không lật được (có test khoá).
+
+**Nhưng mã luật là `PH-1`, không phải `HR-5`.** Tiền tố `HR-` trong repo dành
+riêng cho luật mà **con số do DJI công bố**. `PH-1` có *nguyên tắc* từ P§4.6 của
+thầy nhưng *con số* từ mô hình vật lý của nhóm, với η khớp từ **một điểm** (thời
+lượng bay treo không tải DJI công bố). Hai nguồn khác nhau nên phải mang mã
+khác nhau.
+
+Repo giờ có **ba họ mã**, trong đó nguồn gốc và mức độ là hai trục độc lập:
+
+| Mã | Nguồn | Mức độ |
+|---|---|---|
+| `HR-1…HR-4` | DJI công bố | VETO |
+| `PH-1` | nguyên tắc P§4.6 + số của nhóm | **VETO** |
+| `PD-1, PD-2` | thí nghiệm của nhóm | DOWNGRADE |
+
 ### B6 — Hai hồ sơ máy bay
 
 Máy bay trong bộ dữ liệu nặng 3.680–4.180 g, **vượt MTOW 3.600 g ở mọi cấu
@@ -239,16 +289,26 @@ violation into FLY."*
 | HR-2 | −10 ≤ T ≤ 40 °C | DJI | **NO-FLY** |
 | HR-3 | khối lượng cất cánh ≤ 3.600 g | DJI | **NO-FLY** (hồ sơ stock) |
 | HR-4 | tốc độ ≤ 17 m/s | DJI | **NO-FLY** |
+| **PH-1** | **`E_available` ≥ năng lượng hạ cánh** | **P§4.6 + `src/physics_m100.py`** | **NO-FLY** |
 | PD-1 | cự ly 420–610 m | thí nghiệm E2c của nhóm | không được FLY |
 | PD-2 | tải 0–500 g | độ phủ dữ liệu | không được FLY |
 
-Hai mức độ khác nhau có chủ đích. HR-* là giới hạn vật lý và chứng nhận của nhà
-sản xuất → chặn tuyệt đối. PD-* là **giới hạn hiệu lực của mô hình** → máy bay
-vẫn bay được, nhưng con số dự báo không đáng tin ở đó, nên hệ thống phải nói rõ
-thay vì im lặng. §6/E3 yêu cầu *"clearly label any extrapolated ranges"*.
+Hai mức độ khác nhau có chủ đích. `HR-*` và `PH-1` là giới hạn vật lý → chặn
+tuyệt đối. `PD-*` là **giới hạn hiệu lực của mô hình** → máy bay vẫn bay được,
+nhưng con số dự báo không đáng tin ở đó, nên hệ thống phải nói rõ thay vì im
+lặng. §6/E3 yêu cầu *"clearly label any extrapolated ranges"*.
 
-Khi trích dẫn phải tách hai nguồn: HR-* trích DJI, PD-* trích thí nghiệm của
-chính nhóm.
+**Khi trích dẫn phải tách ba nguồn**, không được trộn:
+
+| Mã | Trích gì |
+|---|---|
+| `HR-1…HR-4` | thông số DJI công bố |
+| `PH-1` | nguyên tắc P§4.6 của thầy + mô hình vật lý của **nhóm** (η khớp từ một điểm) |
+| `PD-1, PD-2` | thí nghiệm E2c và độ phủ dữ liệu của **nhóm** |
+
+Có test canh quy ước này: `test_moi_luat_hr_co_ghi_nguon` bắt buộc mọi luật
+`HR-*` phải có `"DJI"` trong trường nguồn. Test đó đã bắt được một lỗi thật —
+luật này ban đầu được đặt tên `HR-5`.
 
 ---
 
@@ -287,6 +347,10 @@ Theo quyết định B9 và `d3_protocol.yaml` mục `budget_conventions`:
 | Tốc độ / độ cao hành trình | tốc độ ra lệnh / độ cao kế hoạch |
 | `E_hover` | 0 Wh — không có điểm giao hàng |
 
+Lưu ý quan hệ với `PH-1`: năng lượng hạ cánh **bình thường** ở cuối chuyến đã
+nằm trong `E_required`. `PH-1` là **sàn riêng** cho tình huống phải huỷ chuyến
+giữa đường và đáp gấp. Hai thứ khác nhau — cộng gộp là đếm hai lần.
+
 ### Cách chạy lại
 
 ```bash
@@ -301,7 +365,7 @@ Sinh bốn file vào `reports/`:
 
 ## 6. Kết quả
 
-### 6.1 — Bảy bất biến, trên dữ liệu thật
+### 6.1 — Tám bất biến, trên dữ liệu thật
 
 | Bất biến | Nội dung | Số trường hợp | Vi phạm |
 |---|---|---|---|
@@ -312,8 +376,9 @@ Sinh bốn file vào `reports/`:
 | INV-5 | tính lại từ bản ghi | 192 | **0** |
 | INV-6 | không chứa mô hình học máy | 1 | **0** |
 | INV-7 | biện pháp giảm thiểu có tác dụng | 213 | **0** |
+| **INV-8** | **không đủ pin hạ cánh thì không bao giờ FLY** | **768** | **0** |
 
-**2.326 trường hợp, không vi phạm nào.**
+**3.094 trường hợp, không vi phạm nào.**
 
 Khác với test đơn vị: test đơn vị kiểm vài chục trường hợp do người chọn; bảng
 này lấy cấu hình từ 192 chuyến bay có thật.
@@ -321,6 +386,16 @@ này lấy cấu hình từ 192 chuyến bay có thật.
 INV-3 đáng chú ý nhất — nó quét SoC theo 50 bước cho từng chuyến và bắt buộc
 phán quyết **không bao giờ xấu đi khi pin nhiều hơn**. Đó cũng là điều kiện tiên
 quyết để thuật toán tìm SoC tối thiểu bằng chia đôi ở mục 6.2 có nghĩa.
+
+INV-8 kiểm **hai chiều**: SoC dưới ngưỡng hạ cánh thì phải NO-FLY, *và* áp biện
+pháp giảm thiểu thì **vẫn** NO-FLY. Chiều thứ hai quan trọng không kém — không
+có nó thì "sạc thêm pin" thành cửa sau để lách `PH-1`.
+
+**Danh sách bất biến đọc từ giao thức, không viết cứng trong code.**
+`run_invariants()` lấy `invariants.tests` từ `d3_protocol.yaml` rồi tra hàm kiểm
+tương ứng, và **ném lỗi** nếu giao thức khai một bất biến mà không có hàm kiểm.
+Trước đó danh sách viết cứng, nên khi thêm INV-7 rồi INV-8 thì giao thức nói một
+đằng và bảng bằng chứng nói một nẻo — lỗi im lặng, và đã xảy ra hai lần.
 
 ### 6.2 — SoC tối thiểu để bay
 
@@ -340,22 +415,68 @@ Nửa số chuyến cần pin trên ~27%; chuyến nặng nhất cần 42%.
 hay nhà sản xuất. P§4.5 bắt báo cả ba mức: *"a finding that holds only at one
 arbitrary reserve setting is not a finding about the method."*
 
+### 6.2b — Luật `PH-1` có ràng buộc hơn luật dự trữ không?
+
+Câu hỏi này phải trả lời bằng số, vì nó quyết định `PH-1` có ý nghĩa gì trên bộ
+dữ liệu này.
+
+| Ngưỡng SoC đòi hỏi | Nhỏ nhất | Trung vị | Lớn nhất |
+|---|---|---|---|
+| Luật `PH-1` (sàn hạ cánh) | 2,5% | 6,0% | **12,0%** |
+| Luật dự trữ (`r = 0,20`) | **16,2%** | 26,5% | 42,0% |
+
+**Hai dải không chồng nhau: 12,0 < 16,2.** Số chuyến mà `PH-1` ràng buộc hơn
+luật dự trữ: **0 trên 192**.
+
+Nên trên bộ dữ liệu này `PH-1` **không đổi phán quyết nào** — bảng mục 6.3 và
+6.4 giữ nguyên so với bản trước khi cài.
+
+**Nhưng `PH-1` không phải code chết.** Ở mức pin 10%, nó chặn **30 trên 192**
+chuyến (cột `ph1_violated` trong `d3_verdict_grid.csv`). Phán quyết vẫn là
+NO-FLY, nhưng **lý do đổi**: không đủ pin để đáp xuống đất, chứ không phải thiếu
+biên dự trữ. Người điều phối đọc hai lý do đó sẽ làm hai việc khác nhau.
+
+**Và `PH-1` cần thiết cho sản phẩm D4.** Luật dự trữ tỷ lệ với `E_required`, còn
+`PH-1` là một lượng Wh **tuyệt đối**. Nên `PH-1` chỉ ràng buộc hơn khi
+`E_required` nhỏ mà độ cao cao:
+
+```
+Chuyến cần 8 Wh, cao 100 m, tải 500 g:
+  luật dự trữ  →  cần 10,2 Wh  →  SoC 10,2%
+  PH-1         →  cần 11,9 Wh  →  SoC 11,9%   ← PH-1 thắng
+```
+
+Bộ dữ liệu CMU không có loại nhiệm vụ đó (cự ly gần như cố định ~472 m), nhưng
+bộ sinh kịch bản ở D4 quét **độc lập** cự ly và độ cao nên sẽ sinh ra. Thiếu
+`PH-1` thì những kịch bản đó cho FLY sai.
+
+> **Cảnh báo khi đọc bảng ngưỡng `PH-1`:** hàm `min_soc_for_landing()` mặc định
+> `κ = 1`, tức cho **ngưỡng lạc quan**. Bảng trên đã dùng κ thật tại 15 °C
+> (0,9954). Ở 0 °C thì κ = 0,9203 và ngưỡng thật cao hơn mặc định **8,66%**.
+> Bảng `reports/d3_landing_energy.csv` dùng mặc định, nên phải đọc là *"ngưỡng
+> tối thiểu ở điều kiện tốt nhất"*, không phải ngưỡng vận hành.
+
 ### 6.3 — Phân bố phán quyết theo mức pin
 
 Tại `r = 0,20`, SoH = 1,0, 15 °C:
 
-| SoC | FLY | CONDITIONAL | NO-FLY |
-|---|---|---|---|
-| 0,10 | 0 | 0 | 192 |
-| 0,20 | 19 | 15 | 158 |
-| 0,25 | 73 | 22 | 97 |
-| 0,30 | 134 | 16 | 42 |
-| 0,35 | 167 | 13 | 12 |
-| 0,40 | 184 | 6 | 2 |
-| 0,50 | **187** | **5** | 0 |
-| 1,00 | **187** | **5** | 0 |
+| SoC | FLY | CONDITIONAL | NO-FLY | `PH-1` chặn |
+|---|---|---|---|---|
+| 0,10 | 0 | 0 | 192 | **30** |
+| 0,15 | 0 | 3 | 189 | 0 |
+| 0,20 | 19 | 15 | 158 | 0 |
+| 0,25 | 73 | 22 | 97 | 0 |
+| 0,30 | 134 | 16 | 42 | 0 |
+| 0,35 | 167 | 13 | 12 | 0 |
+| 0,40 | 184 | 6 | 2 | 0 |
+| 0,45 | 187 | 4 | 1 | 0 |
+| 0,50 | **187** | **5** | 0 | 0 |
+| 1,00 | **187** | **5** | 0 | 0 |
 
 Từ SoC 0,50 trở lên bảng **đứng yên**: 187 FLY, 5 CONDITIONAL, mãi mãi.
+
+Cột cuối là số chuyến bị `PH-1` chặn. Nó chỉ khác 0 ở mức pin 10% — nơi luật dự
+trữ cũng đã chặn cả 192 chuyến. Xem mục 6.2b.
 
 ### 6.4 — Năm chuyến không bao giờ đạt FLY
 
@@ -422,11 +543,14 @@ học được từ dữ liệu.
 | Không gọi đầu ra là xác suất | Đạt | §5.6, §5.8 — có test chặn |
 | Báo cả ba mức hệ số dự trữ | Đạt | mục 6.2, 6.5 |
 | Bản ghi tái lập được | Đạt | INV-5 đạt 192/192 |
-| Kiểm chéo (Mục 10) | **Chờ Duy** | OI-D3-3 |
+| Kiểm chéo (Mục 10) | **Đạt** | Duy xác nhận 20/10/2026 |
 
-**Chốt: 13/13 tiêu chí đạt. Còn chữ ký kiểm chéo của Duy (OI-D3-3).**
+**Chốt: 13/13 tiêu chí đạt. Sản phẩm D3 NGHIỆM THU.**
 
-Kiểm thử: **358 test**, trong đó 173 test cho riêng D3.
+Ngoài 13 tiêu chí, hệ thống còn cài thêm **luật `PH-1`** theo P§4.6 (quyết định
+B10) và **bốn quy ước ngân sách năng lượng** theo P§4.5 (quyết định B9). Cả hai
+là bổ sung theo thiết kế đã cam kết trong Proposal, không phải vá một tiêu chí
+thiếu — Mục 12.1 không có tiêu chí nào đòi chúng.
 
 ---
 
@@ -458,18 +582,27 @@ Kiểm thử: **358 test**, trong đó 173 test cho riêng D3.
 7. **`E_nominal = 99,9 Wh` là giá trị chốt tạm.** Bài báo gốc tự mâu thuẫn về
    loại pin; nhóm chọn hướng bảo thủ. Bắt buộc chạy độ nhạy với 129,96 Wh ở D4.
 
-8. **Chưa có sàn an toàn cho tình huống sự cố** (OI-D3-1). §4.6 đòi một giới hạn
-   an toàn đặt **trước** điểm hết phóng điện. Hiện hệ thống chưa có luật riêng
-   cho việc này.
+8. **Sàn năng lượng hạ cánh (`PH-1`) dựa trên mô hình vật lý của nhóm, không
+   phải số nhà sản xuất.** Nguyên tắc lấy từ P§4.6, nhưng con số tính từ
+   `src/physics_m100.py` với hệ số hiệu suất η khớp từ **một điểm** duy nhất
+   (thời lượng bay treo không tải DJI công bố).
 
-   Phân biệt rõ: năng lượng hạ cánh **bình thường** ở cuối chuyến **không
-   thiếu** — nó đã nằm trong `E_required` (quyết định B9). Việc còn thiếu là sàn
-   cho tình huống phải **huỷ chuyến giữa đường và đáp gấp**.
+   Hai giả định phải nêu: (a) công suất khi hạ cánh lấy **bằng** công suất bay
+   treo — cận bảo thủ, vì thiếu hệ số cản cánh quạt; (b) η khớp trên dải khối
+   lượng 2.431–3.431 g nhưng máy bay thực tế nặng 3.680–4.180 g, nên **là ngoại
+   suy**.
 
-   Hai cách đặt luật, cho kết quả khác nhau: ngưỡng SoC cố định, hoặc năng lượng
-   hạ cánh dự phòng tính theo độ cao hành trình. Đang chờ thầy chốt một lựa
-   chọn. Không chặn D3 nghiệm thu — Mục 12.1 không có tiêu chí này — nhưng phải
-   xong trước D4.
+   Cả hai lệch về phía **ước thừa** năng lượng hạ cánh, tức thận trọng hơn. Nhưng
+   phải khai báo, và không được trích `PH-1` như giới hạn nhà sản xuất.
+
+9. **`PH-1` chưa được thử thách trên bộ dữ liệu này.** Ngưỡng `PH-1` (2,5–12,0%)
+   nằm hoàn toàn dưới ngưỡng luật dự trữ (16,2–42,0%), nên nó không đổi phán
+   quyết nào trong 192 chuyến. Nó chỉ chặn 30 chuyến ở mức pin 10%, nơi luật dự
+   trữ cũng đã chặn.
+
+   Nghĩa là tác dụng thật của `PH-1` sẽ chỉ thấy ở sản phẩm D4, trên kịch bản
+   "chuyến ngắn bay cao" mà bộ dữ liệu CMU không có. Không được trình bày `PH-1`
+   như một luật đã được kiểm chứng trên dữ liệu thật.
 
 ---
 
@@ -500,17 +633,73 @@ Bốn điều D4 phải mang theo:
    được cộng thêm năng lượng hạ cánh vào `E_required`, và phải khai rõ đang lấy
    mẫu cự ly theo cách đọc nào (tổng quãng bay hay một chiều).
 
+5. **Quét độc lập cự ly và độ cao, và báo riêng số kịch bản mà `PH-1` ràng buộc
+   hơn luật dự trữ.** Đó là vùng duy nhất `PH-1` có tác dụng, và bộ dữ liệu CMU
+   không có nó. Nếu D4 cũng cho 0 kịch bản như vậy thì bộ sinh chưa quét đủ
+   rộng.
+
 ---
 
 ## 10. Việc còn treo
 
 | Mã | Việc | Chặn gì |
 |---|---|---|
-| OI-D3-1 | Sàn an toàn khi có sự cố — chờ thầy chốt cách đặt luật. Hạ cánh bình thường đã trong `E_required` (B9) | không chặn nghiệm thu; làm trước D4 |
+| ~~OI-D3-1~~ | ~~Sàn an toàn khi có sự cố~~ | **ĐÓNG 20/10** — cài thành luật `PH-1`, quyết định B10 |
+| ~~OI-D3-3~~ | ~~Duy ký kiểm chéo WP3~~ | **ĐÓNG 20/10** |
 | RS-3 | Lệch tổng cự ly: 92,8 km (192 chuyến) so với ~65 km bài gốc ghi cho 209 chuyến. Nghi nhiễu GPS lúc treo bị cộng dồn. Chưa kết luận | không chặn; ảnh hưởng cách đọc envelope ở B7 |
-| OI-D3-3 | Duy xác nhận vai kiểm chéo WP3 và ký nghiệm thu | nghiệm thu D3 theo Mục 12.1 |
 | OI-4 | Báo thầy quyết định hai biến thể D2 | không chặn |
 | OI-5 | `Draft Báo.docx` còn dùng thông số Matrice 210 | D8 |
+
+---
+
+## 11. Ba lỗi do chính bộ test bắt được
+
+Giữ lại mục này vì nó là bằng chứng cho một tính chất của hệ thống kiểm chứng:
+test ở đây không chỉ kiểm con số, mà kiểm **quy ước** và **ràng buộc kiến trúc**.
+Ba lỗi dưới đây đều phát sinh khi cài `PH-1`, và đều bị bắt trước khi vào bài.
+
+### (a) Mã luật phá quy ước nguồn gốc
+
+Luật mới ban đầu được đặt tên `HR-5`. Test `test_moi_luat_hr_co_ghi_nguon` bắt
+buộc mọi luật `HR-*` phải có `"DJI"` trong trường nguồn, và nó đỏ.
+
+Quy ước đó đáng giữ: thầy sẽ hỏi *"con số này ở đâu ra"*, và một luật tên `HR-5`
+nằm cạnh bốn luật DJI mời gọi câu trả lời sai. Đã đổi thành `PH-1` và tách thành
+mục riêng `physics_derived` trong giao thức.
+
+### (b) Chữ ký hàm phá ràng buộc §4.6
+
+Bản đầu truyền `e_available_Wh` vào `check_hard_rules()`. Test
+`test_lop_nay_khong_nhan_dau_ra_mo_hinh` quét chữ ký hàm và cấm mọi tham số có
+tên liên quan năng lượng — nó đỏ.
+
+Lập luận *"`E_available` là công thức §5.4, không phải đầu ra mô hình"* là đúng,
+nhưng cách làm không cần thiết. Đã đổi: lớp luật cứng nhận `soc`/`soh` (**đầu
+vào thô**) rồi tự gọi `available_energy()`. Chữ ký sạch, §4.6 được tôn trọng
+nguyên vẹn, và test tiếp tục canh.
+
+### (c) Ngưỡng hạ cánh mặc định là ngưỡng lạc quan
+
+`min_soc_for_landing()` mặc định `κ = 1`. Test
+`test_dung_ngay_tai_nguong_thi_pass` đỏ, vì ở 15 °C thì κ = 0,9954 nên ngưỡng
+thật cao hơn.
+
+Đây là lỗi trong test, **nhưng nó phơi ra một cái bẫy thật**: ở 0 °C thì
+κ = 0,9203 và ngưỡng thật cao hơn mặc định **8,66%**. Ai dùng hàm đó để quyết
+định mà quên truyền κ sẽ **ước thiếu** lượng pin cần. Đã thêm
+`test_nguong_mac_dinh_la_nguong_LAC_QUAN` khoá tính chất này, và `run_min_soc()`
+giờ truyền κ thật.
+
+### Và một lỗi im lặng lặp lại ba lần
+
+Danh sách bất biến từng được viết cứng ở bốn chỗ. Mỗi lần thêm bất biến là một
+lần phải sửa bốn chỗ — và đã sai **ba lần** (thêm INV-7, thêm INV-8, rồi
+`test_evaluation_decision.py`). Lỗi này **im lặng**: giao thức khai 8 bất biến,
+bảng bằng chứng chỉ in 7, không ai báo gì.
+
+Đã sửa bằng cách bỏ con số viết cứng: `run_invariants()` đọc danh sách từ giao
+thức và **ném lỗi** nếu thiếu hàm kiểm; test so bảng kết quả trực tiếp với giao
+thức. Không có lần thứ tư.
 
 ---
 
@@ -519,7 +708,7 @@ Bốn điều D4 phải mang theo:
 | Loại | Đường dẫn |
 |---|---|
 | Giao thức | `configs/d3_protocol.yaml` |
-| Mã nguồn | `src/available_energy.py`, `src/safety_invariants.py`, `src/decision_rules.py`, `src/workflow_state.py`, `src/evaluation_decision.py` |
-| Kết quả | `reports/d3_min_soc_per_flight.csv`, `d3_verdict_grid.csv`, `d3_scenario_sensitivity.csv`, `d3_invariant_check.csv` |
-| Kiểm thử | `tests/test_available_energy.py`, `test_safety_invariants.py`, `test_decision_rules.py`, `test_workflow_state.py` |
+| Mã nguồn | `src/available_energy.py`, `src/safety_invariants.py`, `src/decision_rules.py`, `src/workflow_state.py`, `src/mitigations.py`, `src/physics_m100.py`, `src/evaluation_decision.py` |
+| Kết quả | `reports/d3_min_soc_per_flight.csv`, `d3_verdict_grid.csv`, `d3_scenario_sensitivity.csv`, `d3_invariant_check.csv`, `d3_landing_energy.csv` |
+| Kiểm thử | `tests/test_available_energy.py`, `test_safety_invariants.py`, `test_decision_rules.py`, `test_workflow_state.py`, `test_mitigations.py`, `test_evaluation_decision.py` |
 | Giải thích cho nhóm | `docs/san_pham/D3_bo_may_quyet_dinh.md` |

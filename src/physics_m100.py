@@ -10,6 +10,9 @@ Script nay lam hai viec:
   2. Khop he so hieu suat eta tu thoi luong bay treo nha san xuat cong bo, roi
      KIEM CHEO voi cac tri so khong dung de khop
 
+Tu ban 1.4.0 cua giao thuc D3, module nay con cung cap `landing_energy_Wh()` va
+`min_soc_for_landing()` cho luat PH-1 cua san pham D3 (P§4.6).
+
     python3 -m src.physics_m100
 
 Nguon tham so: trang ho tro chinh thuc DJI cho Matrice 100
@@ -153,6 +156,107 @@ def max_payload_g(battery: str) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Nang luong ha canh — phuc vu luat PH-1 cua san pham D3
+# ---------------------------------------------------------------------------
+# Can cu: Proposal.docx §4.6 — "A minimum state of charge is added, set so that
+# the aircraft retains the energy required to land from its cruise altitude,
+# following the principle of placing a safety limit ahead of the end of
+# discharge rather than at it [10]."
+#
+# Toc do ha canh lay tu bai goc, Rodrigues et al. (2021), muc Methods:
+# "reaches the launch point again, the UAV stops and descends at approximately
+# 1.5 m/s".
+#
+# GIA DINH BAO THU — phai neu trong bai:
+#   Cong suat khi ha canh duoc lay BANG cong suat bay treo cung khoi luong.
+#   Thuc te ha canh toc do thap ton IT HON bay treo, vi canh quat thu lai mot
+#   phan nang luong tu luong khi di len. Nhung khong co tham so de tinh phan do
+#   (thieu he so can canh quat, xem MISSING), nen lay can bao thu — dung cach
+#   §5.4 yeu cau khi thieu tham so.
+#   Huong sai lech: UOC THUA nang luong ha canh -> he thong than trong hon ->
+#   lech ve phia tu choi thua, khong phai cho bay nham.
+
+DESCENT_RATE_MS = 1.5        # Rodrigues et al. (2021), Methods
+
+
+def landing_energy_Wh(altitude_m: float | None,
+                      total_mass_g: float | None,
+                      battery: str = "TB47D",
+                      descent_rate_ms: float = DESCENT_RATE_MS) -> float | None:
+    """
+    Nang luong can de ha canh tu do cao `altitude_m` xuong dat.
+
+        t_ha  = altitude_m / descent_rate_ms
+        P     = P_ly_tuong(total_mass_g) / eta
+        E_ha  = P * t_ha / 3600
+
+    `total_mass_g` la khoi luong cat canh DAY DU (khung + pin + thiet bi + tai),
+    khong phai chi tai trong.
+
+    Tra None khi thieu dau vao — de lop luat cung bao MISSING chu khong tu dien
+    gia tri mac dinh (§4.6 fail closed).
+    """
+    if altitude_m is None or total_mass_g is None:
+        return None
+    if altitude_m < 0:
+        raise ValueError(f"do cao am: {altitude_m}")
+    if total_mass_g <= 0:
+        raise ValueError(f"khoi luong khong hop le: {total_mass_g}")
+    if descent_rate_ms <= 0:
+        raise ValueError(f"toc do ha phai duong: {descent_rate_ms}")
+
+    t_s = altitude_m / descent_rate_ms
+    p_electrical = ideal_hover_power_W(total_mass_g / 1000) / fit_efficiency(battery)
+    return p_electrical * t_s / 3600.0
+
+
+def min_soc_for_landing(altitude_m: float | None,
+                        total_mass_g: float | None,
+                        soh: float = 1.0,
+                        kappa: float = 1.0,
+                        battery: str = "TB47D") -> float | None:
+    """
+    SoC toi thieu de con du nang luong ha canh — luat PH-1.
+
+        E_available(SoC) = E_nominal * SoC * SoH * kappa  >=  E_landing
+        =>  SoC >= E_landing / (E_nominal * SoH * kappa)
+
+    LUU Y QUAN TRONG: day la mot SAN cho SoC, KHONG phai mot khoan cong vao
+    E_required. Nang luong ha canh BINH THUONG o cuoi chuyen DA NAM TRONG
+    E_required (quyet dinh B9, xem d3_protocol.yaml budget_conventions), vi muc
+    tieu du bao cua D2 la tong nang luong ca chuyen bay. Cong them mot lan nua
+    la DEM HAI LAN.
+    San nay danh cho tinh huong BAT THUONG: dang bay nua duong, phai huy chuyen
+    va dap gap.
+    """
+    e_landing = landing_energy_Wh(altitude_m, total_mass_g, battery)
+    if e_landing is None:
+        return None
+    capacity = BATTERIES[battery]["energy_Wh"] * soh * kappa
+    if capacity <= 0:
+        return 1.0
+    return min(1.0, e_landing / capacity)
+
+
+def landing_energy_table() -> pd.DataFrame:
+    """Bang nang luong ha canh cho cac do cao va tai trong trong bo du lieu."""
+    rows = []
+    for prof, khung in (("M100_stock", 2355), ("CMU_instrumented", 3680)):
+        for payload in (0, 250, 500):
+            for alt in (25, 50, 75, 100):
+                tong = khung + payload
+                rows.append({
+                    "ho_so": prof,
+                    "do_cao_m": alt,
+                    "tai_trong_g": payload,
+                    "khoi_luong_g": tong,
+                    "e_landing_Wh": round(landing_energy_Wh(alt, tong), 4),
+                    "soc_min_pct": round(min_soc_for_landing(alt, tong) * 100, 2),
+                })
+    return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="D5 — tham so hoa mo hinh vat ly M100")
@@ -206,6 +310,28 @@ def main() -> None:
 
     print()
     print("=" * 74)
+    print("NANG LUONG HA CANH — phuc vu luat PH-1 (P§4.6)")
+    print("=" * 74)
+    print(f"  toc do ha canh {DESCENT_RATE_MS} m/s (Rodrigues et al. 2021, Methods)")
+    print(f"  cong suat ha canh lay = cong suat bay treo (can bao thu)")
+    print()
+    lt = landing_energy_table()
+    print(f"{'ho so':<18}{'do cao':>8}{'tai (g)':>9}{'khoi luong':>12}"
+          f"{'E_ha (Wh)':>12}{'SoC min':>10}")
+    print("-" * 74)
+    for _, r_ in lt.iterrows():
+        print(f"{r_['ho_so']:<18}{r_['do_cao_m']:>8.0f}{r_['tai_trong_g']:>9.0f}"
+              f"{r_['khoi_luong_g']:>12.0f}{r_['e_landing_Wh']:>12.3f}"
+              f"{r_['soc_min_pct']:>9.1f}%")
+    print()
+    print("  So sanh: luat du tru hien hanh doi SoC trung vi 26.5 %, lon nhat")
+    print("  42.0 % (r = 0.20). Nen PH-1 gan nhu KHONG kich hoat tren 192 chuyen.")
+    print("  PH-1 chi thang khi E_required NHO ma do cao CAO — vi luat du tru ti")
+    print("  le voi E_required con PH-1 la so tuyet doi. Bo sinh kich ban o san")
+    print("  pham D4 se sinh ra loai do.")
+
+    print()
+    print("=" * 74)
     print("THAM SO KHONG LAY DUOC — khong duoc bia (§5.2 D5)")
     print("=" * 74)
     for k, v in MISSING.items():
@@ -218,6 +344,8 @@ def main() -> None:
     outdir.mkdir(parents=True, exist_ok=True)
     table.to_csv(outdir / "d5_hover_validation.csv", index=False)
     print(f"Da ghi {outdir}/d5_hover_validation.csv")
+    lt.to_csv(outdir / "d3_landing_energy.csv", index=False)
+    print(f"Da ghi {outdir}/d3_landing_energy.csv")
 
 
 if __name__ == "__main__":

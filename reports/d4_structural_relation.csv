@@ -1,0 +1,2 @@
+a_khoan_du_phong_nhan_Wh,b_khoan_bat_dinh_he_thong_Wh,r,(1+r)*a,M4_bang_0_la_tat_yeu,bien_cua_bat_dang_thuc_Wh,a_doi_dau_khi_nho_hon,ghi_chu
+1.2924,1.4687,0.2,1.5509,True,0.0822,1.2239,"Khi (1+r)*a >= b, moi kich ban nhan goi la kha thi deu tu dong vuot nguong FLY. M-4 = 0 KHONG phai ket qua do duoc."

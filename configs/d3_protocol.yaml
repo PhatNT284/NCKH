@@ -16,8 +16,8 @@
 # =============================================================================
 
 meta:
-  version: "1.3.0"
-  frozen_on: "2026-10-19"
+  version: "1.4.0"
+  frozen_on: "2026-10-20"
   owner: "Phat (WP3)"
   cross_checker: "Duy"
   cross_check_status: "PENDING"
@@ -361,6 +361,73 @@ hard_rules:
         theo do phu du lieu la 0-500 g.
         Chi tiet: reports/parameter_table.md muc 3.1.
 
+  # 4.1b — Luat tu NGUYEN TAC cua thay, CON SO tu mo hinh vat ly cua nhom
+  # ---------------------------------------------------------------------------
+  # NGUON GOC va MUC DO la HAI TRUC KHAC NHAU:
+  #   HR-1..HR-4   DJI cong bo                     -> VETO
+  #   PH-1         nguyen tac P§4.6 + con so nhom  -> VETO
+  #   PD-1, PD-2   thi nghiem cua nhom             -> DOWNGRADE
+  # PH-1 la VETO vi no KHONG phai gioi han hieu luc cua mo hinh (nhu PD-*) ma
+  # la mot thuc te vat ly: khong du pin de dap xuong dat. Nhung con so KHONG
+  # phai DJI cong bo, nen tach muc rieng va BAT khai ro nguon khi bao cao.
+  physics_derived:
+    - id: "PH-1"
+      check: "available_energy(soc, soh, T) >= landing_energy_Wh(altitude_m, takeoff_mass_g)"
+      severity: "VETO"
+      source: "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+      principle_quote: >
+        "A minimum state of charge is added, set so that the aircraft retains
+        the energy required to land from its cruise altitude, following the
+        principle of placing a safety limit ahead of the end of discharge
+        rather than at it [10]."
+      on_violation: "NO_FLY — khong gi lat duoc"
+      descent_rate_ms: 1.5
+      descent_rate_source: >
+        Rodrigues et al. (2021), Methods: "reaches the launch point again, the
+        UAV stops and descends at approximately 1.5 m/s"
+      conservative_assumption: >
+        Cong suat khi ha canh lay BANG cong suat bay treo cung khoi luong. Thuc
+        te ha canh toc do thap ton IT HON bay treo, vi canh quat thu lai mot
+        phan nang luong tu luong khi di len. Nhung thieu he so can canh quat
+        (xem physics_m100.MISSING) nen lay can bao thu — dung cach §5.4 yeu cau.
+        Huong sai lech: UOC THUA nang luong ha canh -> than trong hon -> lech ve
+        phia tu choi thua, khong phai cho bay nham.
+      wording_rule: >
+        Khi bao cao PHAI noi ro: NGUYEN TAC tu P§4.6 cua thay, nhung CON SO tinh
+        tu mo hinh vat ly cua nhom voi eta khop tu MOT diem (thoi luong bay treo
+        khong tai do DJI cong bo). Khac han HR-1..HR-4 la so DJI in ra giay.
+        Thay se hoi "con so nay o dau ra" — phai tra loi duoc ngay.
+      not_to_be_confused_with: >
+        Day KHONG phai nang luong ha canh BINH THUONG o cuoi chuyen. Cai do da
+        nam trong E_required (quyet dinh B9, xem
+        energy_required.budget_conventions). PH-1 la SAN cho SoC, ap dung cho
+        tinh huong phai huy chuyen giua duong va dap gap.
+      binding_analysis: >
+        Tren 192 chuyen cua bo du lieu, PH-1 gan nhu KHONG kich hoat: no doi
+        SoC 2.5-11.9 % (ho so CMU_instrumented, tai 0-500 g, cao 25-100 m),
+        trong khi luat du tru da doi trung vi 26.5 % va lon nhat 42.0 %.
+        Luat du tru nghiem hon.
+        PH-1 chi thang khi E_required NHO ma do cao CAO — vi luat du tru ti le
+        voi E_required con PH-1 la so tuyet doi. Vi du: chuyen can 8 Wh, cao
+        100 m, tai 500 g -> luat du tru doi SoC 10.2 %, PH-1 doi 11.9 %.
+        Bo sinh kich ban o san pham D4 SE sinh ra loai nay, vi no quet doc lap
+        cu ly va do cao. Thieu PH-1 thi nhung kich ban do cho FLY sai.
+      kappa_warning: >
+        min_soc_for_landing() mac dinh kappa = 1.0, tuc cho NGUONG LAC QUAN.
+        Ai dung ham do de quyet dinh PHAI truyen kappa THAT. Vi du: o 0 C thi
+        kappa = 0.9203 nen nguong that cao hon mac dinh 8.66 %.
+        Bang reports/d3_landing_energy.csv dung mac dinh, nen phai doc la
+        "nguong toi thieu o dieu kien tot nhat", KHONG phai nguong van hanh.
+        Co test canh: test_nguong_mac_dinh_la_nguong_LAC_QUAN.
+      code_ref: "src/safety_invariants.py -> _kiem_ha_canh()"
+      naming_rule: >
+        Ma la PH-1 chu KHONG phai HR-5. Tien to HR- trong repo danh rieng cho
+        luat co so la SO DJI CONG BO, va co test canh
+        (test_moi_luat_hr_co_ghi_nguon kiem moi luat HR-* phai co "DJI" trong
+        nguon). PH-1 co NGUYEN TAC tu thay nhung CON SO tu nhom, nen mang ma
+        rieng.
+      reference_table: "reports/d3_landing_energy.csv (sinh boi src.physics_m100)"
+
   # 4.2 — Gioi han do NHOM phat hien, KHONG phai cua nha san xuat
   project_derived:
     - id: "PD-1"
@@ -393,7 +460,15 @@ hard_rules:
       TRONG E_required — xem energy_required.budget_conventions muc (2).
       Cong them mot lan nua la DEM HAI LAN.
       San nay la cho tinh huong BAT THUONG: dang bay nua duong, phai dap gap.
-    status: "CHO THAY QUYET — xem open_items OI-D3-1"
+    status: "DA CAI — luat PH-1, xem hard_rules.physics_derived"
+    implemented_in: >
+      src/physics_m100.py -> landing_energy_Wh(), min_soc_for_landing();
+      src/safety_invariants.py -> PH-1 (_kiem_ha_canh)
+    resolution_note: >
+      KHONG phai viec cho thay quyet. P§4.6 da chon san cach lam: "set so that
+      the aircraft retains the energy required to land from its cruise
+      altitude". Viec cua nhom chi la TINH va CAI DAT. Nhom tung tuong day la
+      viec can hoi — tra lai P§4.6 thi thay da co san cau tra loi.
     does_not_block_acceptance: >
       Da doi chieu bang tieu chi nghiem thu Muc 12.1 cho san pham D3: KHONG co
       tieu chi nao doi luat SoC toi thieu. D3 van dat 13/13 khi chua co luat
@@ -565,6 +640,16 @@ invariants:
       rationale: >
         De xuat mot bien phap khong doi duoc gi la lua nguoi dung. Va mot danh
         sach bien phap khong bao gio duoc kiem thi som muon se chua rac.
+    - id: "INV-8"
+      name: "khong du pin ha canh thi khong bao gio FLY"
+      statement: "e_available < landing_energy(altitude, mass) -> KHONG BAO GIO ra FLY"
+      method: "quet do cao 25/50/75/100 m x tai 0/250/500 g x SoC duoi nguong;
+               kiem moi truong hop vi pham PH-1 deu ra NO_FLY. Kiem them mot
+               chieu nua: PH-1 la VETO nen bien phap giam thieu KHONG lat duoc."
+      rationale: >
+        Khai mot luat trong giao thuc roi khong kiem thi vo nghia — giong INV-6.
+        Va neu khong khoa chieu bien phap thi M1 (sac them pin) se thanh cua sau
+        de lach PH-1, dung loi ma mitigations.py da co test chan cho HR-1.
 
 # -----------------------------------------------------------------------------
 # 8. NHUNG DIEU KHONG DUOC LAM
@@ -593,22 +678,17 @@ prohibitions:
 open_items:
   - id: "OI-D3-1"
     item: >
-      San an toan khi co su co — CHO THAY QUYET MOT LUA CHON THIET KE.
-      Da lam ro pham vi: nang luong ha canh BINH THUONG khong thieu, no da nam
-      trong E_required (energy_required.budget_conventions muc 2). Viec con lai
-      la san an toan cho tinh huong phai HUY CHUYEN GIUA DUONG.
-      Hai cach dat luat, cho ket qua khac nhau:
-        (a) nguong SoC co dinh — vi du khong bao gio xuong duoi 15 %
-        (b) nang luong ha canh du phong tu do cao hanh trinh, tinh tu cong suat
-            treo cua mo hinh vat ly D5 (src/physics_m100.py, eta xac thuc 3.4 %),
-            toc do ha 1.5 m/s theo Rodrigues et al.
-      Uoc so bo theo cach (b), toc do ha 1.5 m/s:
-        25 m -> 1.5 Wh  |  50 m -> 2.9 Wh  |  75 m -> 4.4 Wh  |  100 m -> 5.9 Wh
-      altitude_m la tham so KE HOACH nen tinh duoc o thoi diem pre-flight.
-      Cau hoi cho thay: dat theo (a) hay (b)?
+      DA DONG 20/10/2026 — cai thanh luat PH-1, xem quyet dinh B10.
+      P§4.6 da chon san cach lam ("set so that the aircraft retains the energy
+      required to land from its cruise altitude"), nen khong co gi phai hoi
+      thay; viec cua nhom la TINH va CAI DAT.
+      Con so (ho so CMU_instrumented, toc do ha 1.5 m/s):
+        tai 0 g   -> 25 m: 2.46 Wh | 50 m: 4.93 Wh | 75 m: 7.39 Wh | 100 m: 9.86 Wh
+        tai 500 g -> 25 m: 2.98 Wh | 50 m: 5.97 Wh | 75 m: 8.95 Wh | 100 m: 11.93 Wh
+      Bang day du: reports/d3_landing_energy.csv
     owner: "Phat"
-    blocks: "hard_rules.minimum_soc"
-    does_not_block: "nghiem thu D3 theo Muc 12.1 — da doi chieu, 13/13 khong can muc nay"
+    status: "DONG"
+    blocks: null
   - id: "OI-D3-2"
     item: >
       DA XET VA BAC BO: dung API thoi tiet (Open-Meteo / NASA POWER) de tra nhiet
@@ -787,3 +867,69 @@ change_log:
           Dinh nghia cu — "SoC toi thieu de con du nang luong ha canh tu do cao
           hanh trinh" — doc ra nghia ha canh thuong, ma cai do da trong
           E_required. Giu nguyen la mo duong cho loi dem hai lan.
+
+  - version: "1.4.0"
+    date: "2026-10-20"
+    author: "Phat"
+    changes: >
+      Cai luat PH-1 (san nang luong ha canh) theo P§4.6. Them bat bien INV-8.
+      Dong OI-D3-1.
+      DOI HANH VI — PHAI chay lai src.evaluation_decision va cap nhat 4 CSV
+      trong reports/. Cac bang cua san pham D2 KHONG bi anh huong.
+    decisions:
+      - id: "B10"
+        question: >
+          P§4.6 doi mot san SoC "so that the aircraft retains the energy
+          required to land from its cruise altitude". Cai the nao, va muc do nao?
+        resolution: >
+          Luat PH-1, muc do VETO. San cho SoC:
+              available_energy(soc, soh, T) >= landing_energy_Wh(altitude_m,
+                                                                 takeoff_mass_g)
+          Toc do ha 1.5 m/s theo Rodrigues et al. Cong suat ha = cong suat bay
+          treo cung khoi luong (can bao thu, vi thieu he so can canh quat).
+          Khai thanh muc rieng `physics_derived` vi nguon goc khac HR-1..HR-4.
+        basis: >
+          VETO vi day KHONG phai gioi han hieu luc cua mo hinh (nhu PD-*) ma la
+          mot thuc te vat ly: khong du pin de dap xuong dat. Cho nguoi duyet lat
+          mot chuyen nhu vay la nguy hiem that.
+          Nhung ve NGUON GOC thi PH-1 giong PD-* hon — con so tu mo hinh vat ly
+          cua nhom voi eta khop tu mot diem, khong phai DJI cong bo. Nen tach
+          muc rieng va bat khai ro nguon khi bao cao.
+        impact: >
+          DA CHAY LAI VA XAC NHAN BANG SO (20/10/2026):
+            - Nguong PH-1 doi SoC 2.5-12.0 %, trung vi 6.0 %.
+            - Nguong luat du tru doi SoC 16.2-42.0 %, trung vi 26.5 %.
+            - Hai dai KHONG CHONG NHAU: 12.0 < 16.2.
+            - So chuyen ma PH-1 rang buoc hon luat du tru: 0/192.
+          => Bang phan quyet KHONG DOI: van 187 FLY / 5 CONDITIONAL / 0 NO_FLY
+          tu SoC 0.50 tro len. Moi bang trong reports/ ve phan quyet giu nguyen.
+          NHUNG PH-1 KHONG phai code chet: o SoC 0.10 no chan 30/192 chuyen
+          (cot ph1_violated trong d3_verdict_grid.csv). Phan quyet van la NO_FLY
+          nhung LY DO doi — khong du pin dap xuong dat, chu khong phai thieu
+          bien du tru.
+          O san pham D4 thi PH-1 CO tac dung: kich ban "chuyen ngan + bay cao"
+          la cho luat du tru long hon PH-1.
+        found_how: >
+          Phat hien khi ra soat cau hoi "he so du tru 20 % bu cho nhung gi".
+          Ban dau nhom tuong day la viec can hoi thay; tra lai P§4.6 thi thay
+          thay DA chon san cach lam, chi la nhom chua tinh. Bai hoc: tra file
+          truoc khi ket luan la thieu.
+      - id: "B10b"
+        question: >
+          PH-1 can nang luong kha dung, nhung §4.6 doi lop luat cung chay
+          DOC LAP voi mo hinh. Co pha vo khong?
+        resolution: >
+          Khong. Truyen `soc` va `soh` (DAU VAO THO) vao check_hard_rules(), va
+          de lop luat cung TU GOI available_energy(). Chu ky ham khong co tham
+          so nao mang ten nang luong — test test_lop_nay_khong_nhan_dau_ra_mo_hinh
+          quet chu ky va van xanh.
+        basis: >
+          §4.6 cam lop luat cung nhan dau ra MO HINH DU BAO. e_available la
+          CONG THUC §5.4 (E_nominal * SoC * SoH * kappa), khong phai dau ra mo
+          hinh. Va §5.7 liet ke san trong lop an toan: "battery/SoC input valid
+          and within allowed bounds". Lop nay van KHONG biet gi ve E_required.
+        safeguard: >
+          Thieu hoac ngoai dai -> PH-1 bao MISSING (fail closed). Va buoc "dau
+          vao pin sai dai -> NO_FLY" phai xet TRUOC buoc thieu du lieu, neu
+          khong thi SoC = 1.5 se ra INSUFFICIENT_DATA thay vi NO_FLY — sai
+          quyet dinh B5. Co test canh: test_soc_ngoai_dai_la_no_fly_*.

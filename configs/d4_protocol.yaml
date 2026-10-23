@@ -1,0 +1,1811 @@
+# =============================================================================
+# GIAO THUC SAN PHAM D4 — BENCHMARK KICH BAN
+# =============================================================================
+# File nay DONG BANG truoc khi sinh kich ban dau tien va truoc khi xem bat ky
+# ket qua nao. Doi sau khi da thay ket qua = chon tham so cho dep so, tuc gian
+# lan. Moi lan doi phai ghi vao `change_log` kem ly do va NGAY.
+#
+# VI SAO PHAI DONG BANG — doc ky cho nay truoc khi lam gi:
+#   San pham D4 la cho DUY NHAT trong de tai ma nhom tu sinh du lieu de tu cham
+#   diem minh. D1 dung du lieu cua nguoi khac. D2 do bang cross-validation. D3
+#   kiem bang bat bien chu khong bang diem so. Rieng D4: nhom tu sinh kich ban,
+#   tu dinh nghia "dang le chuyen nay co nen bay khong", roi tu do xem he thong
+#   minh dung bao nhieu phan tram. Ba vai do cung mot nguoi.
+#   Bon thu duoi day KHONG ai phat hien duoc tu ben ngoai neu khong co file nay
+#   ghi ngay dong bang:
+#     - thay diem xau -> thu dai kich ban lai cho de -> diem dep
+#     - chay 20 seed -> bao seed dep nhat
+#     - noi dinh nghia nhan tham chieu cho khop he thong -> vong tron
+#     - thay false-safe cao -> doi sang bao accuracy
+#
+# NGUON: §6/E3 (bo sinh kich ban, nhan tham chieu), Muc 7 (duong co so, thuoc
+# do), Muc 12/12.1 (san pham va tieu chi nghiem thu), §4.7, P§4.9.
+# -----------------------------------------------------------------------------
+
+meta:
+  deliverable: "D4 — Scenario benchmark (Muc 12)"
+  experiment: "E3 — Pre-flight decision benchmark (§6)"
+  research_question: "RQ2"
+  version: "1.0.11"
+  frozen_on: "2026-10-20"
+
+  # ---------------------------------------------------------------------------
+  # QUY UOC NGUON — moi con so trong file nay phai thuoc mot trong ba loai
+  # ---------------------------------------------------------------------------
+  provenance_rule: >
+    Moi tham so so hoc trong file nay PHAI mang truong `source` thuoc mot trong
+    ba loai:
+      SUPERVISOR  — co trong file thay (§, Muc) hoac Proposal (P§). Trich duoc.
+      MEASURED    — tinh tu du lieu trong repo. Chi duoc file CSV cu the.
+      TEAM_CHOICE — nhom chon. PHAI kem `affects_results` va ly do.
+    KHONG duoc co con so nao khong thuoc ba loai tren. Ban 1.0.0-1.0.2 co bon
+    con so nhu vay; xem change_log 1.0.3.
+  author: "Phat"
+  cross_checker: "Duy"
+  status: "DONG BANG — DU DIEU KIEN CHAY (OI-D4-1 da dong 21/10/2026)"
+  depends_on:
+    - "configs/d2_protocol.yaml v1.4.0 — mo hinh nang luong da chot"
+    - "configs/d3_protocol.yaml v1.4.0 — nguong, luat cung, bien phap giam thieu"
+    - "reports/d2_oof_residuals.csv — phan phoi phan du cho nhan tham chieu"
+    - "reports/parameter_table.md muc 5 — dai nao co du lieu do lung"
+
+  # ---------------------------------------------------------------------------
+  # BA HE MA CUNG DUNG CHU CAI — KHONG DUOC TRON KHI TRICH DAN
+  # ---------------------------------------------------------------------------
+  naming_warning: >
+    Co BA he ma rieng biet, de nham nhat trong ca de tai:
+      (1) B0..B5  = DUONG CO SO QUYET DINH, Muc 7. Dung o file nay.
+      (2) B3..B10 = QUYET DINH THIET KE cua san pham D3, trong d3_protocol.yaml.
+      (3) D0..D5  = MO HINH du bao nang luong, §5.2.
+    Trong file nay, quyet dinh thiet ke cua san pham D4 mang tien to `C` (C1,
+    C2, ...) chu KHONG phai `B`, de khong dam vao (1). Khi viet bao cao phai ghi
+    du: "duong co so B2", "quyet dinh C3", "mo hinh D2".
+    Cho de sai nhat: B4 trong Muc 7 la MO HINH VAT LY, khong phai mot nguong.
+
+# -----------------------------------------------------------------------------
+# 1. BO SINH KICH BAN
+# -----------------------------------------------------------------------------
+# §6/E3 nguyen van: "create at least 5,000 reproducible scenarios using fixed
+# random seeds. Sample mission distance, payload, wind conditions, SoC, SoH, and
+# temperature from documented ranges. Use dataset-supported ranges for
+# payload/speed/altitude wherever possible; clearly label any extrapolated
+# ranges. Do not pretend these are real operational missions."
+scenario_generator:
+  module: "src/scenario_generator.py"
+  n_scenarios: 18000
+  n_scenarios_min_required: 5000
+  sampling: "Latin hypercube tren 7 chieu lien tuc, do cao lay roi rac"
+  seed: 42
+
+  # ---------------------------------------------------------------------------
+  # BON TANG — quyet dinh C9
+  # ---------------------------------------------------------------------------
+  # Lay mau uniform tren toan khong gian KHONG bao dam phu nhung vung quan trong
+  # nhat. Chia tang de bao dam, va de tang dac biet khong lam loang bang chinh.
+  # Moi tang dung seed DAN XUAT (seed + seed_offset): dung chung seed thi hai
+  # tang lay cung chuoi quasi-random, tuc tuong quan voi nhau mot cach im lang.
+  strata:
+
+    main:
+      n: 12600
+      seed_offset: 0
+      in_main_comparison: true
+      purpose: "lay mau trong dai co tai lieu do lung"
+
+    hard_rule_probe:
+      n: 2100
+      seed_offset: 1
+      in_main_comparison: false
+      purpose: >
+        CO Y vuot gioi han van hanh, de lop luat cung co dip kich hoat. Tren bo
+        du lieu CMU luat cung HR-1 (gio) CHUA BAO GIO kich hoat, nen chua tung
+        duoc thu thach — day la cho duy nhat thu duoc.
+      method: "LUOI BOI SO cua gioi han nha san xuat, khong lay mau ngau nhien"
+      probe_multipliers: [1.10, 1.25, 1.50]
+      probe_multipliers_source: "TEAM_CHOICE"
+      probe_multipliers_affects_results: false
+      probe_multipliers_basis: >
+        Luat cung HR-1..HR-4 la nguong NHI PHAN: vuot la VETO, khong co muc do.
+        Nen MOI gia tri tren gioi han deu thu dung mot thu, va boi so cu the
+        KHONG the doi bat ky thuoc do nao. Day la ly do con so nay duoc phep la
+        TEAM_CHOICE: no khong co bac tu do anh huong ket qua.
+        Chon ba boi so chu khong mot, chi de bang bang chung cho thay luat chan
+        ca sat nguong va xa nguong.
+      limits_probed:
+        # Gioi han lay tu reports/parameter_table.md muc 5 — so DJI cong bo.
+        - variable: "wind_forecast_ms"
+          dji_limit: 10.0
+          limit_source: "SUPERVISOR/DJI — HR-1"
+        - variable: "payload_g"
+          dji_limit: 1245.0
+          limit_source: "SUPERVISOR/DJI — HR-2"
+        - variable: "speed_commanded_ms"
+          dji_limit: 17.0
+          limit_source: "SUPERVISOR/DJI — HR-3"
+      removed_in_1_0_3: >
+        Ban 1.0.1-1.0.2 lay mau dai [10,16], [500,1400], [12,20]. Ba so chan
+        tren do nhom TU DAT, khong co nguon — va con sai: gioi han tai trong
+        DJI la 1245 g chu khong phai 500, gioi han toc do 17 m/s chu khong phai
+        12. Tuc dai cu vua bia so vua lay sai nguong. Xem quyet dinh C13.
+      excluded_from_main_tables_because: >
+        So sanh duong co so chi co nghia tren kich ban kha thi VE NGUYEN TAC.
+        Kich ban gio 16 m/s thi MOI phuong phap deu phai tu choi; dua vao bang
+        chung chi lam loang con so va lam B0/B1 trong khoe len mot cach gia.
+        Tang nay co bang rieng va phuc vu thuoc do M-7.
+
+    short_high:
+      n: 2100
+      seed_offset: 2
+      in_main_comparison: true
+      purpose: >
+        Chuyen NGAN ma bay CAO — vung duy nhat luat PH-1 rang buoc hon luat du
+        tru. Bo du lieu CMU co 0/192 truong hop nhu vay.
+      range_overrides:
+        distance_2d_m: [300.0, 419.0]
+        altitude_m: [75, 100]
+
+    missing_input:
+      n: 1200
+      seed_offset: 3
+      in_main_comparison: false
+      purpose: "thieu MOT dau vao an toan, de do ty le fail-closed tren kich ban tong hop"
+      missing_fields_cycled: ["soc", "soh", "ambient_temp_c", "wind_forecast_ms"]
+      method: >
+        Bo trong theo CHI SO (i % 4), khong rut tham: tai lap duoc, va bao dam
+        ca bon cot deu duoc thu chu khong de ngau nhien bo sot mot cot.
+      excluded_from_main_tables_because: >
+        Thieu dau vao thi dung phan quyet la INSUFFICIENT_DATA, khong phai
+        FLY/NO_FLY. Dua vao confusion matrix se bop meo ca ba lop.
+  seed_policy: >
+    MOT seed duy nhat = 42, trung voi seed cua d2_protocol.yaml de ca de tai
+    dung mot con so. CAM chay nhieu seed roi chon seed cho ket qua dep. Neu
+    muon bao do on dinh theo seed thi phai bao CA BA seed 42/43/44 cung luc,
+    day du, va khai o day truoc khi chay.
+  seed_replicates_if_reported: [42, 43, 44]
+
+  # Cot nao co du lieu do lung, cot nao la ngoai suy — nguon: parameter_table.md
+  # muc 5. Moi kich ban PHAI mang co `extrapolated_*` tuong ung.
+  variables:
+
+    payload_g:
+      range: [0, 500]
+      distribution: "uniform"
+      support: "DATASET_SUPPORTED"
+      note: "phu 40 % dai van hanh (toi da 1245 g); KHONG lay mau tren 500 g"
+
+    speed_commanded_ms:
+      range: [4, 12]
+      distribution: "uniform"
+      support: "DATASET_SUPPORTED"
+      note: "gioi han van hanh 17 m/s; khong lay mau ngoai 12"
+
+    altitude_m:
+      values: [25, 50, 75, 100]
+      distribution: "discrete_uniform"
+      support: "DATASET_SUPPORTED"
+      note: "bo du lieu chi co bon muc roi rac — giu dung bon muc"
+
+    distance_2d_m:
+      range: [300, 900]
+      distribution: "uniform"
+      support: "PARTLY_EXTRAPOLATED"
+      convention: "ROUND_TRIP — tong quang bay, dong quy uoc voi B7 cua D3"
+      envelope_supported: [420, 610]
+      extrapolation_flag: "extrapolated_distance = not (420 <= d <= 610)"
+      note: >
+        Day la chieu duy nhat CO Y lay mau ra ngoai envelope, vi thi nghiem E2c
+        da do duoc huong lech (bias -7.6 Wh o 835 m) nen con so ngoai suy van
+        doc duoc. Phai bao ket qua rieng cho hai vung trong/ngoai envelope.
+        Doc theo cu ly giao hang MOT CHIEU thi dai nay la ~150-450 m.
+
+    wind_forecast_ms:
+      range: [0, 10]
+      distribution: "uniform"
+      support: "PARTLY_EXTRAPOLATED"
+      dataset_coverage: [2.81, 6.67]
+      extrapolation_flag: "extrapolated_wind = not (2.81 <= w <= 6.67)"
+      note: >
+        Lay mau toi 10 m/s de luat cung HR-1 co dip kich hoat — tren bo du lieu
+        CMU no CHUA BAO GIO kich hoat (max 6.67). Lop luat cung cua D3 vi the
+        chua tung duoc thu thach bang du lieu that; D4 la cho thu.
+
+    soc:
+      range: [0.10, 1.00]
+      distribution: "uniform"
+      support: "SCENARIO_PARAMETER"
+      note: "khong co trong bo du lieu; la tham so kich ban theo §4.3"
+
+    soh:
+      range: [0.70, 1.00]
+      distribution: "uniform"
+      support: "PURE_EXTRAPOLATION"
+      extrapolation_flag: "extrapolated_soh = True (luon luon)"
+      note: >
+        Bo du lieu KHONG co SoH. Moi ket qua theo SoH la PHAN TICH DO NHAY,
+        khong phai du bao. §6/E3 bat dan nhan ro.
+
+    ambient_temp_c:
+      range: [-10, 40]
+      distribution: "uniform"
+      support: "PURE_EXTRAPOLATION"
+      extrapolation_flag: "extrapolated_temp = True (luon luon)"
+      kappa_valid_range: [4.5, 18.4]
+      note: >
+        Bo du lieu KHONG ghi nhiet do. Them vao do: kappa(T) chi hop le tren
+        4.5-18.4 C, ngoai dai do bi KEP MOT PHIA theo B3 cua D3. Nen phan lon
+        dai nhiet do nay mo hinh khong mo ta duoc gi — phai bao rieng ti le kich
+        ban roi vao vung kep.
+
+  energy_budget_conventions:
+    inherit_from: "d3_protocol.yaml energy_required.budget_conventions (B9)"
+    rule: >
+      GIU NGUYEN ca bon quy uoc. CAM cong them nang luong cat/ha canh vao
+      E_required — no DA nam trong output mo hinh D2. E_hover = 0.
+    if_true_delivery_scenario: >
+      Neu sau nay muon mo phong giao hang THAT (co tha hang) thi phai cong lai
+      E_hover VA khai lai quy uoc chang ve (chang ve khong mang tai), va do la
+      mot ban giao thuc MOI — khong duoc lam im lang trong ban nay.
+
+  mandatory_coverage:
+    # Muc dich: bao dam bo sinh khong bo trong nhung vung quan trong nhat.
+    # `verified_by` quan trong: COV-1/2/4 tinh duoc tu truong THO nen bo sinh tu
+    # kiem duoc; COV-3 can R = M/E_required, tuc dau ra mo hinh, nen chi kiem
+    # duoc o buoc gan nhan. Quyet dinh C10.
+    - id: "COV-1"
+      requirement: "it nhat 500 kich ban vuot >= 1 gioi han luat cung"
+      min_count: 500
+      satisfied_by_stratum: "hard_rule_probe"
+      verified_by: "GEN-4a"
+      why: "de do duoc 'hard-rule violations incorrectly approved' (muc tieu 0)"
+    - id: "COV-2"
+      requirement: "it nhat 500 kich ban NGAN (d < 420 m) ma BAY CAO (>= 75 m)"
+      min_count: 500
+      satisfied_by_stratum: "short_high"
+      verified_by: "GEN-4a"
+      why: >
+        Day la vung duy nhat luat PH-1 rang buoc hon luat du tru. Tren 192
+        chuyen CMU co 0/192 kich ban nhu vay, nen PH-1 chua bao gio doi phan
+        quyet. Neu D4 cung cho 0 thi KET LUAN LA BO SINH CHUA QUET DU RONG,
+        khong phai PH-1 vo dung.
+    - id: "COV-3"
+      requirement: "it nhat 1000 kich ban nam trong dai bien (boundary) theo dinh nghia muc 4"
+      min_count: 1000
+      satisfied_by_stratum: null
+      verified_by: "GEN-4b"
+      why: "Muc 7 bat bao false-safe rieng cho vung bien va ngoai bien"
+      note: >
+        KHONG kiem duoc o bo sinh: vung bien dinh nghia theo R = M / E_required,
+        ma E_required la dau ra mo hinh. Bo sinh khong biet no — va khong duoc
+        biet, neu khong no co the nan dai kich ban theo cho mo hinh lam tot.
+        Neu sau khi gan nhan ma COV-3 khong dat thi KHONG duoc sua dai kich ban
+        de chay theo: phai nang `n_scenarios` va ghi vao change_log.
+    - id: "COV-4"
+      requirement: "it nhat 300 kich ban thieu it nhat mot dau vao an toan"
+      min_count: 300
+      satisfied_by_stratum: "missing_input"
+      verified_by: "GEN-4a"
+      why: "do ty le fail-closed tren kich ban tong hop, khong chi trong unit test"
+
+# -----------------------------------------------------------------------------
+# 2. NHAN THAM CHIEU — PHAN DE SAI NHAT CUA CA SAN PHAM D4
+# -----------------------------------------------------------------------------
+# §6/E3 goi day la "Reference decision (mandatory protocol)".
+reference_label:
+  status: >
+    DA KY DU — Duy ky ban 1.0.6 (21/10/2026) cho REF-1, ba lop nhan, rui ro
+    vong tron va anh xa dac trung; ky lai ban 1.0.8 (21/10/2026) cho phuong
+    phap REF-2 da doi theo quyet dinh C22.
+  approved_by: "DUY"
+  approved_on: "2026-10-21"
+  previous_approval:
+    approved_by: "DUY"
+    approved_on: "2026-10-21"
+    protocol_version: "1.0.6"
+    scope: >
+      REF-1, ba lop nhan feasible/marginal/infeasible, rui ro vong tron, anh xa
+      dac trung. Nhung phan nay KHONG doi o 1.0.8.
+
+  independence_requirement: >
+    §6/E3: "Prefer a reference procedure independent of the candidate model."
+    Dung chinh mo hinh D2 de sinh nhan roi lai dung D2 de du bao thi chi do duoc
+    "D2 co tu nhat quan khong", KHONG do duoc gi ve an toan. Day la rui ro vong
+    tron, va Muc 12.1 bat phai GHI RA no du lam dung.
+
+  method:
+    id: "REF-1"
+    name: "nhu cau tham chieu bao thu tu phan du do duoc"
+    formula: >
+      E_reference = E_d2_prediction + abs(q05(residual_signed_oof))
+    naming_note: >
+      Ban 1.0.0-1.0.3 goi so hang dau la `E_measured_proxy`. Ten do NOI DOI: no
+      khong phai so do, no la DU BAO cua chinh mo hinh D2. Kich ban la tong hop,
+      khong co chuyen bay that de do. Doi ten de doc la thay ngay vong tron —
+      ma Muc 12.1 bat PHOI no ra, khong phai che. Xem quyet dinh C16.
+    source_of_residuals: "reports/d2_oof_residuals.csv (out-of-fold, san pham D2)"
+    residual_sign_convention: >
+      PHAN DU = DU BAO - DO DUOC, theo src/evaluation_energy.py:
+          residuals[name] = (oof_sum / max(oof_cnt, 1)) - y
+      Nen phan du DUONG = doan THUA = huong AN TOAN; phan du AM = doan THIEU =
+      huong NGUY HIEM. Phai ghi ro o day vi ban 1.0.1 da ghi NGUOC dau.
+    uncertainty_allowance: >
+      Lay DO LON CUA PHAN VI 5 cua phan du CO DAU — tuc duoi dai, phia doan
+      THIEU. KHONG lay phan vi 95 (do la phia an toan), va KHONG lay phan vi 95
+      cua TRI TUYET DOI (tron ca hai huong). Quyet dinh C11.
+      Con so chot: xem muc `frozen_numbers` duoi.
+    forbidden_source: >
+      §6/E3: "never estimate the allowance from the final test fold."
+      CAM tinh khoan du phong tu fold kiem cuoi.
+    reserve_policy_for_reference:
+      r: 0.20
+      note: "dong he so du tru voi D3; khac r thi khong con so sanh duoc"
+
+  three_classes:
+    feasible:   "M_reference > 0 va bien du tru >= r"
+    marginal:   "M_reference > 0 nhung bien du tru < r"
+    infeasible: "M_reference <= 0"
+    note: >
+      Ba lop nay la cua NHAN THAM CHIEU, khong phai ba muc phan quyet cua he
+      thong. Anh xa sang nhi phan feasible/infeasible de tinh precision/recall:
+      marginal duoc gop vao `infeasible` cho phep do an toan (cach bao thu), VA
+      phai bao them mot bang voi marginal gop vao `feasible` de nguoi doc thay
+      ket qua phu thuoc cach gop the nao.
+
+  circularity:
+    risk: "CO — phai ghi ra bao cao, Muc 12.1 bat buoc"
+    why: >
+      `E_measured_proxy` khong phai nang luong do that (kich ban la tong hop,
+      khong co chuyen bay that de do). No duoc dung lai tu mo hinh, nen nhan
+      tham chieu KHONG hoan toan doc lap voi duong co so B3 (vua la mo hinh D2).
+      Khoan cong q95 lam nhan BAO THU HON du bao, nhung khong xoa duoc ho hang
+      ve ho mo hinh.
+    mandatory_sensitivity: >
+      §6/E3 bat: "add a sensitivity analysis with a distinct conservative
+      reference assumption." Chay lai toan bo benchmark voi mot nhan tham chieu
+      THU HAI, doc lap ho mo hinh — REF-2 duoi day — va bao ca hai ket qua canh
+      nhau. Neu xep hang cac duong co so DOI khi thay nhan, do la ket qua phai
+      bao, khong phai loi.
+
+  sensitivity_method:
+    id: "REF-2"
+    name: "nhu cau tham chieu tu mo hinh vat ly"
+    formula: >
+      E_reference2 = k * P_ideal(takeoff_mass) * t_planned / 3600
+    code_ref: "src/physics_m100.py ideal_hover_power_W() — cong suat treo LY TUONG"
+
+    frozen_numbers:
+      note: >
+        Dien bang scripts/compute_ref2_calibration.py. DE TRONG co y: con so
+        dong bang phai do nguoi dien va biet minh dang dien gi.
+      calibration_k: 7.4400
+      percentile: 95
+      n_flights: 192
+      computed_on: "2026-10-21"
+      computed_from: "data/processed/flight_level.csv"
+
+    calibration:
+      definition: >
+        k = p95( E_do_duoc / (P_ideal(khoi luong) * t_ke_hoach / 3600) )
+        tren 192 chuyen that.
+      source: "MEASURED"
+      which_duration: >
+        `duration_planned_s`, KHONG phai `duration_s`. Kich ban tong hop khong
+        co thoi luong do duoc, nen phai hieu chinh tren cung dai luong ma REF-2
+        se dung.
+      why_p95_not_p50: >
+        Nhan tham chieu phai BAO THU: tha doi THUA nang luong hon doi THIEU.
+        Doi thieu thi nhan goi mot kich ban la kha thi trong khi thuc te khong —
+        dap an sai theo huong nguy hiem.
+      eta_cancels: >
+        k ti le THUAN voi eta, uoc luong ti le NGHICH, nen E_ref2 KHONG phu
+        thuoc he so hieu suat khop duoc. REF-2 gio chi dua vao hai thu: cong
+        suat treo LY TUONG (dang dong tu khoi luong va dien tich dia, khong
+        tham so khop nao) va MOT so vo huong do duoc.
+      still_independent_of_d2: >
+        §6/E3 doi "independent of the candidate model". k rut tu nang luong DO
+        DUOC, khong phai tu dau ra hoi quy. Khong he so hoi quy nao di vao REF-2.
+      runtime_check: >
+        src/reference_labeller.py tinh lai k tu du lieu moi lan chay va NEM LOI
+        neu lech so da dong bang quá 1e-3. Mot con so bi sua tay se khong di qua
+        im lang.
+
+    removed_in_1_0_3: >
+      Ban 1.0.0-1.0.2 ghi `safety_k: 1.25`. Con so do KHONG co trong file thay,
+      khong co trong Proposal, va khong tinh tu du lieu nao — nhom tu dat. Da bo.
+      Xem quyet dinh C12.
+    removed_in_1_0_8: >
+      Ban 1.0.3-1.0.7 ghi `eta_dev: 0.034` va chia cho eta. Con so 0.034 CO
+      nguon (sai lech kiem cheo bay treo), nhung no sai VIEC: no do sai lech cua
+      he so hieu suat, khong do sai lech cua ca cong thuc. Chay thu cho thay
+      REF-2 doi nhu cau trung vi 7.56 Wh khi REF-1 doi 23.65 va nang luong do
+      duoc that la 20.79 — tuc REF-2 LAC QUAN gap 2.7 lan, nguoc han vai
+      "conservative reference" ma §6/E3 giao. Xem quyet dinh C22.
+    why_independent: >
+      Khong dung bat ky he so hoi quy nao khop tu bo du lieu CMU, nen doc lap
+      voi ca D1, D2, D3. Danh doi: tho hon, va chinh no cung co han che (khong
+      co P_bl, P_par) — khai ro o D5_mo_hinh_vat_ly.md.
+    honest_limitation: >
+      PHAI neu trong bao cao, ba dieu:
+      (1) He so k = 7.44 do tren 192 chuyen CMU, tat ca o cu ly ~472 m va mot
+          dai tai trong 0-500 g. Ap cho kich ban ngoai dai do (300-900 m, tai
+          toi 1867 g o tang probe) la NGOAI SUY. Khac mot con so tu dat o cho
+          no co nguon va tinh lai duoc, nhung van la ngoai suy.
+      (2) k hieu chinh tren `duration_planned_s` = cu ly/toc do, mot dai luong
+          KE HOACH. No bo qua thoi gian leo, ha va treo, nen k dang ganh ca
+          phan sai lech do — khong tach rieng duoc.
+      (3) REF-2 va REF-1 khong doc lap HOAN TOAN: ca hai dung cung 192 chuyen
+          bay. Chung doc lap ve HO MO HINH (REF-2 khong dung he so hoi quy nao),
+          chu khong doc lap ve du lieu. Day la gioi han cua bo du lieu, khong
+          sua duoc trong pham vi de tai.
+
+  simulation_derived_label:
+    required: true
+    rule: >
+      MOI bang, hinh va cau ket luan cua san pham D4 phai mang chu
+      "simulation-derived". Muc 12.1: "labels explicitly marked
+      simulation-derived" va cong chan "No claims of real-world safety
+      validation".
+    forbidden_words:
+      - "ground truth"
+      - "validated safety"
+      - "real-world success rate"
+      - "do chinh xac an toan"
+
+  # ---------------------------------------------------------------------------
+  # ANH XA DAC TRUNG — quyet dinh C17
+  # ---------------------------------------------------------------------------
+  # Cot cua bo kich ban KHONG trung ten voi tap dac trung cua mo hinh D2. Khai
+  # anh xa o day thay vi doi ten cot kich ban, vi hai bo ten la HAI LOAI DAI
+  # LUONG khac nhau: file kich ban mo ta KE HOACH NHIEM VU, flight_level.csv mo
+  # ta BAN GHI CHUYEN BAY. Doi ten cot kich ban thanh `wind_raw_mean_ms` la gia
+  # vo gio du bao chinh la gio do duoc.
+  feature_mapping:
+    model: "D2_ridge_preflight"
+    feature_set_ref: "d2_protocol.yaml features.preflight (6 cot)"
+    map:
+      payload_num: "payload_g"
+      speed_num: "speed_commanded_ms"
+      altitude_num: "altitude_m"
+      distance_2d_m: "distance_2d_m"
+      duration_planned_s: "DERIVED: distance_2d_m / speed_commanded_ms"
+      wind_raw_mean_ms: "wind_forecast_ms"
+
+    derived_formula_source: >
+      d2_protocol.yaml features.derived.duration_planned_s.formula —
+      "distance_2d_m / speed_num", nguon §5.5. Cong thuc cua giao thuc D2,
+      khong phai cua D4.
+
+    substitution_declared:
+      slot: "wind_raw_mean_ms"
+      fed_with: "wind_forecast_ms"
+      why_this_is_a_substitution: >
+        Mo hinh D2 huan luyen tren GIO DO DUOC (cot tho tu cam bien, trung binh
+        trong chuyen bay). Kich ban cung cap GIO DU BAO. Hai dai luong khac nhau.
+      why_unavoidable: >
+        Bo du lieu CMU KHONG co cot gio du bao nao. CA HAI bien the D2 (D2-a va
+        D2-b) deu dung wind_raw_mean_ms — hai bien the khac nhau DUNG MOT dac
+        trung va do la THOI LUONG, khong phai gio
+        (xem test_features.py::test_two_variants_differ_by_exactly_one_feature).
+        Nen D2-b — bien the "truoc chuyen bay" — van con DUNG MOT dau vao khong
+        thuc su biet truoc khi bay: gio.
+      already_known: >
+        San pham D3 da ghi la han che so 13 ("gio do duoc dung thay gio du bao
+        khi chay D3 tren 192 chuyen"). D4 la chieu nguoc: gio du bao nhet vao o
+        hoc tu gio do. Cung mot ho hong, hai chieu.
+      must_state_in_paper: true
+
+  # ---------------------------------------------------------------------------
+  # KHOP MO HINH MOT LAN — quyet dinh C18
+  # ---------------------------------------------------------------------------
+  model_fit:
+    what: >
+      Khop MOT LAN mo hinh D2_ridge_preflight tren CA 192 chuyen that, roi dong
+      bang he so ra file. Dung bo he so do cho ca 6000 kich ban.
+    authorised_by: >
+      Muc 11 tuan 6 nguyen van: "finalize selected energy model".
+      Muc 7 duong co so B3: "use the best validated model selected in E2".
+    learns_from: "192 chuyen bay that (co energy_Wh do duoc)"
+    predicts_for: "6000 kich ban tong hop (KHONG co cot nang luong nao)"
+    never_learns_from_scenarios: >
+      Mo hinh KHONG hoc tu kich ban, va khong the: kich ban khong co cot muc
+      tieu. GEN-5 cam bo kich ban chua cot nang luong, co test canh.
+    spec_frozen:
+      features: "6 cot preflight cua d2_protocol.yaml — khong them bot"
+      pipeline: "StandardScaler + Ridge, dung src/models.py make_d2()"
+      alpha_grid: [0.01, 0.1, 1.0, 10.0, 100.0]
+      alpha_selection: "CV long, random_state 42"
+      data: "ca 192 chuyen"
+      degrees_of_freedom: 0
+    freeze_coefficients_to: "reports/d4_d2_frozen_coefficients.csv"
+    cross_check: >
+      Duy doi chieu bo he so do voi reports/d2_ridge_coefficients.csv da co tu
+      tuan 6. Khop thi dung la mo hinh da chot; lech thi co gi sai. Day la cho
+      lam viec khop nay KIEM DUOC — khong co file he so thi khong ai kiem duoc.
+    why_a_26th_fit_is_needed: >
+      O san pham D2, Ridge duoc khop 25 lan (5 fold x 5 lan lap), moi lan tren
+      4/5 du lieu, de DO sai so. 25 bo he so do bi bo di — chung chi phuc vu
+      viec do. Nen chua co bo he so nao dung duoc de du bao cho kich ban moi.
+    error_of_the_final_fit_is_unknown: >
+      QUAN TRONG, phai neu trong bao cao: MAE 0.657 Wh la sai so cua QUY TRINH
+      cross-validation, KHONG phai cua bo he so cuoi cung. Mo hinh khop tren ca
+      192 chuyen thi khong do duoc sai so cua chinh no — khong con du lieu nao
+      no chua thay.
+      => CAM viet "mo hinh nay sai 0.657 Wh".
+      => Thuoc do bat dinh PHAI lay tu phan du out-of-fold cua 25 lan kia. Do
+         chinh la nguon cua khoan 1.2924 Wh, va la ly do §6/E3 bat lay khoan du
+         phong tu "out-of-fold measured-energy residuals".
+
+  must_save_per_scenario:
+    # §6/E3: "Save the reference-model version, parameter file, scenario seed,
+    # reserve policy, and per-scenario label."
+    - "reference_model_version"
+    - "parameter_file_hash"
+    - "scenario_seed"
+    - "reserve_policy"
+    - "reference_label"
+    - "extrapolated_distance / extrapolated_wind / extrapolated_soh / extrapolated_temp"
+
+  frozen_numbers:
+    note: >
+      Da tinh tu reports/d2_oof_residuals.csv bang scripts/compute_q95.py.
+      DONG BANG — khong sua nua. OI-D4-3 da dong.
+    uncertainty_allowance_Wh: 1.2924
+    source_statistic: "abs(q05) cua phan du co dau"
+    q05_signed_Wh: -1.2924
+    q95_signed_Wh: 1.2915
+    q95_abs_for_reference_Wh: 1.4687
+    bias_Wh: 0.0105
+    underprediction_share: 0.50
+    n_flights: 192
+    model_column: "D2_ridge_preflight"
+    computed_on: "2026-10-20"
+    computed_from: "reports/d2_oof_residuals.csv"
+    cross_check: >
+      q95(|phan du|) = 1.4687 KHOP dung con so quyet dinh B4 cua
+      d3_protocol.yaml dang dung cho nguong R_fly. Nghia la D3 chon tri tuyet
+      doi, D4 chon q05 co dau — hai thong ke khac nhau, chon CO Y THUC, khong
+      phai mot cho nao sai. Xem C11.
+
+# -----------------------------------------------------------------------------
+# 3. DUONG CO SO — Muc 7
+# -----------------------------------------------------------------------------
+# Muc 12.1 doi: "B0/B1/B2/B3/B5 implemented where applicable".
+baselines:
+
+  B0:
+    name: "Fixed SoC threshold"
+    spec: "duyet bay neu SoC >= nguong, nguoc lai tu choi"
+    thresholds: [0.20, 0.30, 0.40]
+    required: true
+    fairness: >
+      Muc 7 bat QUET nguong de cho thay danh doi, CAM chi bao nguong tot nhat
+      sau khi da xem ket qua. Ba nguong nay chot tu bay gio.
+    ignores: "hoan toan khong biet nhu cau nhiem vu"
+
+  B1:
+    name: "Nominal endurance threshold"
+    spec: "so thoi gian bay ke hoach voi thoi luong bay danh dinh tru du tru"
+    required: true
+    endurance_source: "SUPERVISOR/DJI — trang ho tro chinh thuc DJI Matrice 100"
+    endurance_min: 13.0
+    endurance_unit: "phut"
+    endurance_config: "TB47D, tai 1000 g, bay treo"
+
+    # Bang nguyen van DJI cong bo (Hovering Time, TB47D)
+    dji_published_table:
+      battery: "TB47D"
+      airframe_mass_g: 2355          # "Weight (with TB47D battery)"
+      max_takeoff_g: 3600            # "Max. Takeoff Weight"
+      hovering_time_min:
+        payload_0_g: 22
+        payload_500_g: 17
+        payload_1000_g: 13
+      note_tb48d: "28 / 20 / 16 phut — dung cho do nhay S-1"
+
+    why_13_min: >
+      May bay CMU nang 3680 g KHONG tai. Cau hinh NANG NHAT ma DJI cong bo la
+      khung 2355 g + tai 1000 g = 3355 g. Tuc may bay CMU o tai 0 g DA VUOT cau
+      hinh nang nhat co so cong bo, vuot 325 g. Khong co so nao khop.
+      => Lay 13 phut (dong 1000 g), la so BAO THU NHAT trong bang.
+      CAM noi suy ra cho 1325 g: bang chi co ba diem, noi suy ra ngoai la bia so.
+
+    fairness_condition: >
+      Muc 7: "Must use matching aircraft/configuration and reserve assumption."
+      KHONG khop duoc. B1 co HAI thien lech, ca hai ve phia LAC QUAN, phai khai
+      trong bao cao:
+        (1) KHOI LUONG — 13 phut do o 3355 g; may bay CMU 3680-4180 g, nang hon
+            325-825 g. Nang hon thi bay duoc it hon, nen 13 phut la LAC QUAN.
+        (2) BAY TREO khong phai BAY HANH TRINH — bang DJI la "Hovering Time".
+            Bay hanh trinh 4-12 m/s rut cong suat khac bay treo. So nay khong
+            phai thoi luong hanh trinh.
+      => B1 se trong KHOE hon thuc te. Khi bao ket qua phai noi ro, neu khong
+      nguoi doc se tuong B1 la mot doi thu cong bang.
+
+    reserve_rule: >
+      t_nhiem_vu <= endurance_kha_dung / (1 + r), voi r = 0.20 dong bo D3.
+      Dang nay khop dinh nghia R = (co - can)/can cua §5.6, nen so sanh duoc
+      voi B5. Dung (1 - r) se la mot dinh nghia du tru KHAC.
+
+    soc_handling:
+      decision: "endurance_kha_dung = 13 phut x SoC x SoH"
+      decision_ref: "C19"
+      source: "TEAM_CHOICE"
+      affects_results: true
+      basis: >
+        Muc 7 ta B1 la "compare planned mission time with a documented nominal
+        endurance figure and reserve" — khong noi co nhan SoC hay khong.
+        Nhan SoC la cach doc VAN HANH tu nhien: con 60 % pin thi con 60 % thoi
+        luong. KHONG nhan thi B1 duyet bay ca khi pin gan can, tuc false-safe
+        gan 100 % tren moi kich ban pin thap — mot doi thu bu nhin, va dung no
+        de lam B5 trong gioi la khong trung thuc.
+      variant_also_reported: >
+        BAO CA HAI: B1 (nhan SoC x SoH) va B1-pure (khong nhan). B1-pure la
+        dang doc sat chu Muc 7 nhat. Bao ca hai thi nguoi doc thay ro phan nao
+        cua ket qua den tu viec B1 khong biet SoC.
+
+  B2:
+    name: "Distance-only energy model"
+    spec: "dung mo hinh D1 de du bao nang luong roi so voi nang luong kha dung"
+    required: true
+    model_ref: "D1_distance_only (d2_protocol.yaml models.D1)"
+    caveat: >
+      Mo hinh D1 THOAI HOA tren bo du lieu nay (180/192 chuyen cung mot tuyen,
+      do lech chuan cu ly ~1 %). Nen B2 se rat yeu, va do KHONG phai vi cu ly
+      khong quan trong ma vi du lieu khong cho cu ly thay doi. Phai viet thang
+      ra, neu khong B5 se trong nhu thang ap dao mot cach gian lan.
+
+  B3:
+    name: "Multi-factor empirical model"
+    spec: "dung mo hinh tot nhat da chot o E2"
+    required: true
+    model_ref: "D2_ridge_preflight"
+    note: "day la duong co so manh nhat, va la cho rui ro vong tron tap trung"
+
+  B4:
+    name: "Physics-based energy model"
+    required: false
+    excluded: true
+    exclusion_reason: >
+      Muc 7 cho B4 dieu kien: "Only quantitative if M100 parameters are
+      documented." Bang kiem tuong thich (§3.2) da ket luan KHA THI MOT PHAN:
+      dung duoc cong suat cam ung va eta, KHONG dung duoc P_bl va P_par vi DJI
+      khong cong bo ti so dac, he so can canh quat va dien tich can than. Nen
+      B4 KHONG vao xep hang dinh luong — dung nguyen tac da ap cho mo hinh D5 o
+      san pham D2, giu nhat quan.
+      Muc 12.1 cung khong liet ke B4 trong danh sach bat buoc
+      ("B0/B1/B2/B3/B5"), nen viec loai nay dung tieu chi.
+    still_used_for: >
+      Mo hinh vat ly VAN duoc dung, nhung o vai khac: sinh nhan tham chieu thu
+      hai REF-2 (muc 2), va cung cap landing_energy_Wh() cho luat PH-1.
+
+  B5:
+    name: "Proposed safety-aware graded decision"
+    spec: >
+      mo hinh nang luong da chon + nang luong kha dung + nguong du tru + lop
+      luat cung co quyen phu quyet
+    required: true
+    code_ref: "src/decision_rules.py assess()"
+    note: "day la phuong phap cua nhom — thu duoc dem ra cham diem"
+
+  ablation:
+    id: "B5-noHR"
+    spec: "B5 nhung TAT lop luat cung"
+    required: true
+    purpose: "Muc 7 bat bao rieng mot ablation nhu vay"
+    hard_constraint: >
+      "for analysis only, never as the operational recommendation."
+      CAM trinh bay B5-noHR nhu mot cau hinh dung duoc. Bang nao co no phai co
+      dong chu canh bao.
+
+  hard_rule_policy:
+    primary: "APPLY_TO_ALL"
+    decision_ref: "C23"
+    source: "TEAM_CHOICE"
+    affects_results: true
+    rule: >
+      Lop luat cung (HR-1..HR-4, PH-1, PD-1, PD-2) ap cho MOI duong co so:
+      B0, B1, B1-pure, B2, B3, B5. Nho vay chenh lech giua chung den HOAN TOAN
+      tu CACH QUYET DINH NANG LUONG, khong lan sang chinh sach an toan.
+    basis: >
+      Muc 7 nguyen van: "Keep the safety-rule policy identical across methods
+      where the comparison is intended to isolate the energy-decision method."
+      Day dung la y do cua ca bang so sanh.
+    why_not_the_other_reading: >
+      Doc sat chu thi mo ta cua B5 la cho duy nhat nhac "hard-rule veto", nen co
+      the hieu B0..B3 KHONG co lop luat cung. Nhung doc nhu vay thi B0 se duyet
+      bay mot kich ban gio 15 m/s — va B5 thang khong phai vi quyet dinh nang
+      luong tot hon ma vi doi thu khong co lop an toan. Do la mot doi thu bu
+      nhin, va Muc 7 co cot "fairness condition" chinh de chan chuyen do.
+    secondary_run_required: >
+      BAT BUOC chay them mot bang voi luat cung TAT cho B0..B3 (giu nguyen cho
+      B5), vi do la cach doc sat chu nhat. Bao ca hai bang canh nhau. Thuoc do
+      M-7 ("so vi pham luat cung bi duyet sai") chi co y nghia o bang thu hai va
+      o ablation B5-noHR — o bang chinh no bang 0 theo thiet ke.
+    what_each_comparison_isolates:
+      B2_vs_B3: "mo hinh nang luong — D1 chi cu ly so voi D2 da yeu to"
+      B3_vs_B5: "chinh sach phan quyet — mot nguong so voi hai nguong co bac"
+      B5_vs_B5noHR: "dong gop cua lop luat cung"
+      B0_B1_vs_phan_con_lai: "co dung mo hinh nang luong hay khong"
+
+  verdict_vocabulary:
+    binary_methods: ["B0", "B1", "B1-pure", "B2", "B3"]
+    binary_values: ["FLY", "NO_FLY", "INSUFFICIENT_DATA"]
+    graded_methods: ["B5", "B5-noHR"]
+    graded_values: ["FLY", "CONDITIONAL", "NO_FLY", "INSUFFICIENT_DATA"]
+    rule: >
+      B0..B3 la quy tac NHI PHAN theo dung mo ta Muc 7 — duyet hoac tu choi.
+      Chi B5 co bac giua, vi muc giua CHINH LA dong gop cua phuong phap nhom
+      (§5.7). Nen confusion matrix BA LOP (thuoc do M-6) chi ap cho B5; con
+      M-5 (nhi phan) ap cho tat ca.
+    conditional_maps_to: >
+      Khi xep B5 vao bang nhi phan de so voi B0..B3: CONDITIONAL duoc tinh la
+      KHONG duyet bay, vi §2.3 noi CONDITIONAL chua thuc thi duoc khi chua co
+      bien phap. Bao them mot bang voi cach gop nguoc lai — cung tinh than do
+      nhay S-3.
+
+  fairness_rules:
+    - "moi phuong phap chay tren CUNG mot bo kich ban (cung seed, cung file)"
+    - "giu CUNG chinh sach luat an toan khi muc dich la co lap phuong phap nang luong"
+    - "khong phuong phap nao duoc tinh chinh bang ket qua benchmark nay"
+    - >
+      B0 va B1 khong dung mo hinh nang luong nao, nen khi bao phai noi ro chung
+      thua o DAU: thua vi khong biet nhu cau, chu khong phai vi nguong dat kem.
+
+# -----------------------------------------------------------------------------
+# 4. VUNG BIEN — dinh nghia truoc khi do
+# -----------------------------------------------------------------------------
+boundary_definition:
+  rule: "|R - 0| <= w  HOAC  |R - r| <= w"
+  w: 0.05
+  rule_corrected_in_1_0_7: >
+    Ban 1.0.0-1.0.6 ghi "|R - R_fly| <= w HOAC |R - R_min| <= w". Sai doi tuong:
+    R_fly va R_min la NGUONG CUA HE THONG (san pham D3), con vung bien o day
+    phai do theo BIEN CUA NHAN THAM CHIEU, vi thuoc do false-safe cham he thong
+    SO VOI NHAN.
+    Nhan tham chieu co dung hai bien:
+        R = 0   giua `infeasible` va `marginal`   (M = 0)
+        R = r   giua `marginal`  va `feasible`
+    Ma R_min = r nen mot nua cong thuc cu tinh co dung; nua con lai (R_fly) thi
+    sai, va R_fly con doi theo tung nhiem vu.
+    Code (`_la_vung_bien`) tu dau da tinh theo R = 0 va R = r — tuc code dung,
+    VAN BAN giao thuc sai. Sua van ban cho khop code.
+    Dem thu ca hai cach tren 6000 kich ban: cach dung 405, cach cu 286.
+    Xem quyet dinh C21.
+  where: "R = M / E_required, theo d3_protocol.yaml muc 5"
+  source: "TEAM_CHOICE"
+  affects_results: true
+  why_needed: >
+    Muc 7 bat bao false-safe RIENG cho vung bien va ngoai bien, nhung KHONG
+    dinh nghia vung bien rong bao nhieu. Nhom phai chon mot con so.
+  why_this_value: >
+    w = 0.05 la MOT PHAN TU cua he so du tru r = 0.20 (so cua thay). Chon theo
+    ty le cua r chu khong theo con so tron, de neu thay doi r thi dinh nghia
+    vung bien di theo mot cach co quy tac.
+  guard: >
+    Day la con so DOI DUOC KET QUA: w rong hon thi vung bien dong hon, va
+    false-safe rate cua tung vung thay doi theo. Nen KHONG duoc khai mot gia
+    tri roi im lang — bat buoc chay do nhay S-4 voi w = 0.025 va w = 0.10, va
+    bao ca ba trong bao cao. Neu ket luan doi theo w thi do la ket qua phai
+    bao, khong phai loi.
+  frozen: true
+  added_in_1_0_3: >
+    Ban 1.0.0-1.0.2 ghi `0.05` khong kem nguon va khong co do nhay — doc ra
+    nhu mot con so cua thay. Xem quyet dinh C14.
+
+# -----------------------------------------------------------------------------
+# 5. THUOC DO — Muc 7 + P§4.9
+# -----------------------------------------------------------------------------
+metrics:
+  primary: "infeasible_scenario_recall"
+  primary_why: "Muc 7 goi day la 'primary safety metric'"
+
+  required:
+    - id: "M-1"
+      name: "infeasible-scenario recall"
+      spec: "ti le kich ban tham chieu-infeasible ma he thong KHONG ra FLY"
+    - id: "M-2"
+      name: "false-safe rate"
+      spec: "ti le kich ban tham chieu-infeasible ma he thong ra FLY"
+      note: "day la con so phai bao du no xau — khong duoc doi sang accuracy"
+    - id: "M-3"
+      name: "false-safe count va rate theo vung bien / ngoai bien"
+      spec: "tach theo boundary_definition muc 4"
+    - id: "M-4"
+      name: "unnecessary-rejection rate"
+      spec: "ti le kich ban tham chieu-feasible ma he thong ra NO_FLY"
+    - id: "M-5"
+      name: "precision, recall, F1, confusion matrix nhi phan"
+    - id: "M-6"
+      name: "confusion matrix ba lop FLY / CONDITIONAL / NO_FLY"
+    - id: "M-7"
+      name: "so vi pham luat cung bi duyet sai"
+      target: 0
+      note: "Muc 7: 'target: zero by design'. Khac 0 la LOI THIET KE, khong phai diem kem."
+    - id: "M-8"
+      name: "decision latency"
+      spec: "ms, bao trung vi va p95; so phu thuoc phan cung nen chi noi ti le"
+
+  additional_required_by_d4:
+    - id: "M-9"
+      name: "ti le kich ban ma PH-1 rang buoc hon luat du tru"
+      why: >
+        Tren bo du lieu CMU con so nay la 0/192. Neu D4 cung ra 0 thi bo sinh
+        chua quet du rong (xem COV-2). Day la thuoc do rieng cua nhom, khai de
+        khong ai tuong no den tu Muc 7.
+    - id: "M-10"
+      name: "ti le kich ban fail-closed dung (thieu dau vao -> khong FLY)"
+      target: 1.0
+
+  tradeoff_curve:
+    required: true
+    spec: "duong danh doi false-safe vs unnecessary-rejection, quet qua he so du tru VA qua nguong SoC co dinh"
+    source: "Muc 7: 'Results must include the trade-off curve over reserve factors and fixed-SoC thresholds.'"
+    reserve_sweep: [0.10, 0.15, 0.20, 0.25, 0.30]
+    reserve_sweep_source: "TEAM_CHOICE (mo rong tu ba muc cua D3)"
+    reserve_sweep_affects_results: false
+    reserve_sweep_basis: >
+      r = 0.20 la so cua thay (§5.6). Ba muc 0.10 / 0.20 / 0.30 da dung o san
+      pham D3. Them 0.15 va 0.25 chi de duong danh doi co du diem ve, khong
+      doi ket luan tai bat ky diem nao — moi diem duoc tinh doc lap.
+    soc_threshold_sweep: [0.20, 0.30, 0.40]
+    soc_threshold_sweep_source: >
+      SUPERVISOR — Muc 7 duong co so B0 nguyen van: "Test several threshold
+      values (e.g., 20%, 30%, 40%)". Ba con so nay la cua thay.
+
+  success_criterion:
+    text: >
+      Muc 7 nguyen van: "the multi-factor approach must improve the
+      safety-relevant metrics without hiding a large increase in unnecessary
+      rejection."
+    operationalised: >
+      B5 phai cho false-safe rate THAP HON B0 va B1 o cung muc
+      unnecessary-rejection, doc tren duong danh doi — khong so hai con so roi
+      le o hai diem van hanh khac nhau.
+    honesty_clause: >
+      Neu B3 (chi mo hinh, khong luat cung) ngang B5 thi KET LUAN LA LOP LUAT
+      CUNG khong doi duoc gi tren bo kich ban nay, va phai viet thang ra. Khong
+      duoc di tim mot bo kich ban khac cho B5 thang.
+
+# -----------------------------------------------------------------------------
+# 6. DO NHAY BAT BUOC
+# -----------------------------------------------------------------------------
+mandatory_sensitivity_runs:
+  - id: "S-1"
+    what: "E_nominal = 129.96 Wh (TB48D) thay cho 99.9 Wh (TB47D)"
+    source: >
+      P§4.4 nguyen van: "Enominal is taken from the manufacturer's published
+      figure for the installed pack, 129.96 Wh for a TB48D and 99.9 Wh for a
+      TB47D [3]; which pack the recorded flights used MUST BE CONFIRMED from
+      the dataset documentation rather than assumed."
+      Bai Rodrigues TU MAU THUAN ve loai pin (ba tri so khop TB47D, cai ten noi
+      TB48D — xem parameter_table.md muc 1.1), nen khong xac nhan duoc. Do la
+      ly do do nhay nay BAT BUOC.
+    note_on_earlier_citation: >
+      Ban 1.0.0-1.0.2 ghi nguon la "§8 muc 3". Pointer do duoc chep lai tu
+      parameter_table.md cua nhom tuan 6, KHONG phai do nguoi viet file nay tra
+      §8. Da thay bang trich dan P§4.4 nguyen van, la cho thuc su dat ra yeu
+      cau. Xem quyet dinh C15.
+  - id: "S-2"
+    what: "nhan tham chieu REF-2 (mo hinh vat ly) thay cho REF-1"
+    source: "§6/E3 — bat buoc vi co rui ro vong tron"
+  - id: "S-3"
+    what: "marginal gop vao feasible, thay vi gop vao infeasible"
+    source: "TEAM_CHOICE — quyet dinh C4, cho thay ket qua phu thuoc cach gop"
+  - id: "S-4"
+    what: "do rong vung bien w = 0.025 va w = 0.10, thay cho 0.05"
+    source: "TEAM_CHOICE — quyet dinh C14"
+    why_mandatory: >
+      w la con so cua nhom VA doi duoc ket qua. Mot con so nhu vay khong duoc
+      khai mot gia tri roi im lang — phai cho thay ket luan co phu thuoc no hay
+      khong.
+
+# -----------------------------------------------------------------------------
+# 7. KIEM TINH DUNG DAN CUA BO SINH — truoc khi tin bat ky ket qua nao
+# -----------------------------------------------------------------------------
+generator_invariants:
+  tests:
+    - id: "GEN-1"
+      statement: "cung seed -> cung bo kich ban, tung bit"
+      method: "sinh hai lan, so hash"
+      verified_at: "generator"
+    - id: "GEN-2"
+      statement: "moi kich ban nam trong dai khai bao CUA TANG CUA NO"
+      method: "kiem tung cot theo `variables` + `range_overrides` cua tang"
+      verified_at: "generator"
+    - id: "GEN-3"
+      statement: "co ngoai suy duoc dat dung"
+      method: "tinh lai co tu gia tri, so voi cot da luu"
+      verified_at: "generator"
+    - id: "GEN-4a"
+      statement: "do phu COV-1, COV-2, COV-4 duoc dap ung"
+      method: "dem tren bo da sinh; THIEU thi ban loi, khong canh bao suong"
+      verified_at: "generator"
+    - id: "GEN-4b"
+      statement: "do phu COV-3 (vung bien) duoc dap ung"
+      method: "dem sau khi gan nhan, vi vung bien can R = M/E_required"
+      verified_at: "labeller"
+    - id: "GEN-5"
+      statement: "bo kich ban KHONG chua cot nang luong nao"
+      method: >
+        kiem khong co cot ten chua `_Wh` hay `energy`. Bo sinh khong duoc sinh
+        san E_required: neu co, se co nguoi cong them khoan ha canh vao do —
+        dung cai loi ma quy uoc B9 cua D3 dung de chan.
+      verified_at: "generator"
+    - id: "GEN-6"
+      statement: "nhan tham chieu khong dung fold kiem cuoi"
+      method: "kiem tinh tren ma nguon + kiem nguon file phan du"
+      verified_at: "labeller"
+  rule: >
+    Danh sach nay doc tu giao thuc, KHONG duoc viet cung trong code hay test.
+    Loi lech danh sach bat bien da xay ra BA LAN o san pham D3, lan nao cung im
+    lang. Lam dung tu dau o D4.
+
+# -----------------------------------------------------------------------------
+# 8. DIEU CAM
+# -----------------------------------------------------------------------------
+prohibitions:
+  - "KHONG chay nhieu seed roi chon seed cho ket qua dep"
+  - "KHONG doi dai kich ban sau khi da xem ket qua"
+  - "KHONG doi dinh nghia nhan tham chieu sau khi da xem ket qua"
+  - "KHONG doi thuoc do chinh sau khi da xem ket qua"
+  - "KHONG goi nhan tham chieu la ground truth"
+  - "KHONG khang dinh da kiem chung an toan trong thuc te"
+  - "KHONG bo qua rui ro vong tron du da cong khoan bao thu"
+  - "KHONG trinh bay B5-noHR nhu cau hinh dung duoc"
+  - "KHONG tinh khoan du phong bat dinh tu fold kiem cuoi"
+  - "KHONG cong them nang luong cat/ha canh vao E_required (da co trong output D2)"
+  - >
+    KHONG lay mau tai trong tren 500 g hay toc do ngoai 4-12 m/s —
+    TRONG TANG `main` VA `short_high`. Tang `hard_rule_probe` CO Y vuot gioi
+    han, do la muc dich cua no; nhung no bi loai khoi bang so sanh chinh.
+  - "KHONG dua tang hard_rule_probe hay missing_input vao bang so sanh chinh"
+  - "KHONG de bo sinh kich ban biet dau ra cua mo hinh nang luong"
+  - "KHONG dung du lieu thoi tiet cong cong ghep vao tung chuyen bay (§4.4)"
+  - "KHONG dung ket qua D4 de doi mo hinh ma san pham D3 dang goi"
+  # Ban 1.0.0-1.0.3 ghi "KHONG huan luyen lai bat ky mo hinh nao trong san pham
+  # D4". Cau do viet QUA TAY: doc chu thi no cam luon viec khop mo hinh da chot
+  # de co bo du bao, ma khong co buoc do thi khong du bao duoc gi. Muc 10 cua
+  # thay cam chuyen KHAC — doi THIET LAP sau khi thay ket qua cuoi. Xem C18.
+  - "KHONG doi thiet lap mo hinh sau khi da thay ket qua cuoi (Muc 10)"
+  - "KHONG tinh chinh sieu tham so bang ket qua benchmark cua san pham D4"
+  - "KHONG chay lai cuoc so sanh §5.2 — D2 da chot Ridge, Muc 7 B3 bat dung no"
+  - "KHONG dung ket qua D4 de doi ket luan da chot cua san pham D2"
+  - "KHONG khop mo hinh tren kich ban tong hop — chi tren 192 chuyen that"
+  - >
+    KHONG goi sai so cua bo he so cuoi la 0.657 Wh. Do la sai so cua quy trinh
+    cross-validation, do tren 25 lan khop khac.
+  - "KHONG chay benchmark truoc khi Duy ky dinh nghia nhan tham chieu (Muc 10)"
+
+# -----------------------------------------------------------------------------
+# 9. SAN PHAM PHAI RA
+# -----------------------------------------------------------------------------
+outputs:
+  code:
+    - "src/scenario_generator.py — bo sinh kich ban"
+    - "src/reference_labeller.py — nhan tham chieu REF-1 va REF-2"
+    - "src/baselines_decision.py — B0, B1, B2, B3, B5, B5-noHR"
+    - "src/evaluation_scenario.py — bo chay benchmark"
+    - "tests/test_scenario_generator.py"
+    - "tests/test_reference_labeller.py"
+    - "tests/test_baselines_decision.py"
+  data:
+    - "reports/d4_scenarios.csv — 6000 kich ban kem nhan va co ngoai suy"
+  results:
+    - "reports/d4_main_comparison.csv — bang chinh, moi duong co so x moi thuoc do"
+    - "reports/d4_confusion_matrices.csv"
+    - "reports/d4_tradeoff_curve.csv"
+    - "reports/d4_boundary_breakdown.csv"
+    - "reports/d4_sensitivity_runs.csv — S-1, S-2, S-3"
+    - "reports/d4_generator_check.csv — GEN-1..GEN-6"
+    - "reports/d4_hard_rule_audit.csv — M-7, muc tieu 0"
+  report:
+    - "reports/scenario_benchmark_report.md"
+    - "docs/san_pham/D4_benchmark_kich_ban.md"
+
+# -----------------------------------------------------------------------------
+# 10. VIEC TREO
+# -----------------------------------------------------------------------------
+open_items:
+  - id: "OI-D4-1"
+    item: >
+      Muc 10 nguyen van: "Student 3 and Student 4 must jointly verify the
+      definition of the reference scenario labels." Tuc DINH NGHIA NHAN THAM
+      CHIEU phai co HAI nguoi xac nhan — nguoi lam khong duoc tu dinh nghia roi
+      tu dung, vi day la cho de tao vong tron nhat. Quyen da chuyen project nen
+      viec nay la Duy.
+      Duy can doc: muc 2 cua file nay (REF-1, REF-2, ba lop, rui ro vong tron).
+    owner: "Phat (trinh) / Duy (ky)"
+    blocks: null
+    status: >
+      DONG 21/10/2026 — Duy da ky (xem reference_label.approved_by/_on).
+      Buoc gan nhan da mo khoa.
+  - id: "OI-D4-2"
+    item: >
+      Dien `endurance_min` cho duong co so B1 tu so DJI cong bo.
+    owner: "Phat"
+    blocks: null
+    status: >
+      DONG 21/10/2026 — 13 phut (TB47D, tai 1000 g, bay treo). Du doan trong
+      ban 1.0.0 dung: KHONG co so nao khop cau hinh CMU, nen B1 duoc khai la
+      duong co so CO THIEN LECH LAC QUAN voi hai nguyen nhan (khoi luong, va
+      bay treo khac bay hanh trinh). Xem baselines.B1 va quyet dinh C19.
+      Bang DJI con XAC NHAN DOC LAP ba gioi han luat cung cua san pham D3:
+        Max. Wind Resistance   10 m/s        -> HR-1
+        Operating Temperature  -10 .. 40 C   -> HR-2
+        Max. Speed (GPS mode)  17 m/s        -> HR-4
+      Ba con so nay truoc do lay tu parameter_table.md; gio co ban sao thu hai
+      tu cung nguon, khop het.
+  - id: "OI-D4-3"
+    item: >
+      Dien khoan du phong bat dinh tu reports/d2_oof_residuals.csv.
+    owner: "Phat"
+    blocks: "nhan tham chieu REF-1"
+    status: >
+      DONG 20/10/2026 — allowance = 1.2924 Wh, xem reference_label.frozen_numbers
+      va quyet dinh C11. Khi dien da phat hien ban 1.0.1 ghi NGUOC dau phan du.
+  - id: "OI-D4-4"
+    item: >
+      HAI CHO TRONG REPO CHON ALPHA BANG HAI CACH KHAC NHAU, nen hai bo he so
+      Ridge khac nhau:
+
+        src/interpretability.py   KFold(5, shuffle, seed 42)    -> alpha 1.0
+        src/reference_labeller.py RepeatedKFold(5x5, seed 42)   -> alpha 0.1
+
+      Ca hai deu khop tren TOAN BO 192 chuyen voi cung pipeline, nen chenh lech
+      he so den HOAN TOAN tu alpha. Da chay lai ca hai cach va moi cach tai lap
+      DUNG bo he so cua no — khong file nao hong.
+
+      Vi du chenh lech (he so don vi goc):
+        speed_num           0.235256 (tuan 6)  vs  0.306641 (buoc 3 D4)
+        duration_planned_s  0.135638           vs  0.142965
+
+      CACH NAO DUNG THEO GIAO THUC: d2_protocol.yaml partitioning.cv khai
+      `repeated_k_fold, 5 splits, 5 repeats, random_state 42` — tuc cach cua
+      src/reference_labeller.py. src/interpretability.py dung mot KFold rieng,
+      khong phai cai giao thuc khai.
+
+      KHONG phai loi nang: interpretability.py tu ghi ro "mo hinh nay chi dung
+      de DIEN GIAI, khong dung de bao diem", va diem so (MAE 0.657) ra tu
+      evaluation_energy.py nen khong bi anh huong.
+
+      Nhung no dan tu mot su that dang ghi: DEN TRUOC D4, CA DE TAI CHUA CO MOT
+      ALPHA CHINH THUC NAO. San pham D2 bao diem bang cross-validation nen alpha
+      doi theo tung fold; san pham D3 dung du bao out-of-fold nen cung khong can
+      mot alpha. San pham D4 la cho DAU TIEN can dung mot alpha.
+    decision: >
+      GIU NGUYEN (lua chon A, 21/10/2026). Khong sua src/interpretability.py.
+      Ly do: sua no la sua san pham D2 DA NGHIEM THU — keo theo chay lai
+      interpretability, ve lai fig5, sua tai lieu nao trich he so, sua ham xap
+      xi trong test_mitigations.py, va theo Muc 10 phai chay lai va ghi lai
+      toan bo danh gia, roi Duy ky lai. Ma khong doi diem nao.
+    mitigation: >
+      Thay vi sua, KHOA lai cho lech cho no khong thanh bay:
+        1. reports/d4_d2_frozen_coefficients.csv ghi them 5 cot
+           `alpha_cv_*` — cach chon alpha, khong chi alpha.
+        2. fit_frozen_estimator() nem loi neu d2_protocol doi `scheme`.
+        3. Co test canh ca hai dieu tren.
+    must_state_in_paper: >
+      Phan han che: hai file he so Ridge trong repo khac nhau vi khac cach chon
+      alpha; file duoc dung cho san pham D4 la file theo dung giao thuc d2.
+    owner: "Phat"
+    blocks: null
+    status: "DONG — giu nguyen, da khoa va da khai"
+  - id: "OI-D4-5"
+    item: >
+      Hai viec, theo thu tu:
+        1. Chay scripts/compute_ref2_calibration.py va dien `calibration_k` vao
+           reference_label.sensitivity_method.frozen_numbers.
+        2. Duy KY LAI muc `sensitivity_method` — phuong phap REF-2 da doi
+           (quyet dinh C22). Duy chi can doc muc do, khong phai doc lai ca file:
+           REF-1, ba lop nhan, rui ro vong tron va anh xa dac trung KHONG doi so
+           voi ban 1.0.6 ma Duy da ky.
+      Dien:
+        reference_label:
+          approved_by: "Duy"
+          approved_on: "<ngay>"
+    owner: "Phat (tinh, trinh) / Duy (ky)"
+    blocks: null
+    status: >
+      DONG 21/10/2026 — calibration_k = 7.44 da dien (p95, 192 chuyen), va Duy
+      da ky lai muc sensitivity_method. Buoc gan nhan da mo khoa.
+  - id: "OI-D4-6"
+    item: >
+      LO HONG DA SUA, ghi lai de khong tai dien va de canh nguoi dung lai.
+
+      Hop dong cua san pham D3 la "None nghia la THIEU" (§4.6 fail closed).
+      Nhung bang kich ban cua D4 doc tu CSV nen o trong thanh NaN, va
+      `NaN is None` la False. Hau qua do duoc o buoc 4:
+        - safety_invariants kiem thieu bang `gia_tri is None` -> NaN lot qua
+        - roi `NaN > 10.0` cung la False -> HR-1 bao PASS
+      => mot kich ban KHONG BIET gio di qua lop luat cung nhu the gio binh
+         thuong, va duong co so B0 duyet bay. Huong sai NGUY HIEM: thieu du lieu
+         an toan ma he thong noi qua.
+
+      DA SUA o ranh gioi D4-D3 bang `nan_sang_none()` trong
+      src/reference_labeller.py, dung o moi cho D4 goi sang D3. Co hai test
+      khoa: test_nan_khong_lot_qua_lop_luat_cung va test_nan_va_none_cho_cung_ket_qua.
+    con_lai: >
+      src/safety_invariants.py VAN kiem thieu bang `is None`. Tren duong chay
+      cua san pham D3 dieu do khong gay loi (D3 truyen None tuong minh), nhung
+      no la mot cai bay cho bat ky ai goi sang sau nay tu mot nguon du lieu
+      dang bang. KHONG sua trong pham vi D4: D3 da nghiem thu, sua la phai chay
+      lai va xin ky lai, ma hanh vi tren duong chay cua D3 khong doi.
+      Neu lam san pham D6 (ban ghi nhiem vu) thi can xem lai cho nay.
+    must_state_in_paper: >
+      Phan han che: lop luat cung nhan dien thieu du lieu bang `None`; nguon du
+      lieu dang bang phai quy doi NaN truoc khi goi.
+    owner: "Phat"
+    blocks: null
+    status: "DONG — da sua o D4, ghi lai rui ro con lai cho D6"
+  - id: "RS-3"
+    item: >
+      Ke thua tu D3, chua ket luan: tong distance_2d_m 92.8 km vs ~65 km bai
+      goc. Anh huong cach doc envelope cu ly, tuc anh huong `distance_2d_m` o
+      muc 1 cua file nay. KHONG chan D4, nhung neu ket luan la nhieu GPS lam
+      phong cu ly thi phai xem lai dai [300, 900].
+    owner: "Phat"
+    blocks: null
+    status: "MO"
+
+# -----------------------------------------------------------------------------
+# 11. NHAT KY THAY DOI
+# -----------------------------------------------------------------------------
+change_log:
+  - version: "1.0.0"
+    date: "2026-10-20"
+    author: "Phat"
+    changes: "Ban dong bang dau tien cho san pham D4."
+    decisions:
+
+      - id: "C1"
+        question: "quyet dinh thiet ke cua D4 danh so the nao de khong dam vao B0-B5?"
+        resolution: "tien to C (C1, C2, ...). B danh rieng cho duong co so Muc 7."
+        basis: >
+          d3_protocol.yaml da dung B3-B10 cho quyet dinh thiet ke, va Muc 7 dung
+          B0-B5 cho duong co so. Hai he da trung nhau mot lan. Khong lam trung
+          lan thu ba.
+
+      - id: "C2"
+        question: "6000 kich ban hay 5000?"
+        resolution: "6000."
+        basis: >
+          §6/E3 doi "at least 5,000". Lay 6000 de con cho cho bon yeu cau do phu
+          COV-1..COV-4 ma khong phai sinh bu, va de phan vung bien du dong de
+          do rieng.
+
+      - id: "C3"
+        question: "mot seed hay nhieu seed?"
+        resolution: >
+          MOT seed = 42. Neu bao do on dinh theo seed thi phai bao ca ba
+          42/43/44 day du, cung luc.
+        basis: >
+          Nhieu seed ma khong khai truoc la cua sau kinh dien: chay 20 lan, bao
+          lan dep. Khai truoc thi khong lach duoc.
+
+      - id: "C4"
+        question: "lop `marginal` cua nhan tham chieu gop vao dau khi tinh nhi phan?"
+        resolution: >
+          Mac dinh gop vao `infeasible` (bao thu). NHUNG bat buoc bao them mot
+          bang voi cach gop nguoc lai — do nhay S-3.
+        basis: >
+          Cach gop quyet dinh truc tiep con so false-safe. Chon mot cach roi im
+          lang la che mat nua su that; bao ca hai thi nguoi doc tu danh gia.
+
+      - id: "C5"
+        question: "duong co so B4 (mo hinh vat ly) co vao xep hang khong?"
+        resolution: "KHONG. Loai, ghi ro ly do."
+        basis: >
+          Muc 7 cho B4 dieu kien "only quantitative if M100 parameters are
+          documented", va bang kiem §3.2 da ket luan khong du tham so (thieu
+          P_bl, P_par). Giu nhat quan voi cach da xu ly mo hinh D5 o san pham
+          D2. Muc 12.1 cung chi doi B0/B1/B2/B3/B5.
+        note: >
+          Mo hinh vat ly VAN co vai: sinh nhan tham chieu REF-2 va cap
+          landing_energy_Wh() cho PH-1. Loai khoi xep hang khong co nghia la bo.
+
+      - id: "C6"
+        question: "lay mau cu ly trong envelope hay ra ngoai?"
+        resolution: "[300, 900] m — CO Y ra ngoai envelope 420-610, co danh dau."
+        basis: >
+          Thi nghiem E2c da do duoc huong lech ngoai envelope (bias -7.6 Wh o
+          835 m), nen con so ngoai suy doc duoc chu khong phai doan bua. Va neu
+          chi lay mau trong envelope thi luat PD-1 khong bao gio kich hoat, tuc
+          khong do duoc mot phan lop luat cua D3.
+        impact: "phai bao ket qua rieng cho hai vung trong/ngoai envelope"
+
+      - id: "C7"
+        question: "co bat bo sinh phai phu nhung vung nao khong?"
+        resolution: "CO — COV-1..COV-4, va GEN-4 ban loi neu thieu."
+        basis: >
+          Lay mau uniform tren 7 chieu KHONG bao dam phu nhung vung quan trong
+          nhat. Cu the: vung "ngan ma bay cao" la cho duy nhat PH-1 rang buoc
+          hon luat du tru, va bo du lieu CMU co 0/192 truong hop nhu vay. Khong
+          bat phu thi D4 se lai cho 0 va nguoi doc se tuong PH-1 vo dung.
+
+      - id: "C8"
+        question: "gio lay mau toi dau?"
+        resolution: "0-10 m/s, tuc VUOT dai du lieu 2.81-6.67, co danh dau."
+        basis: >
+          Tren bo du lieu CMU, luat cung HR-1 (gio) CHUA BAO GIO kich hoat. Mot
+          lop luat chua bao gio kich hoat thi chua duoc thu thach. D4 la cho duy
+          nhat thu duoc, nen phai lay mau den gioi han 10 m/s.
+
+  - version: "1.0.1"
+    date: "2026-10-20"
+    author: "Phat"
+    changes: >
+      Sua HAI loi cau truc cua ban 1.0.0, phat hien khi viet
+      src/scenario_generator.py — tuc TRUOC KHI sinh kich ban dau tien va truoc
+      khi thay bat ky con so ket qua nao. Khong doi dai lay mau nao cua tang
+      `main`, khong doi thuoc do, khong doi dinh nghia nhan.
+      Chia bon tang (C9) va tach GEN-4 (C10).
+    decisions:
+
+      - id: "C9"
+        question: >
+          Ban 1.0.0 doi >= 500 kich ban vi pham luat cung (COV-1), nhung dai lay
+          mau lai nam TRONG gioi han (tai <= 500 g, toc do <= 12, gio <= 10) va
+          dieu cam con chan them. Hai yeu cau tu danh nhau. Xu ly sao?
+        resolution: >
+          Chia bo kich ban thanh BON TANG. Tang `hard_rule_probe` (700 kich ban)
+          CO Y vuot gioi han, va bi LOAI khoi bang so sanh chinh. Dieu cam
+          "khong lay mau ngoai dai" duoc thu hep lai cho tang `main` va
+          `short_high` — dung cho no cam ca tang probe.
+          Tang `missing_input` (400) cung loai khoi bang chinh.
+          Phan bo: main 4200 + probe 700 + short_high 700 + missing 400 = 6000,
+          giu dung tong cua C2.
+        basis: >
+          Thuoc do M-7 ("so vi pham luat cung bi duyet sai, muc tieu 0") can
+          dung loai kich ban vuot gioi han. Khong co tang probe thi M-7 do tren
+          0 truong hop, tuc bao "dat muc tieu 0" ma khong chung minh gi — dung
+          cai loi ma bat bien INV-6 cua D3 da canh.
+          Nhung tron tang probe vao bang chinh thi sai chieu nguoc lai: kich ban
+          gio 16 m/s thi MOI phuong phap deu tu choi, nen B0 va B1 se trong khoe
+          len mot cach gia. Hai tang, hai bang.
+        found_how: >
+          Phat hien khi viet ham kiem _gen4a(): dem thu thi thay se ra 0 vi pham
+          luat cung. Neu khong viet ham kiem truoc khi sinh, loi nay se im lang
+          — bang M-7 van in ra "0 vi pham", van dung chu nghia, va khong ai biet
+          no do tren 0 truong hop.
+
+      - id: "C10"
+        question: >
+          Ban 1.0.0 bat GEN-4 kiem ca bon yeu cau do phu, trong do COV-3 la
+          "nam trong vung bien". Nhung vung bien dinh nghia theo R = M /
+          E_required, ma E_required la dau ra mo hinh — bo sinh khong co. Kiem o
+          dau?
+        resolution: >
+          Tach GEN-4 thanh GEN-4a (COV-1, COV-2, COV-4 — bo sinh tu kiem) va
+          GEN-4b (COV-3 — kiem o buoc gan nhan). Them truong `verified_at` cho
+          moi phep kiem, va `verified_by` cho moi yeu cau do phu.
+        basis: >
+          Bo sinh KHONG DUOC biet dau ra cua mo hinh. Neu biet, no co the nan
+          dai kich ban theo cho mo hinh lam tot — mot dang ro ri nguoc, va
+          khong ai phat hien duoc tu ket qua. Nen dua E_required vao bo sinh de
+          kiem COV-3 la duoi sai huong; dung cach la hoan phep kiem lai mot buoc.
+        guard: >
+          Neu sau khi gan nhan ma COV-3 khong dat: CAM sua dai kich ban de chay
+          theo cho du. Phai nang `n_scenarios` va ghi vao change_log — vi sua
+          dai sau khi da biet R la dung dinh nghia "doi tham so sau khi thay ket
+          qua".
+
+  - version: "1.0.2"
+    date: "2026-10-20"
+    author: "Phat"
+    changes: >
+      Sua DAU cua phan du trong cong thuc REF-1 — ban 1.0.1 ghi nguoc. Chot
+      khoan du phong bat dinh = 1.2924 Wh va dong OI-D4-3. Quyet dinh C11.
+      Khong doi dai lay mau, khong doi tang, khong doi thuoc do.
+    decisions:
+
+      - id: "C11"
+        question: >
+          Khoan du phong bat dinh cho nhan tham chieu REF-1 lay thong ke nao:
+          q95 cua |phan du| (= 1.4687, trung con so B4 cua D3), hay do lon cua
+          q05 phan du co dau (= 1.2924)?
+        resolution: "abs(q05) cua phan du co dau = 1.2924 Wh."
+        basis: >
+          HAI ly do, va ly do thu hai quan trong hon.
+          (1) Huong: PHAN DU = DU BAO - DO DUOC, nen am = doan THIEU = huong gay
+              duyet bay nguy hiem. P§4.9 noi ro chi huong do dang ke. Tri tuyet
+              doi tron ca huong an toan vao, cho mot con so khong noi len dieu
+              gi ve an toan.
+          (2) Doc lap: nhan tham chieu KHONG duoc dung chung con so voi nguong
+              cua chinh he thong dang bi cham diem. Dung chung thi neu con so do
+              sai, ca dap an va he thong cung sai mot huong — va sai lech BIEN
+              MAT khoi ket qua. Day la mot dang vong tron tinh vi hon cai ma
+              §4.7 canh, nhung cung co che.
+        impact: >
+          Khoan du phong THAP hon B4 0.1763 Wh (-12 %), tuc nhan tham chieu it
+          bao thu hon mot chut so voi nguong cua chinh he thong. He qua: he
+          thong co xu huong TU CHOI nhieu hon dap an, tuc day con so
+          unnecessary-rejection LEN va false-safe XUONG. Phai neu ro trong bao
+          cao, khong de nguoi doc tuong false-safe thap la nho phuong phap tot.
+        numbers_frozen_at_this_version: true
+        found_how: >
+          Phat hien khi chay scripts/compute_q95.py lan dau: script TU CHOI doan
+          ten cot (file o dang rong, khong co cot nao ten `residual`) va dung
+          lai. Khi tra ma nguon evaluation_energy.py de biet dau, moi thay ban
+          1.0.1 ghi nguoc dau — "duong = doan thieu". Neu script tu doan cot va
+          chay tiep thi con so sai da duoc dong bang va khong ai biet.
+
+  - version: "1.0.3"
+    date: "2026-10-20"
+    author: "Phat"
+    changes: >
+      RA SOAT NGUON. Soat toan file tim con so khong co nguon, phat hien BON
+      cho: safety_k = 1.25 (bia), dai tang probe (bia VA sai nguong DJI), do
+      rong vung bien 0.05 (khong khai nguon, ma doi duoc ket qua), va mot
+      pointer trich dan chep lai chua tu tra. Da sua ca bon.
+      Them quy uoc `provenance_rule` o muc meta: moi con so phai mang truong
+      `source` thuoc SUPERVISOR / MEASURED / TEAM_CHOICE.
+      Them do nhay S-4. KHONG doi dai lay mau tang main, khong doi thuoc do,
+      khong doi khoan du phong 1.2924.
+    decisions:
+
+      - id: "C12"
+        question: >
+          REF-2 (nhan tham chieu tu mo hinh vat ly) can mot khoan bao thu. Ban
+          truoc dat `safety_k = 1.25`. Con so do o dau ra?
+        resolution: >
+          KHONG o dau ra ca — nhom tu dat. DA BO.
+          Thay bang `eta_dev = 0.034`, lay tu sai lech trung binh 3.4 % cua he
+          so hieu suat eta khi kiem cheo voi bon tri so thoi luong bay treo DJI
+          cong bo (reports/d5_hover_validation.csv, da ghi o
+          d2_protocol.yaml models.D5.checklist_status).
+        basis: >
+          File thay khong co he so an toan nao cho REF-2, va khong co chi dan
+          cho phep chon mot he so tuy y. Mot con so 1.25 DOI DUOC moi thuoc do
+          cua do nhay S-2: no quyet dinh bao nhieu kich ban bi goi la
+          infeasible theo REF-2. Nen no la loai nguy hiem nhat — tu dat VA doi
+          duoc ket qua.
+          3.4 % la con so bat dinh DUY NHAT co nguon cho mo hinh vat ly nay.
+          Thay 1.25 bang 1.034 lam REF-2 BOT bao thu di nhieu, va do la ket qua
+          phai chap nhan: bao thu bang mot con so tu dat thi khong phai bao thu,
+          chi la khong truy nguon duoc.
+        impact: >
+          REF-2 se goi it kich ban la infeasible hon han so voi ban 1.0.2. Do
+          nhay S-2 vi the se cho ket qua khac — nhung la ket qua truy nguon duoc.
+        honest_note: >
+          3.4 % do tren bay TREO cua may bay DJI nguyen ban, ap cho bay HANH
+          TRINH cua may bay CMU nang hon la ngoai suy. Phai neu trong bao cao.
+          Nhung ngoai suy co nguon khac han mot con so tu dat.
+
+      - id: "C13"
+        question: >
+          Tang `hard_rule_probe` lay mau gio [10,16], tai [500,1400], toc do
+          [12,20]. Ba chan tren do o dau ra?
+        resolution: >
+          Nhom tu dat, VA lay sai nguong: gioi han tai trong DJI la 1245 g chu
+          khong phai 500 g, gioi han toc do 17 m/s chu khong phai 12 m/s (xem
+          parameter_table.md muc 5). Tuc dai cu bia so VA probe sai cho.
+          Thay bang LUOI BOI SO cua chinh gioi han DJI: 1.10, 1.25, 1.50 lan
+          gioi han, ap len dung ba gioi han co nguon
+          (gio 10 m/s, tai 1245 g, toc do 17 m/s).
+        basis: >
+          Luat cung HR-1..HR-4 la nguong NHI PHAN: vuot la VETO, khong co muc
+          do. Nen moi gia tri tren gioi han deu thu dung mot thu, va boi so cu
+          the KHONG the doi bat ky thuoc do nao.
+          Day la ly do boi so duoc phep la TEAM_CHOICE con safety_k thi khong:
+          boi so khong co bac tu do anh huong ket qua, safety_k thi co.
+          Dung luoi chu khong lay mau ngau nhien, vi mot nguong nhi phan khong
+          can lay mau — chi can vai diem tren nguong.
+        impact: >
+          Hash bo kich ban DOI. Thuoc do M-7 van do dung thu no phai do, nhung
+          bay gio probe dung ba gioi han that thay vi hai cai sai.
+
+      - id: "C14"
+        question: >
+          Do rong vung bien w = 0.05 o dau ra? Muc 7 bat bao false-safe rieng
+          cho vung bien nhung khong noi vung bien rong bao nhieu.
+        resolution: >
+          Nhom chon, va khai ro la TEAM_CHOICE voi affects_results = true.
+          Dat w = r/4 = 0.05, tuc theo TY LE cua he so du tru r = 0.20 (so cua
+          thay) chu khong theo mot con so tron.
+          VA them do nhay S-4 BAT BUOC: chay lai voi w = 0.025 va w = 0.10.
+        basis: >
+          w doi duoc ket qua: rong hon thi vung bien dong hon, va false-safe
+          rate cua tung vung thay doi theo. Mot con so nhu vay khong duoc khai
+          mot gia tri roi im lang.
+          Dat theo ty le cua r de neu sau nay doi r thi dinh nghia vung bien di
+          theo co quy tac, khong phai dat lai bang tay.
+          Ban 1.0.0-1.0.2 ghi "0.05" tran, khong nguon, nam ngay duoi mot cau
+          trich Muc 7 — nguoi doc se tuong do la con so cua thay.
+
+      - id: "C15"
+        question: >
+          Do nhay S-1 ghi nguon la "§8 muc 3". Pointer do dung khong?
+        resolution: >
+          KHONG TU TRA DUOC. Pointer do chep lai tu parameter_table.md cua nhom
+          tuan 6, nguoi viet file nay chua doc §8 de xac nhan.
+          Da thay bang trich dan NGUYEN VAN P§4.4, la cho thuc su dat ra yeu
+          cau: "which pack the recorded flights used must be confirmed from the
+          dataset documentation rather than assumed."
+        basis: >
+          Mot pointer chep lai ma chua tu tra thi khong khac gi mot con so bia:
+          no trong nhu co nguon. Yeu cau chay do nhay la THAT va can thiet (bai
+          Rodrigues tu mau thuan ve loai pin), nhung phai tro vao cho dung.
+        still_open: >
+          Neu muon giu pointer "§8", phai doc §8 cua
+          Delivery_UAV_Preflight_Feasibility_Proposal_updated.md va xac nhan.
+          Chua lam. Khong chan gi vi P§4.4 da du lam can cu.
+
+  - version: "1.0.4"
+    date: "2026-10-20"
+    author: "Phat"
+    changes: >
+      Ba sua doi phat hien khi chuan bi viet src/reference_labeller.py — tuc
+      TRUOC khi viet code, de chung khong bi dong cung vao file.
+      C16 doi ten E_measured_proxy -> E_d2_prediction.
+      C17 khai anh xa dac trung, kem phep thay the gio.
+      C18 viet lai dieu cam ve huan luyen cho dung y Muc 10.
+      KHONG doi con so nao: 1.2924 giu nguyen, ba lop nhan giu nguyen, dai lay
+      mau giu nguyen. Bo kich ban KHONG phai sinh lai.
+    decisions:
+
+      - id: "C16"
+        question: "so hang dau cua cong thuc REF-1 ten la gi?"
+        resolution: "E_d2_prediction, thay cho E_measured_proxy."
+        basis: >
+          Kich ban la tong hop, khong co chuyen bay that de do, nen so hang do
+          CHI CO THE la du bao cua mo hinh D2. Ten `E_measured_proxy` doc ra
+          nhu du lieu do — tuc che mat dung cai ma Muc 12.1 bat phoi ra
+          ("document any circularity risk").
+          §6/E3 da luong truoc tinh huong nay: "If the reference uses the same
+          model family or fitted predictions as a candidate, flag that
+          comparison as potentially circular and add a sensitivity analysis
+          with a distinct conservative reference assumption."
+          => Dung du bao cua D2 lam goc la phuong an THAY CHO PHEP, voi hai dieu
+          kien: ghi co vong tron, va co nhan thu hai doc lap (REF-2). Ca hai da
+          co. Chi can dat ten that.
+        impact: "KHONG doi so nao. Chi doi ten truong va ten bien trong code."
+
+      - id: "C17"
+        question: >
+          Cot bo kich ban khong trung ten tap dac trung mo hinh D2. Doi ten cot
+          kich ban, hay anh xa trong code?
+        resolution: >
+          ANH XA trong code, giu hai bo ten rieng. Khai bang anh xa o muc
+          `reference_label.feature_mapping`.
+        basis: >
+          Hai bo ten la hai LOAI dai luong: file kich ban mo ta KE HOACH NHIEM
+          VU, flight_level.csv mo ta BAN GHI CHUYEN BAY. Doi ten cot kich ban
+          thanh `wind_raw_mean_ms` la gia vo gio du bao chinh la gio do duoc, va
+          mat luon phan biet do ve sau.
+        substitution_found: >
+          Khi lap bang anh xa moi thay: o `wind_raw_mean_ms` duoc nhet gio DU
+          BAO, trong khi mo hinh hoc tren gio DO DUOC. Va CA HAI bien the D2
+          deu dung cot gio do — hai bien the khac nhau dung MOT dac trung va do
+          la THOI LUONG (duration_s vs duration_planned_s), khong phai gio.
+          Nen D2-b, bien the "truoc chuyen bay", van con mot dau vao khong thuc
+          su biet truoc khi bay. Khong sua duoc — bo du lieu khong co gio du bao
+          — nhung phai khai, va da khai.
+
+      - id: "C18"
+        question: >
+          Dieu cam "KHONG huan luyen lai bat ky mo hinh nao trong san pham D4"
+          chan luon viec khop mo hinh de co bo du bao. Thay co cho phep khop
+          khong, va neu co thi theo buoc nao?
+        resolution: >
+          CHO PHEP, va con xep vao lich. Muc 11 tuan 6: "finalize selected
+          energy model". Muc 7 B3: "use the best validated model selected in
+          E2".
+          Thay cam chuyen KHAC — Muc 10: "Student 5 must not change model
+          settings after final test results without rerunning and documenting
+          the complete evaluation." Tuc cam doi THIET LAP, khong cam khop voi
+          thiet lap khong doi.
+          Da viet lai dieu cam thanh 6 dong cu the (xem muc `prohibitions`), va
+          them muc `reference_label.model_fit` khai ro quy trinh.
+        basis: >
+          Dieu cam cu la LOI CUA NGUOI VIET GIAO THUC, khong phai yeu cau cua
+          thay. De nguyen ma van lam thi la vi pham chinh giao thuc cua minh —
+          loai viec khong duoc lam du ly do nghe hop ly co nao.
+        steps_are_exactly_52: >
+          Dung spec §5.2 da dong bang, khong them bot: 6 cot preflight,
+          StandardScaler + Ridge, dai alpha 5 gia tri, CV long chon alpha,
+          random_state 42, ca 192 chuyen. Bac tu do = 0.
+          KHONG di lai cuoc so sanh §5.2 (D0 vs D1 vs D2 vs D3): cuoc do xong
+          roi o san pham D2, va chay lai la vi pham dieu cam ve doi ket luan D2.
+        added_safeguard: >
+          Ghi he so ra reports/d4_d2_frozen_coefficients.csv de Duy doi chieu
+          voi reports/d2_ridge_coefficients.csv. Khong co file do thi viec khop
+          nay khong ai kiem duoc — va mot buoc khong kiem duoc thi khong khac gi
+          mot con so bia.
+
+  - version: "1.0.7"
+    date: "2026-10-21"
+    author: "Phat"
+    changes: >
+      Ba sua doi sau khi chay buoc gan nhan lan dau.
+      C19 — ghi lai quyet dinh ve SoC cua duong co so B1 (truoc do B1 tro toi
+      "C19" nhung nhat ky KHONG co muc nao ten C19: tham chieu treo).
+      C20 — nang n_scenarios 6000 -> 18000 vi GEN-4b khong dat.
+      C21 — sua van ban dinh nghia vung bien cho khop code.
+      DOI BO KICH BAN: phai chay lai src.scenario_generator roi gan nhan lai.
+      KHONG doi khoan du phong 1.2924, khong doi nhan, khong doi thuoc do.
+    decisions:
+
+      - id: "C19"
+        question: >
+          Duong co so B1 co nhan thoi luong bay danh dinh voi SoC khong? Muc 7
+          khong noi.
+        resolution: >
+          CO: endurance_kha_dung = 13 phut x SoC x SoH.
+          VA bao them bien the B1-pure (khong nhan), la dang doc sat chu Muc 7
+          nhat.
+        basis: >
+          Muc 7 ta B1 la "compare planned mission time with a documented nominal
+          endurance figure and reserve" — khong noi co nhan SoC hay khong.
+          KHONG nhan thi B1 duyet bay ca khi pin gan can, tuc false-safe gan
+          100 % tren moi kich ban pin thap — mot doi thu bu nhin. Dung mot doi
+          thu bu nhin de B5 trong gioi la khong trung thuc, va Muc 7 co cot
+          "fairness condition" chinh de chan chuyen do.
+          Bao ca hai thi nguoi doc thay ro phan nao cua ket qua den tu viec B1
+          khong biet SoC.
+        source: "TEAM_CHOICE"
+        affects_results: true
+        note_on_dangling_ref: >
+          Ban 1.0.6 da ghi `soc_handling.decision_ref: "C19"` trong muc
+          baselines.B1 nhung nhat ky khong co C19. Mot tham chieu tro vao cho
+          trong thi doc nhu co can cu ma khong co — cung loai loi voi pointer
+          "§8 muc 3" o C15.
+
+      - id: "C20"
+        question: >
+          GEN-4b KHONG DAT: COV-3 doi >= 1000 kich ban vung bien, thuc te chi
+          co 405 tren 6000. Xu ly sao?
+        resolution: >
+          NANG n_scenarios tu 6000 len 18000, nhan ba moi tang (main 12600,
+          probe 2100, short_high 2100, missing 1200). Do bang so: 18000 kich
+          ban cho 1077 vung bien.
+          KHONG ha COV-3 xuong duoi 1000, KHONG noi dai lay mau, KHONG noi w.
+        basis: >
+          Giao thuc tu ban 1.0.1 da khai truoc cach xu ly cho dung tinh huong
+          nay (mandatory_coverage, COV-3.note): "Neu sau khi gan nhan ma COV-3
+          khong dat thi KHONG duoc sua dai kich ban de chay theo: phai nang
+          `n_scenarios` va ghi vao change_log."
+          Day la ly do viec khai truoc co gia tri: cach xu ly da chot TRUOC khi
+          biet ket qua, nen bay gio khong con cho de tu bien.
+          Ha COV-3 hay noi w la sua tieu chi sau khi thay ket qua — dung dinh
+          nghia gian lan ma ca file nay dung de chan.
+        why_405_not_1000: >
+          1000 la TEAM_CHOICE dat o ban 1.0.0, luc chua biet bao nhieu phan tram
+          kich ban lay mau DEU se roi gan nguong. Thuc te ~7 %. Uoc luong ban
+          dau qua lac quan — loi uoc luong cua nguoi viet giao thuc, khong phai
+          loi cua bo sinh.
+        do_bang_so:
+          n_6000: 405
+          n_12000: 756
+          n_15000: 913
+          n_16000: 961
+          n_18000: 1077
+        impact: >
+          Hash bo kich ban DOI. Phai sinh lai reports/d4_scenarios.csv va gan
+          nhan lai. Chua co bang ket qua nao nen khong co gi phai tinh lai.
+          Bo sinh chay lau hon khoang ba lan.
+
+      - id: "C21"
+        question: >
+          Van ban giao thuc dinh nghia vung bien theo R_fly va R_min (nguong HE
+          THONG), con code tinh theo R = 0 va R = r (bien NHAN THAM CHIEU). Cai
+          nao dung?
+        resolution: "CODE DUNG. Sua van ban giao thuc cho khop code."
+        basis: >
+          Thuoc do false-safe cham he thong SO VOI NHAN THAM CHIEU, nen "vung
+          bien" phai la vung gan bien CUA NHAN: R = 0 (giua infeasible va
+          marginal) va R = r (giua marginal va feasible).
+          R_fly la nguong cua san pham D3 va con doi theo tung nhiem vu
+          (R_fly = r + 1.4687/E_required), nen khong dung lam moc phan vung cho
+          mot thuoc do ve nhan. R_min = r nen mot nua cong thuc cu tinh ra dung;
+          chi nua R_fly la sai.
+        do_bang_so: >
+          Tren 6000 kich ban: cach dung (R=0, R=r) cho 405; cach cu
+          (R=R_fly, R=r) cho 286. Khong sua thi GEN-4b dem theo mot dinh nghia
+          khac voi cai code dang dung — hai cho noi hai dang, dung loai loi da
+          lap ba lan o san pham D3.
+
+  - version: "1.0.8"
+    date: "2026-10-21"
+    author: "Phat"
+    changes: >
+      Doi PHUONG PHAP nhan tham chieu thu hai REF-2 (quyet dinh C22). Phat hien
+      khi chay buoc gan nhan lan dau tren 18000 kich ban.
+      XOA chu ky — phuong phap doi thi phai ky lai (OI-D4-5). Ban ghi ky cu giu
+      o reference_label.previous_approval.
+      KHONG doi REF-1, khong doi ba lop nhan, khong doi khoan du phong 1.2924,
+      khong doi dai lay mau, khong doi thuoc do.
+      PHAI gan nhan lai sau khi dien he so va ky.
+    decisions:
+
+      - id: "C22"
+        question: >
+          Chay thu cho thay REF-2 doi nhu cau nang luong trung vi 7.56 Wh, khi
+          REF-1 doi 23.65 Wh va nang luong DO DUOC THAT cua 192 chuyen la
+          20.79 Wh. REF-2 thap hon REF-1 o 98 % kich ban. §6/E3 giao cho REF-2
+          dung mot viec: "a distinct CONSERVATIVE reference assumption". Nhu vay
+          REF-2 co lam duoc viec do khong?
+        resolution: >
+          KHONG. Da doi cong thuc:
+            cu  E_ref2 = P_hover(m)/eta * t/3600 * (1 + 0.034)
+            moi E_ref2 = k * P_ideal(m) * t/3600,
+                voi k = p95( E_do_duoc / (P_ideal(m) * t/3600) ) tren 192 chuyen.
+        basis: >
+          Cong thuc cu bo qua nang luong LEO 25-100 m, HA va TREO; thoi gian
+          thuc cua chuyen bay dai hon cu ly/toc do, va cong suat bay hanh trinh
+          cao hon cong suat treo ly tuong. Tinh thu mot chuyen dien hinh: cong
+          thuc cu cho 6.1 Wh, do duoc 20.79 Wh — lech 3.4 lan.
+          He so 0.034 CO nguon nhung sai VIEC: no do sai lech cua he so hieu
+          suat, khong do sai lech cua ca cong thuc.
+        measured_result: >
+          Voi k = p95 (do thu tren du lieu, uoc ~7.44): REF-2 cho trung vi
+          ~32 Wh tren 192 chuyen that, tuc doi THUA ~54 % so voi muc do duoc, va
+          chi 10/192 chuyen doi thieu (5 %, dung nhu p95 ham y).
+          => REF-2 gio bao thu HON ca REF-1, dung vai ma §6/E3 giao.
+        two_properties_gained:
+          - >
+            eta TRIET TIEU — E_ref2 khong con phu thuoc he so hieu suat khop
+            duoc. REF-2 chi dua vao cong suat treo LY TUONG (dang dong, khong
+            tham so khop) va MOT so vo huong do duoc.
+          - >
+            VAN doc lap voi mo hinh D2: k rut tu nang luong DO DUOC, khong phai
+            tu dau ra hoi quy.
+        not_the_same_as_safety_k: >
+          safety_k = 1.25 bi bo o C12 vi nhom TU DAT. k nay DO tu 192 chuyen
+          that, co script tinh lai duoc, va co kiem doi chieu luc chay.
+        impact: >
+          Nhan REF-2 doi => do nhay S-2 doi. Nhan REF-1 KHONG doi (da kiem:
+          feasible 11950, infeasible 3763, marginal 1087, unknown 1200, vung
+          bien 1077 — tinh doc lap hai lan, khop).
+          Chua co bang ket qua nao nen khong co gi phai tinh lai.
+
+  - version: "1.0.9"
+    date: "2026-10-23"
+    author: "Phat"
+    changes: >
+      Khai chinh sach lop luat cung cho cac duong co so (C23) va tu vung phan
+      quyet. Can truoc khi viet src/baselines_decision.py, de lua chon nay khong
+      bi dong cung vao code ma khong ai thay.
+      KHONG doi kich ban, khong doi nhan, khong doi thuoc do.
+    decisions:
+
+      - id: "C23"
+        question: >
+          Lop luat cung co ap cho B0, B1, B2, B3 khong, hay chi cho B5? Muc 7 de
+          ngo: mo ta cua B5 la cho duy nhat nhac "hard-rule veto", nhung dieu
+          kien cong bang lai bat "keep the safety-rule policy identical across
+          methods where the comparison is intended to isolate the
+          energy-decision method".
+        resolution: >
+          BANG CHINH: ap cho TAT CA. Nho vay chenh lech giua cac duong co so den
+          hoan toan tu cach quyet dinh nang luong.
+          BANG THU HAI (bat buoc): tat luat cung cho B0..B3, giu cho B5 — cach
+          doc sat chu nhat. Bao ca hai canh nhau.
+        basis: >
+          Chi ap cho B5 thi B0 se duyet bay mot kich ban gio 15 m/s, va B5 thang
+          khong phai vi quyet dinh nang luong tot hon ma vi doi thu khong co lop
+          an toan. Do la doi thu bu nhin — Muc 7 co cot "fairness condition"
+          chinh de chan.
+          Nhung bo han cach doc sat chu cung khong dung, vi no la cach thay viet
+          ra. Nen bao ca hai, va de nguoi doc thay dong gop cua lop luat cung
+          tach rieng.
+        consequence_for_M7: >
+          Thuoc do M-7 ("so vi pham luat cung bi duyet sai, muc tieu 0") bang 0
+          cho MOI phuong phap o bang chinh — theo thiet ke, khong phai thanh
+          tich. No chi co y nghia o bang thu hai va o ablation B5-noHR. Phai
+          viet ro cau nay trong bao cao, neu khong "0 vi pham" doc nhu mot ket
+          qua trong khi no la mot hang so.
+
+      - id: "C24"
+        question: >
+          B0..B3 co bac phan quyet giua (CONDITIONAL) khong?
+        resolution: >
+          KHONG. B0..B3 la quy tac NHI PHAN — duyet hoac tu choi, dung mo ta Muc
+          7. Chi B5 co bac giua.
+        basis: >
+          Bac giua CHINH LA dong gop cua phuong phap nhom (§5.7: "three-level
+          advisory verdict"). Cho B0..B3 muon bac giua la xoa mat thu dang do.
+          Nen confusion matrix BA LOP (M-6) chi ap cho B5; M-5 nhi phan ap cho
+          tat ca.
+        when_mapping_B5_to_binary: >
+          CONDITIONAL tinh la KHONG duyet bay, vi §2.3 noi no chua thuc thi duoc
+          khi chua co bien phap. Bao them bang voi cach gop nguoc lai — cung
+          tinh than do nhay S-3.
+
+  - version: "1.0.10"
+    date: "2026-10-23"
+    author: "Phat"
+    changes: >
+      Sua mot lo hong THAT phat hien khi chay test buoc 4 (OI-D4-6): NaN lot qua
+      lop luat cung. Khai bat doi xung cua luat PD-* giua phuong phap nhi phan
+      va phuong phap co bac (C25).
+      KHONG doi kich ban, khong doi nhan, khong doi thuoc do.
+    decisions:
+
+      - id: "C25"
+        question: >
+          Luat PD-1 va PD-2 (ngoai dai co du lieu do lung) la DOWNGRADE: ha FLY
+          xuong CONDITIONAL. Phuong phap NHI PHAN khong co bac giua. Ap the nao?
+        resolution: >
+          KHONG ap cho B0..B3. Chi B5 va B5-noHR chiu DOWNGRADE.
+          BAT BUOC bao so kich ban bi anh huong (ngoai envelope cu ly
+          420-610 m) trong bang ket qua.
+        basis: >
+          Mot phuong phap nhi phan khong the "ha mot bac" vi no khong co bac
+          nao de ha. Ep thanh NO_FLY la nang DOWNGRADE len thanh VETO — sai muc
+          do, va lam B2/B3 bi phat nang hon muc Muc 7 mo ta.
+          Bat doi xung nay la THAT: tren kich ban ngoai envelope, B2 va B3 ra
+          FLY trong khi B5 ra CONDITIONAL. Do KHONG phai B5 kem hon — do chinh
+          la dong gop cua no (§5.7): no biet mo hinh dang chay ngoai vung hieu
+          luc va noi ra.
+        must_report: >
+          Tren bo 18000 kich ban co 12965 kich ban ngoai envelope cu ly (72 %).
+          Con so do PHAI nam canh bang ket qua, neu khong nguoi doc se doc chenh
+          lech thanh "B5 tu choi thua" thay vi "B5 canh bao ngoai vung hieu luc".
+
+  - version: "1.0.11"
+    date: "2026-10-23"
+    author: "Phat"
+    changes: >
+      Ghi lai HAI PHAT HIEN tu lan chay cham diem dau tien (C26), va them hai
+      bang bat buoc de chung khong bi doc nham.
+      KHONG doi mot con so nao: a = 1.2924 va b = 1.4687 da dong bang va co
+      nguoi ky. Chinh chung sau khi thay ket qua la dung dieu ma ca file nay
+      dung de chan.
+    decisions:
+
+      - id: "C26"
+        question: >
+          Lan chay cham diem dau tien cho M-4 (ty le tu choi thua) bang DUNG 0
+          cho B1, B3 va B5-noHR, va bang 0.7186 cho B5. Hai con so do co phai
+          ket qua do duoc khong?
+        resolution: >
+          KHONG, ca hai deu phai kem giai thich, va them hai bang:
+            reports/d4_structural_relation.csv
+            reports/d4_b5_rejection_causes.csv
+
+        phat_hien_1: >
+          M-4 = 0 la TAT YEU VE DAI SO, khong phai do duoc.
+          Nhan REF-1 goi mot kich ban la kha thi khi
+              E_av >= (1+r)(E_pred + a),  a = 1.2924
+          Khi do bien du tru cua HE THONG (dung E_pred, khong cong a) thoa
+              R_sys >= r + (1+r)*a / E_pred
+          con nguong FLY la
+              R_fly  = r + b / E_pred,    b = 1.4687
+          Ma (1+r)*a = 1.5509 > b = 1.4687, nen R_sys > R_fly LUON LUON.
+          => Moi kich ban nhan goi la kha thi deu tu dong vuot nguong FLY, va
+             bac giua CONDITIONAL KHONG THE bi tinh la tu choi thua.
+          Bien cua bat dang thuc chi 0.0822 Wh; doi dau khi a < 1.2239.
+        he_qua_1: >
+          CAM viet "bac giua cai thien an toan ma khong ton them tu choi". Cau
+          do dung theo CAU TAO, khong phai theo bang chung. Dong gop that cua
+          bac giua (B3 -> B5-noHR: false-safe 0.0754 -> 0.0046) van la ket qua
+          do duoc va bao duoc; chi phan "khong ton them" la khong.
+          Cho danh doi THAT xuat hien la duong quet he so du tru: nhan giu
+          r = 0.20 con he thong quet 0.10-0.30, nen khi he thong chat hon nhan
+          thi tu choi thua moi hien ra.
+
+        phat_hien_2: >
+          M-4 cua B5 = 0.7186 phan lon KHONG phai quyet dinh nang luong.
+          12965/18000 kich ban nam ngoai envelope cu ly 420-610 m, va luat
+          PD-1/PD-2 ha FLY xuong CONDITIONAL, roi CONDITIONAL tinh la khong
+          duyet (C24). Tinh lai: main ngoai envelope 68.3 % x 12600 +
+          short_high 2100 = 10706/14700 = 72.8 %, khop 0.7186.
+        he_qua_2: >
+          Doc nguyen con so thanh "B5 tu choi thua 72 %" la SAI HAN. Dung la:
+          B5 gan co NGOAI VUNG HIEU LUC cho 72 % kich ban — chinh la viec no
+          duoc thiet ke de lam (§5.7). Bang d4_b5_rejection_causes.csv tach
+          rieng tung nguyen nhan de con so nay khong the bi doc nham.
+
+        khong_duoc_sua_bang_cach: >
+          CAM chinh a, b, hay r de M-4 "co y nghia hon". Hai con so do da dong
+          bang, co nguoi ky, va viec chinh tham so sau khi thay ket qua la dung
+          dinh nghia gian lan ma giao thuc nay dung de chan. Cach dung la BAO
+          RA, va chi vao cho danh doi that su ton tai.
+
+        must_state_in_paper: >
+          Hai cau, bat buoc:
+          (1) "Ty le tu choi thua bang 0 doi voi mot so duong co so la he qua
+              dai so cua viec nhan tham chieu bao thu hon he thong mot khoan
+              lon hon chinh khoan bat dinh cua he thong; khong phai ket qua do
+              duoc."
+          (2) "Phan lon ty le tu choi cua phuong phap de xuat den tu co ngoai
+              suy, khong tu quyet dinh nang luong."

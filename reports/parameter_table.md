@@ -236,34 +236,95 @@ Cả hai là **đếm hai lần**. P§4.5 bắt khai bốn quy ước ngân sác
 counting"*. Bốn quy ước khai ở `configs/d3_protocol.yaml` mục
 `energy_required.budget_conventions`.
 
-### Việc còn treo liên quan `r`
+### Sàn năng lượng hạ cánh — luật `PH-1` (OI-D3-1, đã đóng 20/10/2026)
 
-**OI-D3-1 — sàn an toàn khi có sự cố.** §4.6 đòi một giới hạn an toàn đặt
-**trước** điểm hết phóng điện (theo Zhang et al.). Việc này **khác** năng lượng
-hạ cánh bình thường — cái đó đã nằm trong `E_required` theo B9. Sàn này là cho
-tình huống phải **huỷ chuyến giữa đường và đáp gấp**.
+§4.6 đòi một giới hạn an toàn đặt **trước** điểm hết phóng điện. P§4.6 nói rõ
+cách làm, nguyên văn: *"A minimum state of charge is added, **set so that the
+aircraft retains the energy required to land from its cruise altitude**,
+following the principle of placing a safety limit ahead of the end of discharge
+rather than at it [10]."*
 
-Hai cách đặt luật, cần thầy chốt:
+Nên không có gì phải chọn — việc của nhóm là **tính và cài đặt**.
 
-| Cách | Nội dung |
-|---|---|
-| (a) | ngưỡng SoC cố định — ví dụ không bao giờ xuống dưới 15 % |
-| (b) | năng lượng hạ cánh dự phòng tính theo độ cao hành trình |
+**Công thức** (`src/physics_m100.py` → `landing_energy_Wh()`):
 
-Ước sơ bộ theo cách (b), tốc độ hạ 1,5 m/s (Rodrigues et al.), dùng công suất
-treo của mô hình vật lý D5:
+```
+t_hạ   = độ cao ÷ 1,5 m/s                  tốc độ hạ: Rodrigues et al. (2021)
+P      = P_lý_tưởng(khối lượng) ÷ η        η = 0,4449 (TB47D)
+E_hạ   = P × t_hạ ÷ 3600
+```
 
-| Độ cao | Năng lượng hạ cánh |
-|---|---|
-| 25 m | 1,5 Wh |
-| 50 m | 2,9 Wh |
-| 75 m | 4,4 Wh |
-| 100 m | 5,9 Wh |
+**Luật:** `E_available(SoC, SoH, T) ≥ E_landing(độ cao, khối lượng)` — mã `PH-1`,
+mức độ **VETO**.
 
-`altitude_m` là tham số **kế hoạch** nên tính được ở thời điểm pre-flight.
+Mã là `PH-1` **không phải** `HR-5`: tiền tố `HR-` dành riêng cho luật mà con số
+do DJI công bố. `PH-1` có *nguyên tắc* từ P§4.6 của thầy nhưng *con số* từ mô
+hình vật lý của nhóm. Có test canh quy ước đó.
 
-Không chặn nghiệm thu D3 — đã đối chiếu Mục 12.1, không có tiêu chí nào đòi luật
-này. Nhưng phải xong trước D4.
+#### Năng lượng hạ cánh — bảng tham số
+
+Bảng đầy đủ 24 dòng ở `reports/d3_landing_energy.csv`, sinh bằng
+`python3 -m src.physics_m100`.
+
+| Độ cao | stock, tải 0 g | stock, tải 500 g | CMU, tải 0 g | CMU, tải 500 g |
+|---|---|---|---|---|
+| 25 m | 1,261 | 1,684 | 2,464 | **2,983** |
+| 50 m | 2,523 | 3,367 | 4,928 | **5,966** |
+| 75 m | 3,784 | 5,051 | 7,392 | **8,948** |
+| 100 m | 5,045 | 6,735 | 9,856 | **11,931** |
+
+*(đơn vị Wh · "stock" = `M100_stock`, "CMU" = `CMU_instrumented`)*
+
+Hồ sơ CMU tốn gần **gấp đôi** hồ sơ nguyên bản, vì nặng hơn 1.325 g do thiết bị
+đo. Đáng nêu trong phần hạn chế của bài: thiết bị đo làm máy bay tốn thêm gần
+một nửa năng lượng hạ cánh.
+
+#### Hai giả định bảo thủ — phải nêu trong bài
+
+1. **Công suất khi hạ cánh lấy bằng công suất bay treo.** Thực tế hạ xuống tốc
+   độ thấp tốn **ít hơn**, vì cánh quạt thu lại một phần năng lượng từ luồng khí
+   đi lên. Nhưng thiếu hệ số cản cánh quạt (xem mục 1 và `physics_m100.MISSING`)
+   nên lấy cận bảo thủ — đúng cách §5.4 yêu cầu khi thiếu tham số.
+
+2. **η khớp trên dải 2.431–3.431 g**, còn máy bay thực tế nặng 3.680–4.180 g.
+   Nên áp lên máy bay CMU là **ngoại suy** — xem mục 3.1.
+
+Cả hai lệch về phía **ước thừa** năng lượng hạ cánh, tức thận trọng hơn.
+
+#### ⚠ Ngưỡng SoC mặc định là ngưỡng LẠC QUAN
+
+`min_soc_for_landing()` mặc định `κ = 1`, tức giả định pin không suy giảm vì
+nhiệt độ. **Ai dùng hàm này để quyết định phải truyền κ thật.**
+
+| | κ | Ngưỡng ở 100 m, tải 500 g |
+|---|---|---|
+| Mặc định | 1,0000 | 11,94% |
+| 15 °C | 0,9954 | 12,00% |
+| 0 °C | 0,9203 | **12,98%** |
+
+Ở 0 °C ngưỡng thật cao hơn mặc định **8,66%**. Bảng `d3_landing_energy.csv` dùng
+mặc định, nên phải đọc là *"ngưỡng tối thiểu ở điều kiện tốt nhất"*, không phải
+ngưỡng vận hành.
+
+Có test khoá tính chất này: `test_nguong_mac_dinh_la_nguong_LAC_QUAN`.
+
+#### `PH-1` có ràng buộc hơn luật dự trữ không — kết quả đo
+
+| Ngưỡng SoC đòi hỏi | Nhỏ nhất | Trung vị | Lớn nhất |
+|---|---|---|---|
+| Luật `PH-1` | 2,5% | 6,0% | **12,0%** |
+| Luật dự trữ (`r = 0,20`) | **16,2%** | 26,5% | 42,0% |
+
+**Hai dải không chồng nhau.** Số chuyến mà `PH-1` ràng buộc hơn: **0 trên 192**.
+
+Nên `PH-1` không đổi phán quyết nào trên bộ dữ liệu này. Nó chỉ chặn 30 chuyến ở
+mức pin 10%, nơi luật dự trữ cũng đã chặn — phán quyết giữ nguyên, **lý do đổi**.
+
+Tác dụng thật của `PH-1` chỉ thấy khi `E_required` **nhỏ** mà độ cao **cao**, vì
+luật dự trữ tỷ lệ với `E_required` còn `PH-1` là lượng Wh tuyệt đối. Bộ dữ liệu
+CMU không có loại nhiệm vụ đó; bộ sinh kịch bản ở D4 sẽ sinh ra.
+
+Chi tiết: `reports/decision_engine_report.md` mục 6.2b.
 
 ---
 
@@ -322,7 +383,7 @@ chặng về, vì lúc đó chặng về không mang tải.
 | Hệ số nhiệt độ | Xong, kèm giới hạn sử dụng đã ghi rõ |
 | Luật cứng | **Xong toàn bộ** |
 | Tham số chính sách | Xong — kèm khai báo `r` không bao gồm gì (B9) |
-| Sàn an toàn sự cố | **Chờ thầy** — OI-D3-1, không chặn nghiệm thu D3 |
+| Sàn năng lượng hạ cánh | **Xong** — luật `PH-1`, quyết định B10, OI-D3-1 đã đóng |
 
 **Bảng tham số đã đủ cho sản phẩm D3.**
 
@@ -334,6 +395,9 @@ Bốn điều phải mang theo sang D3 và D4:
 3. **Envelope cự ly 420 – 610 m** — xem mục 5.
 4. **Bốn quy ước ngân sách năng lượng của B9** — xem mục 4. Không cộng thêm năng
    lượng hạ cánh, không nâng `r` để bù.
+5. **Luật `PH-1` và cảnh báo κ mặc định** — xem mục 4. Bảng
+   `d3_landing_energy.csv` là ngưỡng ở điều kiện tốt nhất, không phải ngưỡng
+   vận hành.
 
 ---
 
