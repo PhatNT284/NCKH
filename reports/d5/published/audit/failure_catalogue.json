@@ -1,0 +1,4382 @@
+[
+  {
+    "scenario_id": 82,
+    "assessment_id": null,
+    "category": "energy_underprediction",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 437.9342020443761,
+      "speed_commanded_ms": 5.114052947057186,
+      "altitude_m": 25.0,
+      "distance_2d_m": 479.64097488403513,
+      "wind_forecast_ms": 4.767191701203732,
+      "ambient_temp_c": 5.95726735083548,
+      "soc": 0.3141539657947652,
+      "soh": 0.9902980339878908,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 21.404623686438217,
+      "e_available_Wh": 28.968023273671186,
+      "margin_Wh": 7.5633995872329685,
+      "reserve_slack_Wh": 3.282474849945327
+    },
+    "changed_inputs": {
+      "payload_g": 437.9342020443761,
+      "speed_commanded_ms": 5.114052947057186,
+      "altitude_m": 25.0,
+      "distance_2d_m": 479.64097488403513,
+      "wind_forecast_ms": 4.767191701203732,
+      "ambient_temp_c": 5.95726735083548,
+      "soc": 0.3141539657947652,
+      "soh": 0.9902980339878908,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.27179733809675,
+      "e_available_Wh": 28.968023273671186,
+      "margin_Wh": 4.696225935574436,
+      "reserve_slack_Wh": -0.1581335320449142,
+      "kappa": 0.9320622294636698
+    },
+    "perturbation_and_source": {
+      "factor": "energy_error",
+      "sweep_kind": "empirical_error",
+      "point_id": "flight_129",
+      "value": "-2.8671736516585327",
+      "unit": "Wh",
+      "primary_error_point": true,
+      "description": "Nhu cầu năng lượng tăng 2.8672 Wh theo sai số D2",
+      "scope": "Sai số từ các chuyến kiểm tra D2"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 7.5633995872329685,
+      "margin_after_Wh": 4.696225935574436,
+      "reserve_slack_before_Wh": 3.282474849945327,
+      "reserve_slack_after_Wh": -0.1581335320449142
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.767191701203732 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 5.95726735083548 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4118 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.114052947057186 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 28.9680232737 Wh vs landing floor 2.91657429568 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 479.64097488403513 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 437.9342020443761 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Nhu cầu tăng 2.8672 Wh khi áp một sai số dự đoán đã lưu từ D2; từ đủ dự trữ thành thiếu dự trữ.",
+    "limitation": "Phần dư = dự đoán − đo được; phần dư âm được trừ khỏi dự đoán nên nhu cầu tăng. Đây là phép thử kịch bản, không phải sự cố bay đã đo.",
+    "mc_context": {
+      "config_id": "PRIMARY_INDEPENDENT",
+      "failure_fraction_min": 0.0174,
+      "failure_fraction_max": 0.0181,
+      "seed_count": 3,
+      "note": "MC summary only; not the probability of this deterministic point"
+    },
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 1911082,
+      "locator": {
+        "scenario_id": 82,
+        "battery_type": "TB47D",
+        "factor": "energy_error",
+        "point_id": "flight_129"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-001"
+  },
+  {
+    "scenario_id": 290,
+    "assessment_id": null,
+    "category": "energy_underprediction",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 111.69649626000454,
+      "speed_commanded_ms": 5.007329176302861,
+      "altitude_m": 75.0,
+      "distance_2d_m": 481.6479013345634,
+      "wind_forecast_ms": 8.331896585273594,
+      "ambient_temp_c": 19.112724144474434,
+      "soc": 0.33154444016827195,
+      "soh": 0.7573921323528665,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 25.043760854035682,
+      "e_available_Wh": 32.63414520012168,
+      "margin_Wh": 7.590384346085997,
+      "reserve_slack_Wh": 2.5816321752788625
+    },
+    "changed_inputs": {
+      "payload_g": 111.69649626000454,
+      "speed_commanded_ms": 5.007329176302861,
+      "altitude_m": 75.0,
+      "distance_2d_m": 481.6479013345634,
+      "wind_forecast_ms": 8.331896585273594,
+      "ambient_temp_c": 19.112724144474434,
+      "soc": 0.33154444016827195,
+      "soh": 0.7573921323528665,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 27.695520900187553,
+      "e_available_Wh": 32.63414520012168,
+      "margin_Wh": 4.938624299934126,
+      "reserve_slack_Wh": -0.6004798801033857,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "energy_error",
+      "sweep_kind": "empirical_error",
+      "point_id": "flight_126",
+      "value": "-2.651760046151871",
+      "unit": "Wh",
+      "primary_error_point": true,
+      "description": "Nhu cầu năng lượng tăng 2.6518 Wh theo sai số D2",
+      "scope": "Sai số từ các chuyến kiểm tra D2"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 7.590384346085997,
+      "margin_after_Wh": 4.938624299934126,
+      "reserve_slack_before_Wh": 2.5816321752788625,
+      "reserve_slack_after_Wh": -0.6004798801033857
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 8.331896585273594 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 19.112724144474434 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3792 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.007329176302861 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 32.6341452001 Wh vs landing floor 7.53430744234 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 481.6479013345634 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 111.69649626000454 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Nhu cầu tăng 2.6518 Wh khi áp một sai số dự đoán đã lưu từ D2; từ đủ dự trữ thành thiếu dự trữ.",
+    "limitation": "Phần dư = dự đoán − đo được; phần dư âm được trừ khỏi dự đoán nên nhu cầu tăng. Đây là phép thử kịch bản, không phải sự cố bay đã đo.",
+    "mc_context": {
+      "config_id": "PRIMARY_INDEPENDENT",
+      "failure_fraction_min": 0.0738,
+      "failure_fraction_max": 0.0776,
+      "seed_count": 3,
+      "note": "MC summary only; not the probability of this deterministic point"
+    },
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 5600990,
+      "locator": {
+        "scenario_id": 290,
+        "battery_type": "TB48D",
+        "factor": "energy_error",
+        "point_id": "flight_126"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-002"
+  },
+  {
+    "scenario_id": 1369,
+    "assessment_id": null,
+    "category": "soc_overstatement",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 119.87520325798094,
+      "speed_commanded_ms": 8.147503249757708,
+      "altitude_m": 25.0,
+      "distance_2d_m": 587.0419068746994,
+      "wind_forecast_ms": 4.234862235457975,
+      "ambient_temp_c": 24.88006138564313,
+      "soc": 0.23130620551441547,
+      "soh": 0.9166175349539389,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 16.289343170429646,
+      "e_available_Wh": 21.180730459425455,
+      "margin_Wh": 4.8913872889958085,
+      "reserve_slack_Wh": 1.6335186549098815
+    },
+    "changed_inputs": {
+      "payload_g": 119.87520325798094,
+      "speed_commanded_ms": 8.147503249757708,
+      "altitude_m": 25.0,
+      "distance_2d_m": 587.0419068746994,
+      "wind_forecast_ms": 4.234862235457975,
+      "ambient_temp_c": 24.88006138564313,
+      "soc": 0.21130620551441548,
+      "soh": 0.9166175349539389,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 16.289343170429646,
+      "e_available_Wh": 19.349328624587486,
+      "margin_Wh": 3.0599854541578395,
+      "reserve_slack_Wh": -0.19788317992808757,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "1",
+      "value": "-0.02",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Mức pin giảm 2 điểm phần trăm",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 4.8913872889958085,
+      "margin_after_Wh": 3.0599854541578395,
+      "reserve_slack_before_Wh": 1.6335186549098815,
+      "reserve_slack_after_Wh": -0.19788317992808757
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.234862235457975 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 24.88006138564313 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3800 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 8.147503249757708 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 19.3493286246 Wh vs landing floor 2.58528210375 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 587.0419068746994 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 119.87520325798094 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Chỉ giảm mức pin từ 23.13% xuống 21.13% đã làm thiếu dự trữ.",
+    "limitation": "Khoảng sai lệch SoC do nhóm giả định; chưa được xác nhận là sai số đo thực tế.",
+    "mc_context": {
+      "config_id": "PRIMARY_INDEPENDENT",
+      "failure_fraction_min": 0.1665,
+      "failure_fraction_max": 0.1758,
+      "seed_count": 3,
+      "note": "MC summary only; not the probability of this deterministic point"
+    },
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 16069,
+      "locator": {
+        "scenario_id": 1369,
+        "battery_type": "TB47D",
+        "factor": "soc_error",
+        "point_id": "1"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-003"
+  },
+  {
+    "scenario_id": 630,
+    "assessment_id": null,
+    "category": "soc_overstatement",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 156.7748756661664,
+      "speed_commanded_ms": 9.399702642702989,
+      "altitude_m": 50.0,
+      "distance_2d_m": 547.4478312200611,
+      "wind_forecast_ms": 9.346889506270342,
+      "ambient_temp_c": 27.15014512187247,
+      "soc": 0.23211602814484797,
+      "soh": 0.7959315470638387,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.60891632043766,
+      "e_available_Wh": 24.009911080578323,
+      "margin_Wh": 5.400994760140662,
+      "reserve_slack_Wh": 1.6792114960531315
+    },
+    "changed_inputs": {
+      "payload_g": 156.7748756661664,
+      "speed_commanded_ms": 9.399702642702989,
+      "altitude_m": 50.0,
+      "distance_2d_m": 547.4478312200611,
+      "wind_forecast_ms": 9.346889506270342,
+      "ambient_temp_c": 27.15014512187247,
+      "soc": 0.21211602814484798,
+      "soh": 0.7959315470638387,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.60891632043766,
+      "e_available_Wh": 21.941125803449996,
+      "margin_Wh": 3.3322094830123348,
+      "reserve_slack_Wh": -0.389573781075196,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "1",
+      "value": "-0.02",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Mức pin giảm 2 điểm phần trăm",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 5.400994760140662,
+      "margin_after_Wh": 3.3322094830123348,
+      "reserve_slack_before_Wh": 1.6792114960531315,
+      "reserve_slack_after_Wh": -0.389573781075196
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 9.346889506270342 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 27.15014512187247 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3837 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.399702642702989 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 21.9411258034 Wh vs landing floor 5.11271052543 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 547.4478312200611 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 156.7748756661664 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Chỉ giảm mức pin từ 23.21% xuống 21.21% đã làm thiếu dự trữ.",
+    "limitation": "Khoảng sai lệch SoC do nhóm giả định; chưa được xác nhận là sai số đo thực tế.",
+    "mc_context": {
+      "config_id": "PRIMARY_INDEPENDENT",
+      "failure_fraction_min": 0.1893,
+      "failure_fraction_max": 0.1969,
+      "seed_count": 3,
+      "note": "MC summary only; not the probability of this deterministic point"
+    },
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 3749130,
+      "locator": {
+        "scenario_id": 630,
+        "battery_type": "TB48D",
+        "factor": "soc_error",
+        "point_id": "1"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-004"
+  },
+  {
+    "scenario_id": 21,
+    "assessment_id": null,
+    "category": "degraded_capacity",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 497.95687863766517,
+      "speed_commanded_ms": 4.749529709844854,
+      "altitude_m": 50.0,
+      "distance_2d_m": 592.812484454525,
+      "wind_forecast_ms": 1.458276406307638,
+      "ambient_temp_c": -8.044966543640248,
+      "soc": 0.4916804650427816,
+      "soh": 0.9308507862937359,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 28.159853021758924,
+      "e_available_Wh": 42.079418666198585,
+      "margin_Wh": 13.919565644439661,
+      "reserve_slack_Wh": 8.28759504008788
+    },
+    "changed_inputs": {
+      "payload_g": 497.95687863766517,
+      "speed_commanded_ms": 4.749529709844854,
+      "altitude_m": 50.0,
+      "distance_2d_m": 592.812484454525,
+      "wind_forecast_ms": 1.458276406307638,
+      "ambient_temp_c": -8.044966543640248,
+      "soc": 0.4916804650427816,
+      "soh": 0.7,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 28.159853021758924,
+      "e_available_Wh": 31.64373227165552,
+      "margin_Wh": 3.483879249896596,
+      "reserve_slack_Wh": -2.148091354455186,
+      "kappa": 0.920325
+    },
+    "perturbation_and_source": {
+      "factor": "soh_domain",
+      "sweep_kind": "scenario_domain",
+      "point_id": "0",
+      "value": "0.7",
+      "unit": "fraction",
+      "primary_error_point": false,
+      "description": "Thử sức khỏe pin ở 70%",
+      "scope": "Thay đổi toàn dải giả định"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 13.919565644439661,
+      "margin_after_Wh": 3.483879249896596,
+      "reserve_slack_before_Wh": 8.28759504008788,
+      "reserve_slack_after_Wh": -2.148091354455186
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 1.458276406307638 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong -8.044966543640248 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4178 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 4.749529709844854 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 31.6437322717 Wh vs landing floor 5.96114745905 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 592.812484454525 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 497.95687863766517 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Giảm sức khỏe pin từ 93.09% xuống 70.00% làm quyết định đổi thành NO_FLY.",
+    "limitation": "Đây là thay đổi tình trạng pin trong toàn dải thử; khác với sai số đo SoH ±2 điểm phần trăm.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 294021,
+      "locator": {
+        "scenario_id": 21,
+        "battery_type": "TB47D",
+        "factor": "soh_domain",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-005"
+  },
+  {
+    "scenario_id": 49,
+    "assessment_id": null,
+    "category": "degraded_capacity",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 148.40892477189564,
+      "speed_commanded_ms": 5.629380498013796,
+      "altitude_m": 25.0,
+      "distance_2d_m": 486.37692889434175,
+      "wind_forecast_ms": 6.337352428712142,
+      "ambient_temp_c": 7.31825045961871,
+      "soc": 0.2727044708621402,
+      "soh": 0.864000979041764,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.367819096362236,
+      "e_available_Wh": 28.86438073041233,
+      "margin_Wh": 10.496561634050092,
+      "reserve_slack_Wh": 6.822997814777647
+    },
+    "changed_inputs": {
+      "payload_g": 148.40892477189564,
+      "speed_commanded_ms": 5.629380498013796,
+      "altitude_m": 25.0,
+      "distance_2d_m": 486.37692889434175,
+      "wind_forecast_ms": 6.337352428712142,
+      "ambient_temp_c": 7.31825045961871,
+      "soc": 0.2727044708621402,
+      "soh": 0.7,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.367819096362236,
+      "e_available_Wh": 23.385467148078263,
+      "margin_Wh": 5.0176480517160265,
+      "reserve_slack_Wh": 1.3440842324435813,
+      "kappa": 0.9426404002035593
+    },
+    "perturbation_and_source": {
+      "factor": "soh_domain",
+      "sweep_kind": "scenario_domain",
+      "point_id": "0",
+      "value": "0.7",
+      "unit": "fraction",
+      "primary_error_point": false,
+      "description": "Thử sức khỏe pin ở 70%",
+      "scope": "Thay đổi toàn dải giả định"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": true,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 10.496561634050092,
+      "margin_after_Wh": 5.0176480517160265,
+      "reserve_slack_before_Wh": 6.822997814777647,
+      "reserve_slack_after_Wh": 1.3440842324435813
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 6.337352428712142 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 7.31825045961871 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3828 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.629380498013796 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 23.3854671481 Wh vs landing floor 2.54799875979 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 486.37692889434175 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 148.40892477189564 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Giảm sức khỏe pin từ 86.40% xuống 70.00% làm quyết định đổi thành CONDITIONAL.",
+    "limitation": "Đây là thay đổi tình trạng pin trong toàn dải thử; khác với sai số đo SoH ±2 điểm phần trăm.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 4027849,
+      "locator": {
+        "scenario_id": 49,
+        "battery_type": "TB48D",
+        "factor": "soh_domain",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-006"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "battery_identity_assumption",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 26.06643920423443,
+      "margin_Wh": 1.7944221133806977,
+      "reserve_slack_Wh": -3.059981304790046
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 33.90985424406714,
+      "margin_Wh": 9.637837153213408,
+      "reserve_slack_Wh": 4.783433735042664,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "battery_assumption",
+      "sweep_kind": "battery_assumption",
+      "point_id": "TB48D",
+      "value": "TB48D",
+      "unit": "battery",
+      "primary_error_point": false,
+      "description": "Đổi giả định sang pin TB48D",
+      "scope": "Thay giả định loại pin"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "NO_FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": true,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 1.7944221133806977,
+      "margin_after_Wh": 9.637837153213408,
+      "reserve_slack_before_Wh": -3.059981304790046,
+      "reserve_slack_after_Wh": 4.783433735042664
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 33.9098542441 Wh vs landing floor 11.4986580942 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Đổi giả định pin từ TB47D sang TB48D làm đổi kết quả.",
+    "limitation": "Đây là độ nhạy với giả định loại pin, không chứng minh người dùng đã lắp nhầm pin; nhãn tham chiếu D4 vẫn cố định theo giả định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 896705,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB47D",
+        "factor": "battery_assumption",
+        "point_id": "TB48D"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-007"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "battery_identity_assumption",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 33.90985424406714,
+      "margin_Wh": 9.637837153213408,
+      "reserve_slack_Wh": 4.783433735042664
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 26.06643920423443,
+      "margin_Wh": 1.7944221133806977,
+      "reserve_slack_Wh": -3.059981304790046,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "battery_assumption",
+      "sweep_kind": "battery_assumption",
+      "point_id": "TB47D",
+      "value": "TB47D",
+      "unit": "battery",
+      "primary_error_point": false,
+      "description": "Đổi giả định sang pin TB47D",
+      "scope": "Thay giả định loại pin"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 9.637837153213408,
+      "margin_after_Wh": 1.7944221133806977,
+      "reserve_slack_before_Wh": 4.783433735042664,
+      "reserve_slack_after_Wh": -3.059981304790046
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 26.0664392042 Wh vs landing floor 11.7985698452 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Đổi giả định pin từ TB48D sang TB47D làm đổi kết quả.",
+    "limitation": "Đây là độ nhạy với giả định loại pin, không chứng minh người dùng đã lắp nhầm pin; nhãn tham chiếu D4 vẫn cố định theo giả định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 4615805,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB48D",
+        "factor": "battery_assumption",
+        "point_id": "TB47D"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-008"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "boundary_verdict_flip",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 26.06643920423443,
+      "margin_Wh": 1.7944221133806977,
+      "reserve_slack_Wh": -3.059981304790046
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.39804815533156157,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 29.811099074562254,
+      "margin_Wh": 5.53908198370852,
+      "reserve_slack_Wh": 0.6846785655377765,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "4",
+      "value": "0.05",
+      "unit": "fraction",
+      "primary_error_point": false,
+      "description": "Mức pin tăng 5 điểm phần trăm",
+      "scope": "Khoảng sai lệch rộng"
+    },
+    "reference_model": "REF-1",
+    "reference_details": {
+      "reference_label": "marginal",
+      "fixed_original_margin_ratio": 0.01963753413960325,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D"
+    },
+    "baseline_verdict": "NO_FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": true,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 1.7944221133806977,
+      "margin_after_Wh": 5.53908198370852,
+      "reserve_slack_before_Wh": -3.059981304790046,
+      "reserve_slack_after_Wh": 0.6846785655377765
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 29.8110990746 Wh vs landing floor 11.7985698452 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Kịch bản gần ngưỡng theo nhãn tham chiếu đã chọn. Mức pin tăng 5 điểm phần trăm làm đổi quyết định.",
+    "limitation": "Gần ngưỡng được xác định riêng theo REF-1/REF-2 gốc với w=0,05; việc đổi quyết định không đồng nghĩa đã xảy ra sự cố.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 58805,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB47D",
+        "factor": "soc_error",
+        "point_id": "4"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-009"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "boundary_verdict_flip",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 26.06643920423443,
+      "margin_Wh": 1.7944221133806977,
+      "reserve_slack_Wh": -3.059981304790046
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.39804815533156157,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 29.811099074562254,
+      "margin_Wh": 5.53908198370852,
+      "reserve_slack_Wh": 0.6846785655377765,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "4",
+      "value": "0.05",
+      "unit": "fraction",
+      "primary_error_point": false,
+      "description": "Mức pin tăng 5 điểm phần trăm",
+      "scope": "Khoảng sai lệch rộng"
+    },
+    "reference_model": "REF-2",
+    "reference_details": {
+      "reference_label": "infeasible",
+      "fixed_original_margin_ratio": -0.034916405203718276,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D"
+    },
+    "baseline_verdict": "NO_FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": true,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 1.7944221133806977,
+      "margin_after_Wh": 5.53908198370852,
+      "reserve_slack_before_Wh": -3.059981304790046,
+      "reserve_slack_after_Wh": 0.6846785655377765
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 29.8110990746 Wh vs landing floor 11.7985698452 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Kịch bản gần ngưỡng theo nhãn tham chiếu đã chọn. Mức pin tăng 5 điểm phần trăm làm đổi quyết định.",
+    "limitation": "Gần ngưỡng được xác định riêng theo REF-1/REF-2 gốc với w=0,05; việc đổi quyết định không đồng nghĩa đã xảy ra sự cố.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 58805,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB47D",
+        "factor": "soc_error",
+        "point_id": "4"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-010"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "boundary_verdict_flip",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 33.90985424406714,
+      "margin_Wh": 9.637837153213408,
+      "reserve_slack_Wh": 4.783433735042664
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.2980481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 29.038422845190233,
+      "margin_Wh": 4.7664057543365,
+      "reserve_slack_Wh": -0.08799766383424412,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "0",
+      "value": "-0.05",
+      "unit": "fraction",
+      "primary_error_point": false,
+      "description": "Mức pin giảm 5 điểm phần trăm",
+      "scope": "Khoảng sai lệch rộng"
+    },
+    "reference_model": "REF-1",
+    "reference_details": {
+      "reference_label": "marginal",
+      "fixed_original_margin_ratio": 0.01963753413960325,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D"
+    },
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 9.637837153213408,
+      "margin_after_Wh": 4.7664057543365,
+      "reserve_slack_before_Wh": 4.783433735042664,
+      "reserve_slack_after_Wh": -0.08799766383424412
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 29.0384228452 Wh vs landing floor 11.4986580942 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Kịch bản gần ngưỡng theo nhãn tham chiếu đã chọn. Mức pin giảm 5 điểm phần trăm làm đổi quyết định.",
+    "limitation": "Gần ngưỡng được xác định riêng theo REF-1/REF-2 gốc với w=0,05; việc đổi quyết định không đồng nghĩa đã xảy ra sự cố.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 3733805,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB48D",
+        "factor": "soc_error",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-011"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "boundary_verdict_flip",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 33.90985424406714,
+      "margin_Wh": 9.637837153213408,
+      "reserve_slack_Wh": 4.783433735042664
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.2980481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 29.038422845190233,
+      "margin_Wh": 4.7664057543365,
+      "reserve_slack_Wh": -0.08799766383424412,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "0",
+      "value": "-0.05",
+      "unit": "fraction",
+      "primary_error_point": false,
+      "description": "Mức pin giảm 5 điểm phần trăm",
+      "scope": "Khoảng sai lệch rộng"
+    },
+    "reference_model": "REF-2",
+    "reference_details": {
+      "reference_label": "infeasible",
+      "fixed_original_margin_ratio": -0.034916405203718276,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D"
+    },
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 9.637837153213408,
+      "margin_after_Wh": 4.7664057543365,
+      "reserve_slack_before_Wh": 4.783433735042664,
+      "reserve_slack_after_Wh": -0.08799766383424412
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 29.0384228452 Wh vs landing floor 11.4986580942 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Kịch bản gần ngưỡng theo nhãn tham chiếu đã chọn. Mức pin giảm 5 điểm phần trăm làm đổi quyết định.",
+    "limitation": "Gần ngưỡng được xác định riêng theo REF-1/REF-2 gốc với w=0,05; việc đổi quyết định không đồng nghĩa đã xảy ra sự cố.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 3733805,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB48D",
+        "factor": "soc_error",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-012"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "marginal_mapping_effect",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "SCORING_POLICY_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 26.06643920423443,
+      "margin_Wh": 1.7944221133806977,
+      "reserve_slack_Wh": -3.059981304790046
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 26.06643920423443,
+      "margin_Wh": 1.7944221133806977,
+      "reserve_slack_Wh": -3.059981304790046,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "2",
+      "value": "0.0",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Giữ nguyên đầu vào gốc",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "REF-1",
+    "reference_details": {
+      "reference_label": "marginal",
+      "fixed_original_margin_ratio": 0.01963753413960325,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D",
+      "mapping_before": "INFEASIBLE",
+      "mapping_after": "FEASIBLE",
+      "false_safe_contribution_before": 0,
+      "false_safe_contribution_after": 0,
+      "unnecessary_rejection_contribution_before": 0,
+      "unnecessary_rejection_contribution_after": 1
+    },
+    "baseline_verdict": "NO_FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": false,
+      "reserve_shortfall": true,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 1.7944221133806977,
+      "margin_after_Wh": 1.7944221133806977,
+      "reserve_slack_before_Wh": -3.059981304790046,
+      "reserve_slack_after_Wh": -3.059981304790046
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 26.0664392042 Wh vs landing floor 11.7985698452 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Giữ nguyên dữ liệu và quyết định; chỉ đổi cách xếp nhóm sát ngưỡng vào nhóm khả thi hay không khả thi khi chấm điểm.",
+    "limitation": "Đây là thay đổi cách chấm và mẫu số, không phải đầu vào hay quyết định của hệ thống thay đổi.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 29405,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB47D",
+        "factor": "soc_error",
+        "point_id": "2"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-013"
+  },
+  {
+    "scenario_id": 10,
+    "assessment_id": null,
+    "category": "marginal_mapping_effect",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "SCORING_POLICY_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 159.33472226756285,
+      "speed_commanded_ms": 9.536739861384126,
+      "altitude_m": 100.0,
+      "distance_2d_m": 775.5926866952068,
+      "wind_forecast_ms": 3.9122545974914718,
+      "ambient_temp_c": 3.4466796928998704,
+      "soc": 0.6156925749929956,
+      "soh": 0.7696183138610817,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 26.032952467126595,
+      "e_available_Wh": 43.565832518092705,
+      "margin_Wh": 17.53288005096611,
+      "reserve_slack_Wh": 12.326289557540793
+    },
+    "changed_inputs": {
+      "payload_g": 159.33472226756285,
+      "speed_commanded_ms": 9.536739861384126,
+      "altitude_m": 100.0,
+      "distance_2d_m": 775.5926866952068,
+      "wind_forecast_ms": 3.9122545974914718,
+      "ambient_temp_c": 3.4466796928998704,
+      "soc": 0.6156925749929956,
+      "soh": 0.7696183138610817,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 26.032952467126595,
+      "e_available_Wh": 43.565832518092705,
+      "margin_Wh": 17.53288005096611,
+      "reserve_slack_Wh": 12.326289557540793,
+      "kappa": 0.920325
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "2",
+      "value": "0.0",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Giữ nguyên đầu vào gốc",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "REF-2",
+    "reference_details": {
+      "reference_label": "marginal",
+      "fixed_original_margin_ratio": 0.027281306462283397,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D",
+      "mapping_before": "INFEASIBLE",
+      "mapping_after": "FEASIBLE",
+      "false_safe_contribution_before": 0,
+      "false_safe_contribution_after": 0,
+      "unnecessary_rejection_contribution_before": 0,
+      "unnecessary_rejection_contribution_after": 0
+    },
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 17.53288005096611,
+      "margin_after_Wh": 17.53288005096611,
+      "reserve_slack_before_Wh": 12.326289557540793,
+      "reserve_slack_after_Wh": 12.326289557540793
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 3.9122545974914718 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 3.4466796928998704 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3839 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.536739861384126 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 43.5658325181 Wh vs landing floor 10.5026258833 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 775.5926866952068 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 159.33472226756285 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Giữ nguyên dữ liệu và quyết định; chỉ đổi cách xếp nhóm sát ngưỡng vào nhóm khả thi hay không khả thi khi chấm điểm.",
+    "limitation": "Đây là thay đổi cách chấm và mẫu số, không phải đầu vào hay quyết định của hệ thống thay đổi.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 29410,
+      "locator": {
+        "scenario_id": 10,
+        "battery_type": "TB47D",
+        "factor": "soc_error",
+        "point_id": "2"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-014"
+  },
+  {
+    "scenario_id": 5,
+    "assessment_id": null,
+    "category": "marginal_mapping_effect",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "SCORING_POLICY_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 33.90985424406714,
+      "margin_Wh": 9.637837153213408,
+      "reserve_slack_Wh": 4.783433735042664
+    },
+    "changed_inputs": {
+      "payload_g": 469.0018139090449,
+      "speed_commanded_ms": 9.074486953045561,
+      "altitude_m": 100.0,
+      "distance_2d_m": 418.39310656400437,
+      "wind_forecast_ms": 4.106374992275846,
+      "ambient_temp_c": 23.1092477943997,
+      "soc": 0.3480481553315616,
+      "soh": 0.7496816557212849,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 24.272017090853733,
+      "e_available_Wh": 33.90985424406714,
+      "margin_Wh": 9.637837153213408,
+      "reserve_slack_Wh": 4.783433735042664,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "2",
+      "value": "0.0",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Giữ nguyên đầu vào gốc",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "REF-1",
+    "reference_details": {
+      "reference_label": "marginal",
+      "fixed_original_margin_ratio": 0.01963753413960325,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D",
+      "mapping_before": "INFEASIBLE",
+      "mapping_after": "FEASIBLE",
+      "false_safe_contribution_before": 0,
+      "false_safe_contribution_after": 0,
+      "unnecessary_rejection_contribution_before": 0,
+      "unnecessary_rejection_contribution_after": 0
+    },
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 9.637837153213408,
+      "margin_after_Wh": 9.637837153213408,
+      "reserve_slack_before_Wh": 4.783433735042664,
+      "reserve_slack_after_Wh": 4.783433735042664
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 4.106374992275846 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 23.1092477943997 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4149 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.074486953045561 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 33.9098542441 Wh vs landing floor 11.4986580942 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 418.39310656400437 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 469.0018139090449 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Giữ nguyên dữ liệu và quyết định; chỉ đổi cách xếp nhóm sát ngưỡng vào nhóm khả thi hay không khả thi khi chấm điểm.",
+    "limitation": "Đây là thay đổi cách chấm và mẫu số, không phải đầu vào hay quyết định của hệ thống thay đổi.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 3763205,
+      "locator": {
+        "scenario_id": 5,
+        "battery_type": "TB48D",
+        "factor": "soc_error",
+        "point_id": "2"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-015"
+  },
+  {
+    "scenario_id": 10,
+    "assessment_id": null,
+    "category": "marginal_mapping_effect",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "SCORING_POLICY_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 159.33472226756285,
+      "speed_commanded_ms": 9.536739861384126,
+      "altitude_m": 100.0,
+      "distance_2d_m": 775.5926866952068,
+      "wind_forecast_ms": 3.9122545974914718,
+      "ambient_temp_c": 3.4466796928998704,
+      "soc": 0.6156925749929956,
+      "soh": 0.7696183138610817,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 26.032952467126595,
+      "e_available_Wh": 56.674830771284554,
+      "margin_Wh": 30.64187830415796,
+      "reserve_slack_Wh": 25.435287810732643
+    },
+    "changed_inputs": {
+      "payload_g": 159.33472226756285,
+      "speed_commanded_ms": 9.536739861384126,
+      "altitude_m": 100.0,
+      "distance_2d_m": 775.5926866952068,
+      "wind_forecast_ms": 3.9122545974914718,
+      "ambient_temp_c": 3.4466796928998704,
+      "soc": 0.6156925749929956,
+      "soh": 0.7696183138610817,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 26.032952467126595,
+      "e_available_Wh": 56.674830771284554,
+      "margin_Wh": 30.64187830415796,
+      "reserve_slack_Wh": 25.435287810732643,
+      "kappa": 0.920325
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "2",
+      "value": "0.0",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Giữ nguyên đầu vào gốc",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "REF-2",
+    "reference_details": {
+      "reference_label": "marginal",
+      "fixed_original_margin_ratio": 0.027281306462283397,
+      "reference_labels_recomputed": false,
+      "original_battery_assumption": "TB47D",
+      "mapping_before": "INFEASIBLE",
+      "mapping_after": "FEASIBLE",
+      "false_safe_contribution_before": 0,
+      "false_safe_contribution_after": 0,
+      "unnecessary_rejection_contribution_before": 0,
+      "unnecessary_rejection_contribution_after": 0
+    },
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 30.64187830415796,
+      "margin_after_Wh": 30.64187830415796,
+      "reserve_slack_before_Wh": 25.435287810732643,
+      "reserve_slack_after_Wh": 25.435287810732643
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 3.9122545974914718 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 3.4466796928998704 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3839 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 9.536739861384126 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 56.6748307713 Wh vs landing floor 10.2356561607 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 775.5926866952068 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 159.33472226756285 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Giữ nguyên dữ liệu và quyết định; chỉ đổi cách xếp nhóm sát ngưỡng vào nhóm khả thi hay không khả thi khi chấm điểm.",
+    "limitation": "Đây là thay đổi cách chấm và mẫu số, không phải đầu vào hay quyết định của hệ thống thay đổi.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 3763210,
+      "locator": {
+        "scenario_id": 10,
+        "battery_type": "TB48D",
+        "factor": "soc_error",
+        "point_id": "2"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-016"
+  },
+  {
+    "scenario_id": 3,
+    "assessment_id": null,
+    "category": "distance_extrapolation",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "MODEL_SUPPORT_WARNING",
+    "baseline_inputs": {
+      "payload_g": 51.09351530957034,
+      "speed_commanded_ms": 5.969379530970295,
+      "altitude_m": 75.0,
+      "distance_2d_m": 322.687876914904,
+      "wind_forecast_ms": 5.611060462495155,
+      "ambient_temp_c": 21.63588060420601,
+      "soc": 0.33465516920200056,
+      "soh": 0.7968897222762114,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.78121563287577,
+      "e_available_Wh": 26.641658157883708,
+      "margin_Wh": 7.860442525007937,
+      "reserve_slack_Wh": 4.104199398432783
+    },
+    "changed_inputs": {
+      "payload_g": 51.09351530957034,
+      "speed_commanded_ms": 5.969379530970295,
+      "altitude_m": 75.0,
+      "distance_2d_m": 322.687876914904,
+      "wind_forecast_ms": 5.611060462495155,
+      "ambient_temp_c": 21.63588060420601,
+      "soc": 0.33465516920200056,
+      "soh": 0.7968897222762114,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.78121563287577,
+      "e_available_Wh": 26.641658157883708,
+      "margin_Wh": 7.860442525007937,
+      "reserve_slack_Wh": 4.104199398432783,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "2",
+      "value": "0.0",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Giữ nguyên đầu vào gốc",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 7.860442525007937,
+      "margin_after_Wh": 7.860442525007937,
+      "reserve_slack_before_Wh": 4.104199398432783,
+      "reserve_slack_after_Wh": 4.104199398432783
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 5.611060462495155 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 21.63588060420601 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3731 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.969379530970295 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 26.6416581579 Wh vs landing floor 7.54621883912 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 322.687876914904 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 51.09351530957034 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Pin đủ theo ngưỡng FLY, nhưng quãng đường ngoài dải dữ liệu khiến hệ thống giữ mức CONDITIONAL.",
+    "limitation": "Không thay đổi quãng đường trong phép quét này; đây là cảnh báo có sẵn ở kịch bản gốc, không phải một chuyển FLY→CONDITIONAL mới.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 29403,
+      "locator": {
+        "scenario_id": 3,
+        "battery_type": "TB47D",
+        "factor": "soc_error",
+        "point_id": "2"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-017"
+  },
+  {
+    "scenario_id": 3,
+    "assessment_id": null,
+    "category": "distance_extrapolation",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "MODEL_SUPPORT_WARNING",
+    "baseline_inputs": {
+      "payload_g": 51.09351530957034,
+      "speed_commanded_ms": 5.969379530970295,
+      "altitude_m": 75.0,
+      "distance_2d_m": 322.687876914904,
+      "wind_forecast_ms": 5.611060462495155,
+      "ambient_temp_c": 21.63588060420601,
+      "soc": 0.33465516920200056,
+      "soh": 0.7968897222762114,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.78121563287577,
+      "e_available_Wh": 34.65815709908475,
+      "margin_Wh": 15.876941466208976,
+      "reserve_slack_Wh": 12.120698339633822
+    },
+    "changed_inputs": {
+      "payload_g": 51.09351530957034,
+      "speed_commanded_ms": 5.969379530970295,
+      "altitude_m": 75.0,
+      "distance_2d_m": 322.687876914904,
+      "wind_forecast_ms": 5.611060462495155,
+      "ambient_temp_c": 21.63588060420601,
+      "soc": 0.33465516920200056,
+      "soh": 0.7968897222762114,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.78121563287577,
+      "e_available_Wh": 34.65815709908475,
+      "margin_Wh": 15.876941466208976,
+      "reserve_slack_Wh": 12.120698339633822,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "soc_error",
+      "sweep_kind": "input_error",
+      "point_id": "2",
+      "value": "0.0",
+      "unit": "fraction",
+      "primary_error_point": true,
+      "description": "Giữ nguyên đầu vào gốc",
+      "scope": "Khoảng sai lệch chính"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 15.876941466208976,
+      "margin_after_Wh": 15.876941466208976,
+      "reserve_slack_before_Wh": 12.120698339633822,
+      "reserve_slack_after_Wh": 12.120698339633822
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 5.611060462495155 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 21.63588060420601 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 3731 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.969379530970295 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 34.6581570991 Wh vs landing floor 7.35439900542 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "VIOLATED",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 322.687876914904 m ngoai dai [420.0, 610.0] m",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 51.09351530957034 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Pin đủ theo ngưỡng FLY, nhưng quãng đường ngoài dải dữ liệu khiến hệ thống giữ mức CONDITIONAL.",
+    "limitation": "Không thay đổi quãng đường trong phép quét này; đây là cảnh báo có sẵn ở kịch bản gốc, không phải một chuyển FLY→CONDITIONAL mới.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 3763203,
+      "locator": {
+        "scenario_id": 3,
+        "battery_type": "TB48D",
+        "factor": "soc_error",
+        "point_id": "2"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-018"
+  },
+  {
+    "scenario_id": 1,
+    "assessment_id": null,
+    "category": "wind_extrapolation",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "MODEL_SUPPORT_WARNING",
+    "baseline_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 3.870875104738842,
+      "ambient_temp_c": 21.52475738213496,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 29.073237317090374,
+      "e_available_Wh": 42.31176860135325,
+      "margin_Wh": 13.238531284262876,
+      "reserve_slack_Wh": 7.4238838208448
+    },
+    "changed_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 0.0,
+      "ambient_temp_c": 21.52475738213496,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 28.475101569526814,
+      "e_available_Wh": 42.31176860135325,
+      "margin_Wh": 13.836667031826437,
+      "reserve_slack_Wh": 8.141646717921077,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "wind_domain",
+      "sweep_kind": "scenario_domain",
+      "point_id": "0",
+      "value": "0.0",
+      "unit": "m/s",
+      "primary_error_point": false,
+      "description": "Thử gió ở 0 m/s",
+      "scope": "Thay đổi toàn dải giả định"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "FLY",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 13.238531284262876,
+      "margin_after_Wh": 13.836667031826437,
+      "reserve_slack_before_Wh": 7.4238838208448,
+      "reserve_slack_after_Wh": 8.141646717921077
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 0.0 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 21.52475738213496 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4135 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.315911823212856 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 42.3117686014 Wh vs landing floor 11.7370739899 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 477.48292390857563 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 454.57246206156526 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Thử gió 0.0000 m/s, ngoài dải đã đo 2,81–6,67 m/s, cho kết quả FLY.",
+    "limitation": "Ngoài dải dữ liệu khác với vượt giới hạn gió DJI. D3 hiện không có luật tự hạ cấp chỉ vì ngoại suy gió; đây là giới hạn cần công bố.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 455701,
+      "locator": {
+        "scenario_id": 1,
+        "battery_type": "TB47D",
+        "factor": "wind_domain",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-019"
+  },
+  {
+    "scenario_id": 1,
+    "assessment_id": null,
+    "category": "wind_extrapolation",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "MODEL_SUPPORT_WARNING",
+    "baseline_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 3.870875104738842,
+      "ambient_temp_c": 21.52475738213496,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 29.073237317090374,
+      "e_available_Wh": 55.04341789221089,
+      "margin_Wh": 25.970180575120516,
+      "reserve_slack_Wh": 20.15553311170244
+    },
+    "changed_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 0.0,
+      "ambient_temp_c": 21.52475738213496,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 28.475101569526814,
+      "e_available_Wh": 55.04341789221089,
+      "margin_Wh": 26.568316322684076,
+      "reserve_slack_Wh": 20.873296008778716,
+      "kappa": 1.0
+    },
+    "perturbation_and_source": {
+      "factor": "wind_domain",
+      "sweep_kind": "scenario_domain",
+      "point_id": "0",
+      "value": "0.0",
+      "unit": "m/s",
+      "primary_error_point": false,
+      "description": "Thử gió ở 0 m/s",
+      "scope": "Thay đổi toàn dải giả định"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "FLY",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 25.970180575120516,
+      "margin_after_Wh": 26.568316322684076,
+      "reserve_slack_before_Wh": 20.15553311170244,
+      "reserve_slack_after_Wh": 20.873296008778716
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 0.0 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 21.52475738213496 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4135 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.315911823212856 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 55.0434178922 Wh vs landing floor 11.4387254224 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 477.48292390857563 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 454.57246206156526 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Thử gió 0.0000 m/s, ngoài dải đã đo 2,81–6,67 m/s, cho kết quả FLY.",
+    "limitation": "Ngoài dải dữ liệu khác với vượt giới hạn gió DJI. D3 hiện không có luật tự hạ cấp chỉ vì ngoại suy gió; đây là giới hạn cần công bố.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 4189501,
+      "locator": {
+        "scenario_id": 1,
+        "battery_type": "TB48D",
+        "factor": "wind_domain",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-020"
+  },
+  {
+    "scenario_id": 1,
+    "assessment_id": null,
+    "category": "temperature_clamp",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "MODEL_SUPPORT_WARNING",
+    "baseline_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 3.870875104738842,
+      "ambient_temp_c": 21.52475738213496,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 29.073237317090374,
+      "e_available_Wh": 42.31176860135325,
+      "margin_Wh": 13.238531284262876,
+      "reserve_slack_Wh": 7.4238838208448
+    },
+    "changed_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 3.870875104738842,
+      "ambient_temp_c": -10.0,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 29.073237317090374,
+      "e_available_Wh": 38.940578438040426,
+      "margin_Wh": 9.867341120950051,
+      "reserve_slack_Wh": 4.052693657531975,
+      "kappa": 0.920325
+    },
+    "perturbation_and_source": {
+      "factor": "temperature_domain",
+      "sweep_kind": "scenario_domain",
+      "point_id": "0",
+      "value": "-10.0",
+      "unit": "degC",
+      "primary_error_point": false,
+      "description": "Thử nhiệt độ -10°C",
+      "scope": "Thay đổi toàn dải giả định"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "FLY",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 13.238531284262876,
+      "margin_after_Wh": 9.867341120950051,
+      "reserve_slack_before_Wh": 7.4238838208448,
+      "reserve_slack_after_Wh": 4.052693657531975
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 3.870875104738842 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong -10.0 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4135 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.315911823212856 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 38.940578438 Wh vs landing floor 11.7370739899 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 477.48292390857563 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 454.57246206156526 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Thử nhiệt độ -10.00°C; hệ số pin được giữ ở giá trị biên lạnh κ=0.920325.",
+    "limitation": "Dưới 4,5°C dùng giá trị tại 4,5°C, không kéo dài đa thức xuống nhiệt độ thấp hơn; ảnh hưởng nhiệt độ là giả định từ tài liệu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 617401,
+      "locator": {
+        "scenario_id": 1,
+        "battery_type": "TB47D",
+        "factor": "temperature_domain",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-021"
+  },
+  {
+    "scenario_id": 1,
+    "assessment_id": null,
+    "category": "temperature_clamp",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "MODEL_SUPPORT_WARNING",
+    "baseline_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 3.870875104738842,
+      "ambient_temp_c": 21.52475738213496,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 29.073237317090374,
+      "e_available_Wh": 55.04341789221089,
+      "margin_Wh": 25.970180575120516,
+      "reserve_slack_Wh": 20.15553311170244
+    },
+    "changed_inputs": {
+      "payload_g": 454.57246206156526,
+      "speed_commanded_ms": 5.315911823212856,
+      "altitude_m": 100.0,
+      "distance_2d_m": 477.48292390857563,
+      "wind_forecast_ms": 3.870875104738842,
+      "ambient_temp_c": -10.0,
+      "soc": 0.5337789873322937,
+      "soh": 0.7934767708963896,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 29.073237317090374,
+      "e_available_Wh": 50.657833571648986,
+      "margin_Wh": 21.584596254558612,
+      "reserve_slack_Wh": 15.769948791140536,
+      "kappa": 0.920325
+    },
+    "perturbation_and_source": {
+      "factor": "temperature_domain",
+      "sweep_kind": "scenario_domain",
+      "point_id": "0",
+      "value": "-10.0",
+      "unit": "degC",
+      "primary_error_point": false,
+      "description": "Thử nhiệt độ -10°C",
+      "scope": "Thay đổi toàn dải giả định"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "FLY",
+      "verdict_changed": false,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 25.970180575120516,
+      "margin_after_Wh": 21.584596254558612,
+      "reserve_slack_before_Wh": 20.15553311170244,
+      "reserve_slack_after_Wh": 15.769948791140536
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": false,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "gio du bao 3.870875104738842 m/s <= 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong -10.0 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4135 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 5.315911823212856 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 50.6578335716 Wh vs landing floor 11.4387254224 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 477.48292390857563 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 454.57246206156526 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Thử nhiệt độ -10.00°C; hệ số pin được giữ ở giá trị biên lạnh κ=0.920325.",
+    "limitation": "Dưới 4,5°C dùng giá trị tại 4,5°C, không kéo dài đa thức xuống nhiệt độ thấp hơn; ảnh hưởng nhiệt độ là giả định từ tài liệu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 4351201,
+      "locator": {
+        "scenario_id": 1,
+        "battery_type": "TB48D",
+        "factor": "temperature_domain",
+        "point_id": "0"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-022"
+  },
+  {
+    "scenario_id": 13,
+    "assessment_id": null,
+    "category": "hard_veto_with_high_margin",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 343.25306698122483,
+      "speed_commanded_ms": 7.121847588659826,
+      "altitude_m": 25.0,
+      "distance_2d_m": 498.0132209833049,
+      "wind_forecast_ms": 8.890109621245832,
+      "ambient_temp_c": 0.9279670154654251,
+      "soc": 0.7923456234443548,
+      "soh": 0.9402023560767833,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.428601378832372,
+      "e_available_Wh": 68.49245078095683,
+      "margin_Wh": 50.06384940212446,
+      "reserve_slack_Wh": 46.37812912635798
+    },
+    "changed_inputs": {
+      "payload_g": 343.25306698122483,
+      "speed_commanded_ms": 7.121847588659826,
+      "altitude_m": 25.0,
+      "distance_2d_m": 498.0132209833049,
+      "wind_forecast_ms": 10.890109621245832,
+      "ambient_temp_c": 0.9279670154654251,
+      "soc": 0.7923456234443548,
+      "soh": 0.9402023560767833,
+      "battery_type": "TB47D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.737645577562166,
+      "e_available_Wh": 68.49245078095683,
+      "margin_Wh": 49.75480520339467,
+      "reserve_slack_Wh": 46.00727608788223,
+      "kappa": 0.920325
+    },
+    "perturbation_and_source": {
+      "factor": "wind_error",
+      "sweep_kind": "input_error",
+      "point_id": "4",
+      "value": "2.0",
+      "unit": "m/s",
+      "primary_error_point": false,
+      "description": "Thay đổi gió thêm 2 m/s",
+      "scope": "Khoảng sai lệch rộng"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 50.06384940212446,
+      "margin_after_Wh": 49.75480520339467,
+      "reserve_slack_before_Wh": 46.37812912635798,
+      "reserve_slack_after_Wh": 46.00727608788223
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": true,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "VIOLATED",
+          "severity": "VETO",
+          "detail": "gio du bao 10.890109621245832 m/s > gioi han 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 0.9279670154654251 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4023 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 7.121847588659826 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 68.492450781 Wh vs landing floor 2.81656621761 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 498.0132209833049 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 343.25306698122483 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Dù năng lượng đủ cả mức dự trữ và khoản dự phòng sai số, một luật VETO vẫn chặn quyết định FLY. Luật chặn: HR-1. Gió trước/sau: 8.8901/10.8901 m/s.",
+    "limitation": "Đây là một ca chặn đúng theo quy tắc, không phải lỗi thuật toán. Ngoại lệ MTOW của hồ sơ CMU vẫn phải được ghi rõ.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 205813,
+      "locator": {
+        "scenario_id": 13,
+        "battery_type": "TB47D",
+        "factor": "wind_error",
+        "point_id": "4"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-023"
+  },
+  {
+    "scenario_id": 13,
+    "assessment_id": null,
+    "category": "hard_veto_with_high_margin",
+    "battery_type": "TB48D",
+    "source_kind": "SAVED_OAT",
+    "event_kind": "VERDICT_CHANGE",
+    "baseline_inputs": {
+      "payload_g": 343.25306698122483,
+      "speed_commanded_ms": 7.121847588659826,
+      "altitude_m": 25.0,
+      "distance_2d_m": 498.0132209833049,
+      "wind_forecast_ms": 8.890109621245832,
+      "ambient_temp_c": 0.9279670154654251,
+      "soc": 0.7923456234443548,
+      "soh": 0.9402023560767833,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.428601378832372,
+      "e_available_Wh": 89.10189092585736,
+      "margin_Wh": 70.67328954702499,
+      "reserve_slack_Wh": 66.98756927125851
+    },
+    "changed_inputs": {
+      "payload_g": 343.25306698122483,
+      "speed_commanded_ms": 7.121847588659826,
+      "altitude_m": 25.0,
+      "distance_2d_m": 498.0132209833049,
+      "wind_forecast_ms": 10.890109621245832,
+      "ambient_temp_c": 0.9279670154654251,
+      "soc": 0.7923456234443548,
+      "soh": 0.9402023560767833,
+      "battery_type": "TB48D",
+      "profile": "CMU_instrumented",
+      "reserve_factor": 0.2,
+      "e_required_Wh": 18.737645577562166,
+      "e_available_Wh": 89.10189092585736,
+      "margin_Wh": 70.3642453482952,
+      "reserve_slack_Wh": 66.61671623278276,
+      "kappa": 0.920325
+    },
+    "perturbation_and_source": {
+      "factor": "wind_error",
+      "sweep_kind": "input_error",
+      "point_id": "4",
+      "value": "2.0",
+      "unit": "m/s",
+      "primary_error_point": false,
+      "description": "Thay đổi gió thêm 2 m/s",
+      "scope": "Khoảng sai lệch rộng"
+    },
+    "reference_model": "NOT_SCORED_AGAINST_REFERENCE",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": true,
+      "reserve_shortfall": false,
+      "workflow_blocked": null
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 70.67328954702499,
+      "margin_after_Wh": 70.3642453482952,
+      "reserve_slack_before_Wh": 66.98756927125851,
+      "reserve_slack_after_Wh": 66.61671623278276
+    },
+    "rule_results": {
+      "origin": "Reconstructed for selected point using verified D3 and saved available energy",
+      "saved_veto": true,
+      "checks": [
+        {
+          "rule_id": "HR-1",
+          "status": "VIOLATED",
+          "severity": "VETO",
+          "detail": "gio du bao 10.890109621245832 m/s > gioi han 10.0 m/s",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-2",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "nhiet do moi truong 0.9279670154654251 C trong [-10.0, 40.0]",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-3",
+          "status": "KNOWN_EXCEEDED",
+          "severity": "RECORD_ONLY",
+          "detail": "khoi luong cat canh 4023 g vuot MTOW 3600 g — DA BIET, may bay mang 1249 g thiet bi do; ghi nhan, khong chan (B6)",
+          "source": "DJI"
+        },
+        {
+          "rule_id": "HR-4",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "toc do ra lenh 7.121847588659826 m/s <= 17.0 m/s",
+          "source": "DJI (che do GPS)"
+        },
+        {
+          "rule_id": "PH-1",
+          "status": "PASS",
+          "severity": "VETO",
+          "detail": "Saved available 89.1018909259 Wh vs landing floor 2.74497098893 Wh",
+          "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)"
+        },
+        {
+          "rule_id": "PD-1",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "cu ly 498.0132209833049 m trong [420.0, 610.0]",
+          "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)"
+        },
+        {
+          "rule_id": "PD-2",
+          "status": "PASS",
+          "severity": "DOWNGRADE",
+          "detail": "tai trong 343.25306698122483 g trong [0.0, 500.0]",
+          "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)"
+        }
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Dù năng lượng đủ cả mức dự trữ và khoản dự phòng sai số, một luật VETO vẫn chặn quyết định FLY. Luật chặn: HR-1. Gió trước/sau: 8.8901/10.8901 m/s.",
+    "limitation": "Đây là một ca chặn đúng theo quy tắc, không phải lỗi thuật toán. Ngoại lệ MTOW của hồ sơ CMU vẫn phải được ghi rõ.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_evaluations.csv.gz",
+      "record_index": 3939613,
+      "locator": {
+        "scenario_id": 13,
+        "battery_type": "TB48D",
+        "factor": "wind_error",
+        "point_id": "4"
+      }
+    },
+    "diagnostic_only": true,
+    "operational_recommendation": false,
+    "case_id": "FC-024"
+  },
+  {
+    "scenario_id": null,
+    "assessment_id": "missing_soc",
+    "category": "missing_or_stale_input",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_SYNTHETIC_WORKFLOW_FIXTURE",
+    "event_kind": "WORKFLOW_BLOCK",
+    "baseline_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": null,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "changed_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": null,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "perturbation_and_source": {
+      "fixture": "missing_soc",
+      "weather": {
+        "observed_at": "2026-10-26T00:55:00+00:00",
+        "source": "SYNTHETIC_TEST_FIXTURE",
+        "valid_until": "2026-10-26T01:30:00+00:00"
+      },
+      "assessed_at": "2026-10-26T01:00:00+00:00",
+      "previous_assessment_id": null
+    },
+    "reference_model": "NOT_APPLICABLE_WORKFLOW_CHECK",
+    "reference_details": null,
+    "baseline_verdict": null,
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "INSUFFICIENT_DATA",
+      "verdict_changed": null,
+      "reserve_shortfall": null,
+      "workflow_blocked": true
+    },
+    "margin_before_after": {
+      "margin_before_Wh": null,
+      "margin_after_Wh": null,
+      "reserve_slack_before_Wh": null,
+      "reserve_slack_after_Wh": null
+    },
+    "rule_results": {
+      "origin": "Stored assessment and completed workflow check",
+      "checks": {
+        "checks": [
+          {
+            "detail": "gio du bao 3 m/s <= 10.0 m/s",
+            "rule_id": "HR-1",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "nhiet do moi truong 15 C trong [-10.0, 40.0]",
+            "rule_id": "HR-2",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "khoi luong cat canh 2605 g <= MTOW 3600 g",
+            "rule_id": "HR-3",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "toc do ra lenh 8 m/s <= 17.0 m/s",
+            "rule_id": "HR-4",
+            "severity": "VETO",
+            "source": "DJI (che do GPS)",
+            "status": "PASS"
+          },
+          {
+            "detail": "khong tinh duoc nang luong kha dung (MISSING_INPUT) — khong kiem duoc san ha canh",
+            "rule_id": "PH-1",
+            "severity": "VETO",
+            "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)",
+            "status": "MISSING"
+          },
+          {
+            "detail": "cu ly 472 m trong [420.0, 610.0]",
+            "rule_id": "PD-1",
+            "severity": "DOWNGRADE",
+            "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)",
+            "status": "PASS"
+          },
+          {
+            "detail": "tai trong 250 g trong [0.0, 500.0]",
+            "rule_id": "PD-2",
+            "severity": "DOWNGRADE",
+            "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)",
+            "status": "PASS"
+          }
+        ],
+        "profile": "M100_stock"
+      },
+      "workflow_check": {
+        "check": "blocks_missing_soc",
+        "detail": "Transition blocked: ASSESSMENT_NOT_ELIGIBLE",
+        "passed": true
+      },
+      "weather_issues": []
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Thiếu mức pin; hệ thống không đủ thông tin để cho FLY.",
+    "limitation": "Đây là ca thử phần mềm có đầu vào/thời tiết giả lập; không có ID D4 và không phải chuyến bay thật. Khi không có bản trước, không suy diễn quyết định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\replay_workflow_20261026_03\\snapshots\\missing_soc.json",
+      "record_index": null,
+      "locator": {
+        "assessment_id": "missing_soc",
+        "workflow_check": "blocks_missing_soc"
+      }
+    },
+    "diagnostic_only": false,
+    "operational_recommendation": false,
+    "case_id": "FC-025"
+  },
+  {
+    "scenario_id": null,
+    "assessment_id": "nan_wind",
+    "category": "missing_or_stale_input",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_SYNTHETIC_WORKFLOW_FIXTURE",
+    "event_kind": "WORKFLOW_BLOCK",
+    "baseline_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.7,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": null
+    },
+    "changed_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.7,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": null
+    },
+    "perturbation_and_source": {
+      "fixture": "nan_wind",
+      "weather": {
+        "observed_at": "2026-10-26T00:55:00+00:00",
+        "source": "SYNTHETIC_TEST_FIXTURE",
+        "valid_until": "2026-10-26T01:30:00+00:00"
+      },
+      "assessed_at": "2026-10-26T01:00:00+00:00",
+      "previous_assessment_id": null
+    },
+    "reference_model": "NOT_APPLICABLE_WORKFLOW_CHECK",
+    "reference_details": null,
+    "baseline_verdict": null,
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "INSUFFICIENT_DATA",
+      "verdict_changed": null,
+      "reserve_shortfall": null,
+      "workflow_blocked": true
+    },
+    "margin_before_after": {
+      "margin_before_Wh": null,
+      "margin_after_Wh": null,
+      "reserve_slack_before_Wh": null,
+      "reserve_slack_after_Wh": null
+    },
+    "rule_results": {
+      "origin": "Stored assessment and completed workflow check",
+      "checks": {
+        "checks": [
+          {
+            "detail": "thieu gio du bao",
+            "rule_id": "HR-1",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "MISSING"
+          },
+          {
+            "detail": "nhiet do moi truong 15 C trong [-10.0, 40.0]",
+            "rule_id": "HR-2",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "khoi luong cat canh 2605 g <= MTOW 3600 g",
+            "rule_id": "HR-3",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "toc do ra lenh 8 m/s <= 17.0 m/s",
+            "rule_id": "HR-4",
+            "severity": "VETO",
+            "source": "DJI (che do GPS)",
+            "status": "PASS"
+          },
+          {
+            "detail": "nang luong kha dung 66.13 Wh >= nang luong ha canh 2.93 Wh (tu 50 m)",
+            "rule_id": "PH-1",
+            "severity": "VETO",
+            "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)",
+            "status": "PASS"
+          },
+          {
+            "detail": "cu ly 472 m trong [420.0, 610.0]",
+            "rule_id": "PD-1",
+            "severity": "DOWNGRADE",
+            "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)",
+            "status": "PASS"
+          },
+          {
+            "detail": "tai trong 250 g trong [0.0, 500.0]",
+            "rule_id": "PD-2",
+            "severity": "DOWNGRADE",
+            "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)",
+            "status": "PASS"
+          }
+        ],
+        "profile": "M100_stock"
+      },
+      "workflow_check": {
+        "check": "blocks_nan_wind",
+        "detail": "Transition blocked: ASSESSMENT_NOT_ELIGIBLE",
+        "passed": true
+      },
+      "weather_issues": []
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Giá trị gió NaN được chuẩn hóa thành dữ liệu thiếu và bị chặn.",
+    "limitation": "Đây là ca thử phần mềm có đầu vào/thời tiết giả lập; không có ID D4 và không phải chuyến bay thật. Khi không có bản trước, không suy diễn quyết định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\replay_workflow_20261026_03\\snapshots\\nan_wind.json",
+      "record_index": null,
+      "locator": {
+        "assessment_id": "nan_wind",
+        "workflow_check": "blocks_nan_wind"
+      }
+    },
+    "diagnostic_only": false,
+    "operational_recommendation": false,
+    "case_id": "FC-026"
+  },
+  {
+    "scenario_id": null,
+    "assessment_id": "invalid_soc",
+    "category": "missing_or_stale_input",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_SYNTHETIC_WORKFLOW_FIXTURE",
+    "event_kind": "WORKFLOW_BLOCK",
+    "baseline_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 1.5,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "changed_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 1.5,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "perturbation_and_source": {
+      "fixture": "invalid_soc",
+      "weather": {
+        "observed_at": "2026-10-26T00:55:00+00:00",
+        "source": "SYNTHETIC_TEST_FIXTURE",
+        "valid_until": "2026-10-26T01:30:00+00:00"
+      },
+      "assessed_at": "2026-10-26T01:00:00+00:00",
+      "previous_assessment_id": null
+    },
+    "reference_model": "NOT_APPLICABLE_WORKFLOW_CHECK",
+    "reference_details": null,
+    "baseline_verdict": null,
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "NO_FLY",
+      "verdict_changed": null,
+      "reserve_shortfall": null,
+      "workflow_blocked": true
+    },
+    "margin_before_after": {
+      "margin_before_Wh": null,
+      "margin_after_Wh": null,
+      "reserve_slack_before_Wh": null,
+      "reserve_slack_after_Wh": null
+    },
+    "rule_results": {
+      "origin": "Stored assessment and completed workflow check",
+      "checks": {},
+      "workflow_check": {
+        "check": "blocks_invalid_soc",
+        "detail": "Transition blocked: ASSESSMENT_NOT_ELIGIBLE",
+        "passed": true
+      },
+      "weather_issues": []
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Mức pin lớn hơn 100% là đầu vào không hợp lệ và bị chặn.",
+    "limitation": "Đây là ca thử phần mềm có đầu vào/thời tiết giả lập; không có ID D4 và không phải chuyến bay thật. Khi không có bản trước, không suy diễn quyết định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\replay_workflow_20261026_03\\snapshots\\invalid_soc.json",
+      "record_index": null,
+      "locator": {
+        "assessment_id": "invalid_soc",
+        "workflow_check": "blocks_invalid_soc"
+      }
+    },
+    "diagnostic_only": false,
+    "operational_recommendation": false,
+    "case_id": "FC-027"
+  },
+  {
+    "scenario_id": null,
+    "assessment_id": "expired_weather",
+    "category": "missing_or_stale_input",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_SYNTHETIC_WORKFLOW_FIXTURE",
+    "event_kind": "WORKFLOW_BLOCK",
+    "baseline_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.7,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "changed_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.7,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "perturbation_and_source": {
+      "fixture": "expired_weather",
+      "weather": {
+        "observed_at": "2026-10-26T00:55:00+00:00",
+        "source": "SYNTHETIC_TEST_FIXTURE",
+        "valid_until": "2026-10-26T01:00:00+00:00"
+      },
+      "assessed_at": "2026-10-26T01:00:00+00:00",
+      "previous_assessment_id": null
+    },
+    "reference_model": "NOT_APPLICABLE_WORKFLOW_CHECK",
+    "reference_details": null,
+    "baseline_verdict": null,
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "INSUFFICIENT_DATA",
+      "verdict_changed": null,
+      "reserve_shortfall": null,
+      "workflow_blocked": true
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 47.877986897317015,
+      "margin_after_Wh": 47.877986897317015,
+      "reserve_slack_before_Wh": null,
+      "reserve_slack_after_Wh": null
+    },
+    "rule_results": {
+      "origin": "Stored assessment and completed workflow check",
+      "checks": {
+        "checks": [
+          {
+            "detail": "gio du bao 3 m/s <= 10.0 m/s",
+            "rule_id": "HR-1",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "nhiet do moi truong 15 C trong [-10.0, 40.0]",
+            "rule_id": "HR-2",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "khoi luong cat canh 2605 g <= MTOW 3600 g",
+            "rule_id": "HR-3",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "toc do ra lenh 8 m/s <= 17.0 m/s",
+            "rule_id": "HR-4",
+            "severity": "VETO",
+            "source": "DJI (che do GPS)",
+            "status": "PASS"
+          },
+          {
+            "detail": "nang luong kha dung 66.13 Wh >= nang luong ha canh 2.93 Wh (tu 50 m)",
+            "rule_id": "PH-1",
+            "severity": "VETO",
+            "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)",
+            "status": "PASS"
+          },
+          {
+            "detail": "cu ly 472 m trong [420.0, 610.0]",
+            "rule_id": "PD-1",
+            "severity": "DOWNGRADE",
+            "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)",
+            "status": "PASS"
+          },
+          {
+            "detail": "tai trong 250 g trong [0.0, 500.0]",
+            "rule_id": "PD-2",
+            "severity": "DOWNGRADE",
+            "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)",
+            "status": "PASS"
+          }
+        ],
+        "profile": "M100_stock"
+      },
+      "workflow_check": {
+        "check": "blocks_expired_weather",
+        "detail": "Transition blocked: WEATHER_EXPIRED; ASSESSMENT_NOT_ELIGIBLE",
+        "passed": true
+      },
+      "weather_issues": [
+        "WEATHER_EXPIRED"
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Đến đúng thời điểm hết hiệu lực của dữ liệu thời tiết thì đánh giá bị chặn.",
+    "limitation": "Đây là ca thử phần mềm có đầu vào/thời tiết giả lập; không có ID D4 và không phải chuyến bay thật. Khi không có bản trước, không suy diễn quyết định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\replay_workflow_20261026_03\\snapshots\\expired_weather.json",
+      "record_index": null,
+      "locator": {
+        "assessment_id": "expired_weather",
+        "workflow_check": "blocks_expired_weather"
+      }
+    },
+    "diagnostic_only": false,
+    "operational_recommendation": false,
+    "case_id": "FC-028"
+  },
+  {
+    "scenario_id": null,
+    "assessment_id": "missing_weather_window",
+    "category": "missing_or_stale_input",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_SYNTHETIC_WORKFLOW_FIXTURE",
+    "event_kind": "WORKFLOW_BLOCK",
+    "baseline_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.7,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "changed_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.7,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "perturbation_and_source": {
+      "fixture": "missing_weather_window",
+      "weather": {
+        "observed_at": "2026-10-26T00:55:00+00:00",
+        "source": "SYNTHETIC_TEST_FIXTURE"
+      },
+      "assessed_at": "2026-10-26T01:00:00+00:00",
+      "previous_assessment_id": null
+    },
+    "reference_model": "NOT_APPLICABLE_WORKFLOW_CHECK",
+    "reference_details": null,
+    "baseline_verdict": null,
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "INSUFFICIENT_DATA",
+      "verdict_changed": null,
+      "reserve_shortfall": null,
+      "workflow_blocked": true
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 47.877986897317015,
+      "margin_after_Wh": 47.877986897317015,
+      "reserve_slack_before_Wh": null,
+      "reserve_slack_after_Wh": null
+    },
+    "rule_results": {
+      "origin": "Stored assessment and completed workflow check",
+      "checks": {
+        "checks": [
+          {
+            "detail": "gio du bao 3 m/s <= 10.0 m/s",
+            "rule_id": "HR-1",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "nhiet do moi truong 15 C trong [-10.0, 40.0]",
+            "rule_id": "HR-2",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "khoi luong cat canh 2605 g <= MTOW 3600 g",
+            "rule_id": "HR-3",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "toc do ra lenh 8 m/s <= 17.0 m/s",
+            "rule_id": "HR-4",
+            "severity": "VETO",
+            "source": "DJI (che do GPS)",
+            "status": "PASS"
+          },
+          {
+            "detail": "nang luong kha dung 66.13 Wh >= nang luong ha canh 2.93 Wh (tu 50 m)",
+            "rule_id": "PH-1",
+            "severity": "VETO",
+            "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)",
+            "status": "PASS"
+          },
+          {
+            "detail": "cu ly 472 m trong [420.0, 610.0]",
+            "rule_id": "PD-1",
+            "severity": "DOWNGRADE",
+            "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)",
+            "status": "PASS"
+          },
+          {
+            "detail": "tai trong 250 g trong [0.0, 500.0]",
+            "rule_id": "PD-2",
+            "severity": "DOWNGRADE",
+            "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)",
+            "status": "PASS"
+          }
+        ],
+        "profile": "M100_stock"
+      },
+      "workflow_check": {
+        "check": "blocks_missing_weather_window",
+        "detail": "Transition blocked: WEATHER_MISSING_OR_INVALID_TIMESTAMPS; ASSESSMENT_NOT_ELIGIBLE",
+        "passed": true
+      },
+      "weather_issues": [
+        "WEATHER_MISSING_OR_INVALID_TIMESTAMPS"
+      ]
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Không có thời điểm hết hiệu lực của thời tiết; hệ thống không tự điền thời hạn.",
+    "limitation": "Đây là ca thử phần mềm có đầu vào/thời tiết giả lập; không có ID D4 và không phải chuyến bay thật. Khi không có bản trước, không suy diễn quyết định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\replay_workflow_20261026_03\\snapshots\\missing_weather_window.json",
+      "record_index": null,
+      "locator": {
+        "assessment_id": "missing_weather_window",
+        "workflow_check": "blocks_missing_weather_window"
+      }
+    },
+    "diagnostic_only": false,
+    "operational_recommendation": false,
+    "case_id": "FC-029"
+  },
+  {
+    "scenario_id": null,
+    "assessment_id": "conditional_fake_mitigation",
+    "category": "missing_or_stale_input",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_SYNTHETIC_WORKFLOW_FIXTURE",
+    "event_kind": "WORKFLOW_BLOCK",
+    "baseline_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.235,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "changed_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.24,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "perturbation_and_source": {
+      "fixture": "conditional_fake_mitigation",
+      "weather": {
+        "observed_at": "2026-10-26T00:55:00+00:00",
+        "source": "SYNTHETIC_TEST_FIXTURE",
+        "valid_until": "2026-10-26T01:30:00+00:00"
+      },
+      "assessed_at": "2026-10-26T01:02:00+00:00",
+      "previous_assessment_id": "conditional"
+    },
+    "reference_model": "NOT_APPLICABLE_WORKFLOW_CHECK",
+    "reference_details": null,
+    "baseline_verdict": "CONDITIONAL",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": false,
+      "reserve_shortfall": null,
+      "workflow_blocked": true
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 3.950163692317016,
+      "margin_after_Wh": 4.422505877317011,
+      "reserve_slack_before_Wh": null,
+      "reserve_slack_after_Wh": null
+    },
+    "rule_results": {
+      "origin": "Stored assessment and completed workflow check",
+      "checks": {
+        "checks": [
+          {
+            "detail": "gio du bao 3 m/s <= 10.0 m/s",
+            "rule_id": "HR-1",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "nhiet do moi truong 15 C trong [-10.0, 40.0]",
+            "rule_id": "HR-2",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "khoi luong cat canh 2605 g <= MTOW 3600 g",
+            "rule_id": "HR-3",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "toc do ra lenh 8 m/s <= 17.0 m/s",
+            "rule_id": "HR-4",
+            "severity": "VETO",
+            "source": "DJI (che do GPS)",
+            "status": "PASS"
+          },
+          {
+            "detail": "nang luong kha dung 22.67 Wh >= nang luong ha canh 2.93 Wh (tu 50 m)",
+            "rule_id": "PH-1",
+            "severity": "VETO",
+            "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)",
+            "status": "PASS"
+          },
+          {
+            "detail": "cu ly 472 m trong [420.0, 610.0]",
+            "rule_id": "PD-1",
+            "severity": "DOWNGRADE",
+            "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)",
+            "status": "PASS"
+          },
+          {
+            "detail": "tai trong 250 g trong [0.0, 500.0]",
+            "rule_id": "PD-2",
+            "severity": "DOWNGRADE",
+            "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)",
+            "status": "PASS"
+          }
+        ],
+        "profile": "M100_stock"
+      },
+      "workflow_check": {
+        "check": "blocks_conditional_fake_mitigation",
+        "detail": "Transition blocked: ASSESSMENT_NOT_ELIGIBLE",
+        "passed": true
+      },
+      "weather_issues": []
+    },
+    "mitigation_if_valid": {
+      "source_assessment_id": "conditional_mitigated",
+      "action": {
+        "approved_at": "2026-10-26T01:01:00+00:00",
+        "approved_by_role": "REVIEWER",
+        "id": "M1"
+      },
+      "changed_inputs": {
+        "altitude_m": 50,
+        "ambient_temp_c": 15,
+        "battery_type": "TB47D",
+        "distance_2d_m": 472,
+        "payload_g": 250,
+        "profile": "M100_stock",
+        "reserve_factor": 0.2,
+        "soc": 0.24,
+        "soh": 0.95,
+        "speed_commanded_ms": 8,
+        "wind_forecast_ms": 3
+      },
+      "resulting_verdict": "CONDITIONAL",
+      "validated_in_saved_workflow": true,
+      "counterfactual_reference_validation": false
+    },
+    "explanation": "Chỉ điền một tên biện pháp tùy ý không làm CONDITIONAL được duyệt.",
+    "limitation": "Đây là ca thử phần mềm có đầu vào/thời tiết giả lập; không có ID D4 và không phải chuyến bay thật. Khi không có bản trước, không suy diễn quyết định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\replay_workflow_20261026_03\\snapshots\\conditional_fake_mitigation.json",
+      "record_index": null,
+      "locator": {
+        "assessment_id": "conditional_fake_mitigation",
+        "workflow_check": "blocks_conditional_fake_mitigation"
+      }
+    },
+    "diagnostic_only": false,
+    "operational_recommendation": false,
+    "case_id": "FC-030"
+  },
+  {
+    "scenario_id": null,
+    "assessment_id": "preflight_degraded",
+    "category": "missing_or_stale_input",
+    "battery_type": "TB47D",
+    "source_kind": "SAVED_SYNTHETIC_WORKFLOW_FIXTURE",
+    "event_kind": "WORKFLOW_BLOCK",
+    "baseline_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.7,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "changed_inputs": {
+      "altitude_m": 50,
+      "ambient_temp_c": 15,
+      "battery_type": "TB47D",
+      "distance_2d_m": 472,
+      "payload_g": 250,
+      "profile": "M100_stock",
+      "reserve_factor": 0.2,
+      "soc": 0.235,
+      "soh": 0.95,
+      "speed_commanded_ms": 8,
+      "wind_forecast_ms": 3
+    },
+    "perturbation_and_source": {
+      "fixture": "preflight_degraded",
+      "weather": {
+        "observed_at": "2026-10-26T00:55:00+00:00",
+        "source": "SYNTHETIC_TEST_FIXTURE",
+        "valid_until": "2026-10-26T01:30:00+00:00"
+      },
+      "assessed_at": "2026-10-26T01:02:00+00:00",
+      "previous_assessment_id": "stock_fly"
+    },
+    "reference_model": "NOT_APPLICABLE_WORKFLOW_CHECK",
+    "reference_details": null,
+    "baseline_verdict": "FLY",
+    "changed_verdict_or_reserve_failure": {
+      "reassessed_verdict": "CONDITIONAL",
+      "verdict_changed": true,
+      "reserve_shortfall": null,
+      "workflow_blocked": true
+    },
+    "margin_before_after": {
+      "margin_before_Wh": 47.877986897317015,
+      "margin_after_Wh": 3.950163692317016,
+      "reserve_slack_before_Wh": null,
+      "reserve_slack_after_Wh": null
+    },
+    "rule_results": {
+      "origin": "Stored assessment and completed workflow check",
+      "checks": {
+        "checks": [
+          {
+            "detail": "gio du bao 3 m/s <= 10.0 m/s",
+            "rule_id": "HR-1",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "nhiet do moi truong 15 C trong [-10.0, 40.0]",
+            "rule_id": "HR-2",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "khoi luong cat canh 2605 g <= MTOW 3600 g",
+            "rule_id": "HR-3",
+            "severity": "VETO",
+            "source": "DJI",
+            "status": "PASS"
+          },
+          {
+            "detail": "toc do ra lenh 8 m/s <= 17.0 m/s",
+            "rule_id": "HR-4",
+            "severity": "VETO",
+            "source": "DJI (che do GPS)",
+            "status": "PASS"
+          },
+          {
+            "detail": "nang luong kha dung 22.20 Wh >= nang luong ha canh 2.93 Wh (tu 50 m)",
+            "rule_id": "PH-1",
+            "severity": "VETO",
+            "source": "P§4.6 (nguyen tac) + src/physics_m100.py (con so)",
+            "status": "PASS"
+          },
+          {
+            "detail": "cu ly 472 m trong [420.0, 610.0]",
+            "rule_id": "PD-1",
+            "severity": "DOWNGRADE",
+            "source": "thi nghiem E2c cua nhom (bo sung ngoai giao thuc thay)",
+            "status": "PASS"
+          },
+          {
+            "detail": "tai trong 250 g trong [0.0, 500.0]",
+            "rule_id": "PD-2",
+            "severity": "DOWNGRADE",
+            "source": "do phu bo du lieu CMU (reports/parameter_table.md muc 5)",
+            "status": "PASS"
+          }
+        ],
+        "profile": "M100_stock"
+      },
+      "workflow_check": {
+        "check": "blocks_preflight_degraded",
+        "detail": "Transition blocked: ASSESSMENT_NOT_ELIGIBLE",
+        "passed": true
+      },
+      "weather_issues": []
+    },
+    "mitigation_if_valid": null,
+    "explanation": "Đánh giá lại xấu hơn đánh giá FLY đã được duyệt trước đó; quyền duyệt cũ không chuyển sang bản mới.",
+    "limitation": "Đây là ca thử phần mềm có đầu vào/thời tiết giả lập; không có ID D4 và không phải chuyến bay thật. Khi không có bản trước, không suy diễn quyết định ban đầu.",
+    "mc_context": null,
+    "source": {
+      "file": "reports\\d5\\replay_workflow_20261026_03\\snapshots\\preflight_degraded.json",
+      "record_index": null,
+      "locator": {
+        "assessment_id": "preflight_degraded",
+        "workflow_check": "blocks_preflight_degraded"
+      }
+    },
+    "diagnostic_only": false,
+    "operational_recommendation": false,
+    "case_id": "FC-031"
+  }
+]

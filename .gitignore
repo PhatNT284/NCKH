@@ -3,6 +3,26 @@ data/raw/
 data/processed/
 *.csv.gz
 
+# D5: cac lan chay, kho replay va ban khoi phuc chi giu cuc bo.
+# Chi dua ban bao cao nho, co lien ket tuong doi len GitHub.
+/reports/d5/*
+!/reports/d5/README.md
+!/reports/d5/published/
+
+# D6: kho ma/model va ban ghi tung lan chay giu cuc bo; chia se bang chung nho.
+/reports/d6/*
+!/reports/d6/README.md
+!/reports/d6/published/
+
+# D6: ban du phong khi don dep chi giu cuc bo.
+/reports/_archive/d6_cleanup_20261028/
+/reports/_archive/d6_cleanup_20261028.zip
+
+# File xuat thu va chan doan Excel khong dua len Git.
+/outputs/
+*.inspect.ndjson
+~$*
+
 # Python
 .venv/
 __pycache__/

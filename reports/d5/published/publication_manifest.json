@@ -1,0 +1,145 @@
+{
+  "kind": "READING_COPY_NOT_FULL_EXPERIMENT_ARCHIVE",
+  "created_at_utc": "2026-10-26T15:54:45.177467+00:00",
+  "source_summary": "reports/d5/summary_20261026_02",
+  "source_evidence_manifest_sha256": "ac307f009c3d32dd5f893b57f2af77df69c7c70f79fe9613e717d99c44051304",
+  "source_report_sha256": "bb0a613073943eec34bd4cab63b2453966e8e944a343020f06727d4380961d25",
+  "protocol_version": "0.6.1",
+  "final_d5_complete": false,
+  "cross_check_status": "PENDING",
+  "source_runs": {
+    "mc": "all_scenarios_dev_01",
+    "review": "fly_reserve_review_20261025_01",
+    "oat": "oat_all_scenarios_20261025_01",
+    "replay": "replay_workflow_20261026_03",
+    "catalogue": "failure_catalogue_20261026_03",
+    "matched": "matched_counterfactual_20261026_01"
+  },
+  "raw_results_included": false,
+  "simulation_rerun": false,
+  "path_policy": "Repository-relative source paths; external proposal identified by filename; CSV/JSON metadata normalized, not original archive bytes",
+  "repository_link_dependencies": [
+    {
+      "path": "../../parameter_table.md",
+      "sha256": "96d29afe9830f7a8e2ddf4055ad65bc28e5e0545acbac637144918591f5c01a2"
+    }
+  ],
+  "exported_evidence_files": [
+    {
+      "source_path": "reports/d5/summary_20261026_02/figures/sensitivity_ranking.png",
+      "source_sha256": "cca7f91512a5999e198230829fdc5be215b39847ef40435f8b426bf542c1f4a2",
+      "published_path": "figures/sensitivity_ranking.png",
+      "published_sha256": "cca7f91512a5999e198230829fdc5be215b39847ef40435f8b426bf542c1f4a2",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/summary_20261026_02/figures/verdict_transitions.png",
+      "source_sha256": "013227d632b8a3401bcd659c680d2152f5a1c31fbe18815b67bb87631577b612",
+      "published_path": "figures/verdict_transitions.png",
+      "published_sha256": "013227d632b8a3401bcd659c680d2152f5a1c31fbe18815b67bb87631577b612",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/summary_20261026_02/figures/false_safe_vs_reserve.png",
+      "source_sha256": "f00398616d101d1551a88d8d5a2118078bb60f2e9dfed297abe394ee78336297",
+      "published_path": "figures/false_safe_vs_reserve.png",
+      "published_sha256": "f00398616d101d1551a88d8d5a2118078bb60f2e9dfed297abe394ee78336297",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/failure_catalogue_20261026_03/failure_cases_explained.csv",
+      "source_sha256": "d916bd66dd9e5aaec8d1fe9ed29e0f5ef30c95c137ee7c7aa9680e1305ae1562",
+      "published_path": "tables/failure_cases_explained.csv",
+      "published_sha256": "ac6b2c9512a9b4b0b157da824a2bc56f259054b5d38832f490d12e38100879d4",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/failure_catalogue_20261026_03/failure_catalogue.json",
+      "source_sha256": "5771fd3306f41f38bee1c6387d12f059dc9086216452c11ba665ca39c63cb474",
+      "published_path": "audit/failure_catalogue.json",
+      "published_sha256": "e5b236da08a0d9a63b1ef4fd6b020966582928d81b851fbdc8c9f2e7495656f9",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/summary_20261026_02/d5_acceptance_checklist.csv",
+      "source_sha256": "12170bd508f1803e0369b71281892bd56acdeb7a97de671fc6a8e9c32d74d498",
+      "published_path": "tables/d5_acceptance_checklist.csv",
+      "published_sha256": "603e1ea93852b3980b5f00afbf8e54f787b90e16457ef99b059f74d6560e18e5",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/mc_csv_recovery_20261026_01/recovery_audit.json",
+      "source_sha256": "cd248672cda49d33d81add5eab20dd0b07d1468ae7cce3a2ba9b85681bc0e242",
+      "published_path": "audit/recovery_audit.json",
+      "published_sha256": "c341c12e958a4d41ab6f228a23e6cd509b1550240e657f7473b08b1f2eca48b0",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/figure_rebuild_20261026_01/figure_rebuild_audit.json",
+      "source_sha256": "b9b033014cf0a4705b738d881fc3d9c1e94907c9a55673e4812f39c6295771e0",
+      "published_path": "audit/figure_rebuild_audit.json",
+      "published_sha256": "7f56a012b40aaa3ab9bda239802693adfd7d8870ca3ecc095c2003495e56d87b",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/all_scenarios_dev_01/terminal_summary.csv",
+      "source_sha256": "44b8934aa9efeed35d6205d05b0ecc3f0b0dd8997a2cae7d523377481adbeb48",
+      "published_path": "tables/terminal_summary.csv",
+      "published_sha256": "aae3d7609f4a27c002437e5b810032bb0b7f48f3b7f4704406c58fcec218cbe6",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/oat_csv_recovery_20261026_01/fly_cases_explained.csv",
+      "source_sha256": "1baf70738b6fe7752d13df83b514f73dcd0d3cc962838ef4a17b323094379ffa",
+      "published_path": "tables/fly_cases_explained.csv",
+      "published_sha256": "1baf70738b6fe7752d13df83b514f73dcd0d3cc962838ef4a17b323094379ffa",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/replay_workflow_20261026_03/replay_results.csv",
+      "source_sha256": "baa509b6ce06b6c8660340c8f87582622ebfed1336de5ccff1c5fc0d1df0625f",
+      "published_path": "tables/replay_results.csv",
+      "published_sha256": "baa509b6ce06b6c8660340c8f87582622ebfed1336de5ccff1c5fc0d1df0625f",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/matched_counterfactual_20261026_01/battery_reference_examples.csv",
+      "source_sha256": "163bbe501497bf053fcb089d5065c91c8c721ce707ff986cf68fc4ab0be1282d",
+      "published_path": "tables/battery_reference_examples.csv",
+      "published_sha256": "163bbe501497bf053fcb089d5065c91c8c721ce707ff986cf68fc4ab0be1282d",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/matched_counterfactual_20261026_01/counterfactual_examples_explained.csv",
+      "source_sha256": "dc44c3b535f817e5cd1cc90f8a5774a7225966fd15536e50f2fc781e2bfc6a7b",
+      "published_path": "tables/counterfactual_examples_explained.csv",
+      "published_sha256": "dc44c3b535f817e5cd1cc90f8a5774a7225966fd15536e50f2fc781e2bfc6a7b",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    },
+    {
+      "source_path": "reports/d5/matched_counterfactual_20261026_01/counterfactual_case_summary.csv",
+      "source_sha256": "e9d3e242ab70caa1cf68bce9d2ffffb3757bab102bf2a688aff91ca8d56045e4",
+      "published_path": "tables/counterfactual_case_summary.csv",
+      "published_sha256": "e9d3e242ab70caa1cf68bce9d2ffffb3757bab102bf2a688aff91ca8d56045e4",
+      "transformation": "PNG bytes preserved; CSV/JSON local path prefixes removed, UTF-8 text normalized"
+    }
+  ],
+  "outputs": {
+    "audit/failure_catalogue.json": "e5b236da08a0d9a63b1ef4fd6b020966582928d81b851fbdc8c9f2e7495656f9",
+    "audit/figure_rebuild_audit.json": "7f56a012b40aaa3ab9bda239802693adfd7d8870ca3ecc095c2003495e56d87b",
+    "audit/recovery_audit.json": "c341c12e958a4d41ab6f228a23e6cd509b1550240e657f7473b08b1f2eca48b0",
+    "figures/false_safe_vs_reserve.png": "f00398616d101d1551a88d8d5a2118078bb60f2e9dfed297abe394ee78336297",
+    "figures/sensitivity_ranking.png": "cca7f91512a5999e198230829fdc5be215b39847ef40435f8b426bf542c1f4a2",
+    "figures/verdict_transitions.png": "013227d632b8a3401bcd659c680d2152f5a1c31fbe18815b67bb87631577b612",
+    "README.md": "08b776878a7592e53515c6a3fa59b490fbbe9d1df399ee4894d6c40b18034209",
+    "tables/battery_reference_examples.csv": "163bbe501497bf053fcb089d5065c91c8c721ce707ff986cf68fc4ab0be1282d",
+    "tables/counterfactual_case_summary.csv": "e9d3e242ab70caa1cf68bce9d2ffffb3757bab102bf2a688aff91ca8d56045e4",
+    "tables/counterfactual_examples_explained.csv": "dc44c3b535f817e5cd1cc90f8a5774a7225966fd15536e50f2fc781e2bfc6a7b",
+    "tables/d5_acceptance_checklist.csv": "603e1ea93852b3980b5f00afbf8e54f787b90e16457ef99b059f74d6560e18e5",
+    "tables/failure_cases_explained.csv": "ac6b2c9512a9b4b0b157da824a2bc56f259054b5d38832f490d12e38100879d4",
+    "tables/fly_cases_explained.csv": "1baf70738b6fe7752d13df83b514f73dcd0d3cc962838ef4a17b323094379ffa",
+    "tables/replay_results.csv": "baa509b6ce06b6c8660340c8f87582622ebfed1336de5ccff1c5fc0d1df0625f",
+    "tables/terminal_summary.csv": "aae3d7609f4a27c002437e5b810032bb0b7f48f3b7f4704406c58fcec218cbe6",
+    "d5_robustness_report.md": "11ea31f27fc40d209a06b22dbd0c3d6acc5fcb71831ea6748cfec592a3176cea"
+  }
+}

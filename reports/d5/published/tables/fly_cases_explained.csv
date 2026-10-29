@@ -1,0 +1,458 @@
+﻿ID,Loai_pin,Ty_le_MC_thieu_min,Ty_le_MC_thieu_max,Phan_du_nang_luong_don_le,Kappa_don_le,SoC_don_le,SoH_don_le,Gio_don_le,Dien_giai
+2681,TB47D,0.1859,0.1916,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+6105,TB47D,0.1873,0.1907,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+10481,TB47D,0.1793,0.1907,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5276,TB47D,0.1753,0.1819,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+8121,TB47D,0.174,0.1766,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+1369,TB47D,0.1665,0.1758,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+7940,TB47D,0.1704,0.1756,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2099,TB47D,0.1644,0.1735,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+4443,TB47D,0.1542,0.1585,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+1356,TB47D,0.1438,0.1469,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6749,TB47D,0.1355,0.145,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7378,TB47D,0.1387,0.145,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3863,TB47D,0.1327,0.142,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2914,TB47D,0.129,0.1381,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+9773,TB47D,0.1267,0.1323,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4637,TB47D,0.1284,0.132,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+218,TB47D,0.1248,0.1293,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8794,TB47D,0.1223,0.1291,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4461,TB47D,0.1253,0.129,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5722,TB47D,0.1234,0.128,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10030,TB47D,0.1203,0.1252,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9465,TB47D,0.1199,0.1244,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11938,TB47D,0.1205,0.124,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5972,TB47D,0.1115,0.1233,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3133,TB47D,0.1121,0.1203,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4856,TB47D,0.104,0.1076,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11825,TB47D,0.1021,0.1056,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7759,TB47D,0.0927,0.0995,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9778,TB47D,0.0867,0.096,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5454,TB47D,0.0847,0.0912,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2823,TB47D,0.0857,0.0904,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6618,TB47D,0.0855,0.0888,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9521,TB47D,0.0832,0.0882,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1858,TB47D,0.0836,0.0855,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9760,TB47D,0.0788,0.0854,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4186,TB47D,0.0834,0.0845,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4853,TB47D,0.0713,0.0763,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8815,TB47D,0.07,0.0759,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6676,TB47D,0.0706,0.0742,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11555,TB47D,0.0614,0.0737,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9684,TB47D,0.0686,0.0732,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2885,TB47D,0.0619,0.0704,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11491,TB47D,0.0658,0.069,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1071,TB47D,0.0644,0.0684,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11910,TB47D,0.0644,0.0668,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11284,TB47D,0.0621,0.0661,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6069,TB47D,0.0618,0.0642,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8341,TB47D,0.0603,0.064,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11400,TB47D,0.0572,0.062,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+888,TB47D,0.0549,0.0607,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6552,TB47D,0.0556,0.0602,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9531,TB47D,0.0525,0.0586,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1844,TB47D,0.0533,0.0578,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3015,TB47D,0.0511,0.0578,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3955,TB47D,0.0528,0.0575,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+12332,TB47D,0.0511,0.0567,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8247,TB47D,0.0514,0.0557,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10459,TB47D,0.0516,0.0552,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7790,TB47D,0.0523,0.0548,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5008,TB47D,0.0521,0.0546,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4305,TB47D,0.0489,0.0515,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5626,TB47D,0.0447,0.0492,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3771,TB47D,0.0468,0.0491,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7130,TB47D,0.0414,0.0467,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6313,TB47D,0.0411,0.0439,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10601,TB47D,0.0377,0.0424,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7585,TB47D,0.0394,0.0417,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6187,TB47D,0.0366,0.0411,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7410,TB47D,0.0385,0.0408,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5465,TB47D,0.0395,0.0404,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10687,TB47D,0.0358,0.039,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1166,TB47D,0.0378,0.0387,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9796,TB47D,0.0331,0.0365,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11388,TB47D,0.0322,0.0354,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+301,TB47D,0.0299,0.0353,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8454,TB47D,0.03,0.0332,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11208,TB47D,0.0295,0.0329,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+778,TB47D,0.0292,0.0327,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1880,TB47D,0.0241,0.0293,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8197,TB47D,0.0214,0.0273,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11292,TB47D,0.0225,0.0259,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4168,TB47D,0.0233,0.0249,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+12074,TB47D,0.0209,0.0239,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7322,TB47D,0.0186,0.0237,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1991,TB47D,0.02,0.023,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6853,TB47D,0.02,0.023,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8992,TB47D,0.0199,0.0229,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1167,TB47D,0.0194,0.0223,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1767,TB47D,0.0205,0.0222,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2922,TB47D,0.0171,0.0219,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10159,TB47D,0.0193,0.0212,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7977,TB47D,0.0174,0.0206,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11299,TB47D,0.0185,0.0198,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9950,TB47D,0.0183,0.0194,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4425,TB47D,0.0161,0.0193,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8886,TB47D,0.0152,0.0188,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+82,TB47D,0.0174,0.0181,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11121,TB47D,0.0131,0.0167,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6978,TB47D,0.0151,0.0166,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5052,TB47D,0.0136,0.0165,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6384,TB47D,0.0134,0.0164,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8295,TB47D,0.014,0.0159,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8329,TB47D,0.0127,0.0159,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9140,TB47D,0.0111,0.0148,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9767,TB47D,0.0131,0.0144,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8666,TB47D,0.0117,0.0143,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11923,TB47D,0.0126,0.0142,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12312,TB47D,0.0137,0.0142,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8813,TB47D,0.0122,0.0136,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10699,TB47D,0.0117,0.0134,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10084,TB47D,0.0116,0.013,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+255,TB47D,0.0095,0.0125,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2915,TB47D,0.0113,0.012,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7497,TB47D,0.0103,0.012,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3410,TB47D,0.0102,0.0119,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1361,TB47D,0.0094,0.0117,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2972,TB47D,0.0097,0.0114,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7292,TB47D,0.0105,0.0108,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7824,TB47D,0.0085,0.0106,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6053,TB47D,0.0072,0.0102,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6826,TB47D,0.0083,0.0101,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11409,TB47D,0.0063,0.0091,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+704,TB47D,0.0084,0.009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6342,TB47D,0.0073,0.009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11434,TB47D,0.0052,0.0088,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1849,TB47D,0.0076,0.0086,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6859,TB47D,0.0053,0.0081,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7166,TB47D,0.0063,0.0081,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10775,TB47D,0.0068,0.0081,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5291,TB47D,0.0069,0.0079,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4469,TB47D,0.0056,0.0076,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11960,TB47D,0.006,0.0074,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5298,TB47D,0.0057,0.0069,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+370,TB47D,0.0051,0.0067,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3204,TB47D,0.0046,0.0067,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12488,TB47D,0.0056,0.0067,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11065,TB47D,0.0055,0.0064,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5083,TB47D,0.0055,0.0063,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1646,TB47D,0.0051,0.0061,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1965,TB47D,0.0042,0.0061,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6153,TB47D,0.0053,0.0061,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9016,TB47D,0.0036,0.0061,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1124,TB47D,0.0049,0.0057,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3325,TB47D,0.0035,0.0056,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9097,TB47D,0.0041,0.0056,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9527,TB47D,0.0041,0.0056,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1581,TB47D,0.0041,0.0055,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11356,TB47D,0.0049,0.0055,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2527,TB47D,0.005,0.0052,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12049,TB47D,0.005,0.0051,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6735,TB47D,0.0044,0.005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8427,TB47D,0.0044,0.0049,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1095,TB47D,0.0046,0.0048,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4648,TB47D,0.0039,0.0048,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7894,TB47D,0.0042,0.0047,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10838,TB47D,0.003,0.0045,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1482,TB47D,0.0039,0.0044,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8126,TB47D,0.0035,0.0043,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12467,TB47D,0.0033,0.0043,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4204,TB47D,0.0025,0.0042,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1294,TB47D,0.0031,0.0041,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11408,TB47D,0.003,0.0041,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11217,TB47D,0.0021,0.0038,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12087,TB47D,0.0028,0.0037,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5463,TB47D,0.0029,0.0035,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4611,TB47D,0.0034,0.0034,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9538,TB47D,0.0026,0.0034,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2618,TB47D,0.0026,0.0033,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6890,TB47D,0.0022,0.0033,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11655,TB47D,0.002,0.0032,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7139,TB47D,0.0016,0.0031,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5082,TB47D,0.0022,0.003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+476,TB47D,0.0015,0.0029,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1589,TB47D,0.0017,0.0027,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3302,TB47D,0.0026,0.0027,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8397,TB47D,0.0021,0.0026,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+447,TB47D,0.0011,0.0023,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1728,TB47D,0.0018,0.0022,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7647,TB47D,0.001,0.0022,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+802,TB47D,0.0017,0.0021,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7475,TB47D,0.002,0.0021,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6106,TB47D,0.0006,0.002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12070,TB47D,0.0013,0.002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2977,TB47D,0.001,0.0019,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6081,TB47D,0.0017,0.0019,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9361,TB47D,0.0017,0.0019,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7388,TB47D,0.0013,0.0018,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2736,TB47D,0.0009,0.0016,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10287,TB47D,0.0005,0.0016,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11520,TB47D,0.0008,0.0016,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1315,TB47D,0.0011,0.0015,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2187,TB47D,0.0007,0.0015,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8590,TB47D,0.0009,0.0014,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10904,TB47D,0.001,0.0014,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11200,TB47D,0.0009,0.0014,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5949,TB47D,0.0008,0.0013,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10693,TB47D,0.0007,0.0013,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11533,TB47D,0.0005,0.0013,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6443,TB47D,0.0004,0.0012,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8780,TB47D,0.0006,0.0011,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+105,TB47D,0.0001,0.001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4782,TB47D,0.0006,0.001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7783,TB47D,0.0001,0.001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+277,TB47D,0.0003,0.0009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8924,TB47D,0.0005,0.0009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9638,TB47D,0.0006,0.0009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3833,TB47D,0.0002,0.0008,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7918,TB47D,0.0001,0.0008,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9358,TB47D,0.0004,0.0007,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9696,TB47D,0.0001,0.0007,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2449,TB47D,0.0002,0.0006,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11844,TB47D,0.0003,0.0006,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1758,TB47D,0.0002,0.0005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5159,TB47D,0.0004,0.0005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8515,TB47D,0.0001,0.0005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2012,TB47D,0.0,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3604,TB47D,0.0001,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8245,TB47D,0.0001,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8643,TB47D,0.0002,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8910,TB47D,0.0001,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11572,TB47D,0.0,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+851,TB47D,0.0,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1097,TB47D,0.0,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1155,TB47D,0.0001,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2716,TB47D,0.0001,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8481,TB47D,0.0001,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9355,TB47D,0.0002,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3485,TB47D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6014,TB47D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6857,TB47D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7622,TB47D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9070,TB47D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12151,TB47D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+403,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1937,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2375,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2506,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3293,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5111,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6294,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6930,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6947,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7013,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8003,TB47D,0.0001,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8648,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11535,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11642,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12432,TB47D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4757,TB48D,0.2432,0.2516,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+10223,TB48D,0.2036,0.2205,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+10503,TB48D,0.1976,0.1978,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+630,TB48D,0.1893,0.1969,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+11011,TB48D,0.1842,0.1931,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+1305,TB48D,0.1784,0.1845,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+10255,TB48D,0.1737,0.1828,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+11441,TB48D,0.1705,0.1789,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+5676,TB48D,0.1665,0.1779,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+6898,TB48D,0.1754,0.1763,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+5897,TB48D,0.1723,0.1762,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+2682,TB48D,0.1688,0.1698,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+5468,TB48D,0.1595,0.1641,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+7450,TB48D,0.1586,0.163,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+2837,TB48D,0.1582,0.1615,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+9322,TB48D,0.1508,0.1552,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+5007,TB48D,0.1353,0.1449,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+4199,TB48D,0.1375,0.142,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+10542,TB48D,0.1251,0.132,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+11445,TB48D,0.1277,0.1314,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+8181,TB48D,0.124,0.1313,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10415,TB48D,0.1277,0.1311,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+7902,TB48D,0.1239,0.129,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5853,TB48D,0.1216,0.128,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+2995,TB48D,0.1179,0.123,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5617,TB48D,0.1073,0.122,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+12045,TB48D,0.1108,0.1161,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11331,TB48D,0.1036,0.1113,True,False,True,False,False,"Có điểm thiếu dự trữ khi chỉ thay riêng: Sai lệch SoC, Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc."
+5842,TB48D,0.108,0.1104,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10874,TB48D,0.1024,0.1071,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3484,TB48D,0.1013,0.1049,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3889,TB48D,0.0997,0.1048,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+12547,TB48D,0.0906,0.1037,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2594,TB48D,0.0955,0.0997,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6344,TB48D,0.0877,0.0972,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+541,TB48D,0.0908,0.0957,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4502,TB48D,0.092,0.0939,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6561,TB48D,0.0855,0.0899,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4444,TB48D,0.0809,0.0892,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+620,TB48D,0.0813,0.0884,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2789,TB48D,0.0865,0.088,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4738,TB48D,0.0771,0.0827,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2877,TB48D,0.077,0.0782,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+290,TB48D,0.0738,0.0776,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1069,TB48D,0.0748,0.0773,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7773,TB48D,0.0699,0.0748,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11321,TB48D,0.0694,0.0724,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+12540,TB48D,0.0651,0.0685,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7010,TB48D,0.0569,0.0654,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9342,TB48D,0.0546,0.0621,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8647,TB48D,0.0607,0.0614,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10065,TB48D,0.055,0.0601,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+10648,TB48D,0.0564,0.0591,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+669,TB48D,0.0559,0.0583,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7321,TB48D,0.0534,0.0564,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7888,TB48D,0.0533,0.0557,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1831,TB48D,0.0494,0.054,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+1164,TB48D,0.0503,0.0513,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9069,TB48D,0.045,0.0478,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11057,TB48D,0.0425,0.046,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2484,TB48D,0.0433,0.0446,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+8357,TB48D,0.0394,0.0443,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+12000,TB48D,0.0356,0.0404,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6816,TB48D,0.0334,0.0373,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+5666,TB48D,0.0351,0.037,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7823,TB48D,0.0332,0.035,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6473,TB48D,0.0322,0.0346,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+3621,TB48D,0.0285,0.0321,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4806,TB48D,0.0269,0.0319,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+2850,TB48D,0.0262,0.0317,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3413,TB48D,0.0287,0.0314,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6312,TB48D,0.0286,0.0312,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11056,TB48D,0.0286,0.0309,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+11720,TB48D,0.0274,0.0307,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+4729,TB48D,0.0283,0.0297,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+12536,TB48D,0.0262,0.028,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2523,TB48D,0.0228,0.0263,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+386,TB48D,0.0236,0.026,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9407,TB48D,0.0216,0.0258,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7217,TB48D,0.0227,0.0253,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5637,TB48D,0.0227,0.0249,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9057,TB48D,0.0221,0.024,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+821,TB48D,0.0191,0.0236,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+317,TB48D,0.0193,0.0217,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+9280,TB48D,0.0187,0.0202,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+188,TB48D,0.0157,0.0194,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7595,TB48D,0.0172,0.0192,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3408,TB48D,0.0158,0.018,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9187,TB48D,0.0156,0.0175,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+7840,TB48D,0.0123,0.0142,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5705,TB48D,0.0125,0.0141,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1426,TB48D,0.0122,0.0134,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5683,TB48D,0.0111,0.0131,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12534,TB48D,0.0101,0.0124,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11026,TB48D,0.0112,0.0119,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12416,TB48D,0.0105,0.0111,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3571,TB48D,0.0081,0.011,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3456,TB48D,0.0093,0.0108,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1866,TB48D,0.0096,0.0107,True,False,False,False,False,Có điểm thiếu dự trữ khi chỉ thay riêng: Phần dư năng lượng OOF. Các yếu tố khác giữ ở đầu vào gốc.
+6637,TB48D,0.0079,0.0098,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7357,TB48D,0.0081,0.0097,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9960,TB48D,0.0074,0.0094,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4858,TB48D,0.0071,0.0092,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4614,TB48D,0.0078,0.009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9938,TB48D,0.0079,0.009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4724,TB48D,0.0067,0.0083,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6516,TB48D,0.0066,0.0083,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+367,TB48D,0.006,0.0081,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10563,TB48D,0.0066,0.0078,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5764,TB48D,0.0063,0.0076,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1547,TB48D,0.0047,0.0071,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+279,TB48D,0.0065,0.007,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2930,TB48D,0.0043,0.0067,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6540,TB48D,0.0056,0.0066,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1891,TB48D,0.0055,0.0065,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3178,TB48D,0.0052,0.0062,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1863,TB48D,0.005,0.0059,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3148,TB48D,0.0044,0.0058,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3689,TB48D,0.0053,0.0058,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5435,TB48D,0.0052,0.0058,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12226,TB48D,0.0055,0.0058,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5980,TB48D,0.0038,0.0056,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1101,TB48D,0.0044,0.0055,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+590,TB48D,0.0045,0.0052,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3114,TB48D,0.0037,0.005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11773,TB48D,0.0048,0.005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4474,TB48D,0.0031,0.0048,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4563,TB48D,0.0035,0.0044,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10165,TB48D,0.004,0.0044,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2927,TB48D,0.0025,0.0042,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3060,TB48D,0.0032,0.0041,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2820,TB48D,0.0032,0.004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4985,TB48D,0.0032,0.0038,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5908,TB48D,0.0031,0.0038,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+661,TB48D,0.0025,0.0037,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3591,TB48D,0.002,0.0037,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11230,TB48D,0.0021,0.0037,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+295,TB48D,0.0024,0.0036,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9674,TB48D,0.0022,0.0035,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9716,TB48D,0.0024,0.0035,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4844,TB48D,0.0023,0.0034,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10120,TB48D,0.0019,0.0031,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7031,TB48D,0.0016,0.0029,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+997,TB48D,0.0019,0.0026,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2349,TB48D,0.0015,0.0026,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6520,TB48D,0.0014,0.0026,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9368,TB48D,0.0018,0.0026,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10094,TB48D,0.0022,0.0025,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11793,TB48D,0.0011,0.0025,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10754,TB48D,0.0012,0.0024,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8585,TB48D,0.0014,0.0023,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11770,TB48D,0.0021,0.0022,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6797,TB48D,0.0018,0.002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6971,TB48D,0.0014,0.002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8045,TB48D,0.0017,0.0018,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1821,TB48D,0.0011,0.0016,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10880,TB48D,0.0011,0.0016,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10089,TB48D,0.001,0.0015,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10570,TB48D,0.0008,0.0015,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9602,TB48D,0.0009,0.0014,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10912,TB48D,0.0005,0.0013,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+130,TB48D,0.001,0.0011,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5523,TB48D,0.0005,0.0011,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8198,TB48D,0.0005,0.0011,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5706,TB48D,0.0005,0.001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9430,TB48D,0.0004,0.001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6024,TB48D,0.0003,0.0009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7413,TB48D,0.0001,0.0009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8531,TB48D,0.0007,0.0009,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+333,TB48D,0.0002,0.0008,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+712,TB48D,0.0005,0.0008,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8404,TB48D,0.0003,0.0008,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10548,TB48D,0.0004,0.0008,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1329,TB48D,0.0005,0.0007,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7152,TB48D,0.0001,0.0007,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10138,TB48D,0.0004,0.0007,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11686,TB48D,0.0003,0.0007,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+869,TB48D,0.0,0.0005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11737,TB48D,0.0001,0.0005,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+692,TB48D,0.0,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1471,TB48D,0.0002,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+2164,TB48D,0.0001,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+4679,TB48D,0.0001,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5567,TB48D,0.0002,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7240,TB48D,0.0,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8167,TB48D,0.0001,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8307,TB48D,0.0002,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+9955,TB48D,0.0004,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12126,TB48D,0.0001,0.0004,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+537,TB48D,0.0002,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3714,TB48D,0.0,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6120,TB48D,0.0001,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11427,TB48D,0.0001,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11552,TB48D,0.0002,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12024,TB48D,0.0001,0.0003,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+1318,TB48D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+5022,TB48D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6491,TB48D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+6933,TB48D,0.0001,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+8771,TB48D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10367,TB48D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+10889,TB48D,0.0,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12317,TB48D,0.0001,0.0002,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+3264,TB48D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7325,TB48D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+7501,TB48D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+11486,TB48D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12090,TB48D,0.0,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.
+12382,TB48D,0.0001,0.0001,False,False,False,False,False,Không thiếu khi đổi riêng từng yếu tố trên lưới chính; có mẫu thiếu trong Monte Carlo phối hợp nhiều sai lệch.

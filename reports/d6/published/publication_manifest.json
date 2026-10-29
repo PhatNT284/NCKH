@@ -1,0 +1,32 @@
+{
+  "status": "TECHNICAL_VALIDATION_PASSED",
+  "cross_check_status": "PENDING",
+  "owner": "Duy",
+  "cross_checker": "Phat",
+  "source_run": "reports/d6/validation_20261027_02",
+  "source_manifest_sha256": "ea7605acc99eb1089faf92b81bab3bedb85c10cb3c9ba2937b8733c37611807f",
+  "schema_version": "1.0.0",
+  "schema_sha256": "13af21553e6e466b13b4a06f48404db2151321e82ffbaf8053a5ce2d297ee2b2",
+  "tests_passed": 108,
+  "tests_failed": 0,
+  "records_validated": 12,
+  "checks_passed": 12,
+  "max_absolute_difference": 0,
+  "replay_requires_full_local_store": true,
+  "source_files": {
+    "src/mission_schema.py": "50236e9e7a8d31c4556232def6a62dc7edcf3f3ed4afb7e5762faeadb9ac8ad0",
+    "src/d6_validation.py": "ba4f483b732f1a8a6fc5cfbd1b86d75a0f8071b7697a1fa760c8887d94814566",
+    "schemas/mission_record/1.0.0.json": "13af21553e6e466b13b4a06f48404db2151321e82ffbaf8053a5ce2d297ee2b2",
+    "tests/test_mission_schema.py": "02e1679b0394d69c102d1089bcd5b68c5927f916451fae09c377640a8f3a2f91",
+    "src/mission_record.py": "e5373a709f5600716deef3779adab09efbff24348975456dddd75084af47e8ec",
+    "tests/test_mission_record.py": "d61eb4937d226e03658c67353fe0980d0ef40691c6d44a66d5bd7663265dec97",
+    "requirements.txt": "3f1b3d19217e6bc4f2705b57a401ca686b279b698677afd6024b75ddbdca1b4f"
+  },
+  "files": {
+    "checks.json": "45d15ef3508e24e1f1c152222b3bd52d7a0fedb992fa666887f6fc7ab4474f1d",
+    "d6_report.md": "44f79df546969ffe550b1adbf7159686aa4f2a640a17ae4488a57c168f7e7c1f",
+    "example_record.json": "ac2cb475ed7eaa5af94fbd9888516e87e199e21d7ec734beebabfcb4c935af97",
+    "replay_results.csv": "590a555ad442c3aa95daabb0b8b369fdcf752068ed8e0c4a40eff1df9f11d7b9",
+    "test_results.xml": "4203acf49951244f22bcf4a3115b613cd9006d5edec33e75bd14920c048ec21c"
+  }
+}

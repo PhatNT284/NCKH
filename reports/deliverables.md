@@ -7,6 +7,10 @@ Mở file này trước khi tìm bất cứ output nào.
 
 **Cập nhật:** 23/10/2026 (bản 4, sau khi hoàn thành D4) · tiến độ: xong tuần 1–9
 
+**Bổ sung 27/10/2026:** cập nhật riêng D6 và phân công D6 theo bàn giao 23/10;
+trạng thái các phần khác dưới đây giữ mốc lịch sử của tài liệu. D6 có bằng chứng
+kỹ thuật, kiểm tra chéo của Phát vẫn PENDING.
+
 ---
 
 ## Tổng quan
@@ -17,8 +21,8 @@ Mở file này trước khi tìm bất cứ output nào.
 | **D2** | Energy prediction benchmark | Phát | 4–6 | **NGHIỆM THU** 14/10/2026 |
 | **D3** | Safety-aware decision engine | Phát | 7 | **NGHIỆM THU** 20/10/2026 — 13/13 tiêu chí, Duy đã kiểm chéo |
 | **D4** | Scenario benchmark | Phát | 8–9 | **XONG 23/10/2026** — 6/6 tiêu chí, Duy ký nhãn tham chiếu 21/10 |
-| D5 | Robustness package | Phát | 10–11 | Chưa bắt đầu — **cổng chặn đã mở** |
-| D6 | Reproducible mission record | Phát | 11 | Chưa bắt đầu |
+| D5 | [Robustness package](d5/README.md) | Duy | 10–11 | Đã triển khai và có bằng chứng kỹ thuật; Phát kiểm tra chéo PENDING |
+| D6 | Reproducible mission record | Duy | 11 | Đã triển khai; [bằng chứng D6](d6/README.md), Phát kiểm tra chéo PENDING |
 | D7 | Prototype (tuỳ chọn) | Phát | 11 | Chưa bắt đầu |
 | D8 | Research paper | Cả nhóm | 12 | Chưa bắt đầu |
 | D9 | Reproducibility package | Cả nhóm | 12 | Chưa bắt đầu |
@@ -673,7 +677,8 @@ Sau khi đổi công thức REF-2 (quyết định C22), chữ ký được **re
 > Mục 12: *"boundary analysis, threshold sweeps, uncertainty/sensitivity plots,
 > and failure-case examples"*
 
-**Chưa bắt đầu. Cổng chặn đã mở** — D1 đến D4 đều xong. Người làm: Phát, tuần 10–11.
+**Cập nhật 29/10/2026:** Duy đã triển khai và tổng hợp bằng chứng kỹ thuật D5;
+Phát kiểm tra chéo PENDING, chưa nghiệm thu. Xem [báo cáo và hướng dẫn D5](d5/README.md).
 
 Module dự kiến: `src/uncertainty.py`
 
@@ -694,18 +699,20 @@ Nguyên liệu đã có:
 
 > Mục 12: *"versioned schema and deterministic replay tests"*
 
-**Chưa bắt đầu chính thức**, nhưng nền đã có: `src/workflow_state.py` →
-`MissionRecord` với bảy trường phiên bản, và INV-5 (tính lại từ bản ghi) đã đạt
-192/192. D6 sẽ mở rộng và kiểm đầy đủ.
+**Cập nhật 27/10/2026:** đã triển khai D6 trên nền snapshot/replay mới của D5
+(`src/mission_record.py`), không dùng API legacy `src/workflow_state.py` làm
+đường bằng chứng. Người làm: **Duy**; Phát kiểm tra chéo **PENDING**, chưa nghiệm thu.
 
-Người làm: Phát, tuần 11.
+- Lược đồ: `schemas/mission_record/1.0.0.json`.
+- Lưu/đọc/kiểm tra/replay: `src/mission_schema.py`.
+- Thực nghiệm: `src/d6_validation.py`; kiểm thử: `tests/test_mission_schema.py`
+  và `tests/test_mission_record.py`.
+- Hướng dẫn, ánh xạ proposal và bằng chứng: [D6](d6/README.md).
 
-**Phải xử lý ở D6 (OI-D4-6):** đầu vào thiếu trong CSV là `NaN`, không phải
-`None`. Tầng luật cứng của D3 kiểm `giá_trị is None`, và `NaN is None` là False,
-`NaN > 10.0` cũng là False — nên HR-1 từng báo PASS cho kịch bản gió không rõ,
-và B0 duyệt bay. D4 đã vá bằng `nan_sang_none()` tại 19 điểm gọi ở ranh giới
-D4↔D3; bản thân D3 để nguyên (đã nghiệm thu, hành vi trên đường chạy riêng của
-nó không bị ảnh hưởng). Đây là **bẫy tiềm ẩn** cho mọi đường dữ liệu mới.
+**OI-D4-6 trên đường D5/D6 mới:** giá trị NaN/infinity được chuẩn hóa thành
+null có dấu vết trước khi lưu JSON; đầu vào thiếu/sai được kiểm thử không tạo
+FLY. Tầng D3 legacy không được sửa, nên các đường tích hợp khác vẫn cần kiểm
+ranh giới dữ liệu; không coi đây là bản vá toàn bộ D3.
 
 ---
 

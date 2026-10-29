@@ -127,6 +127,10 @@ ghi *"Do not run the final decision benchmark until unit and rule tests pass"*.
 
 ## Tìm sản phẩm bàn giao ở đâu
 
+**D5 đang phát triển:** [báo cáo tổng hợp và các bảng nhỏ](reports/d5/published/README.md).
+Mã nguồn, protocol và kiểm thử D5 được giữ trong repo; dữ liệu lần chạy đầy đủ
+được lưu riêng, không commit. Bản chia sẻ chưa thay xác nhận kiểm tra chéo hoặc nghiệm thu.
+
 **`reports/deliverables.md`** — bảng tra từng mục D1–D9 của Mục 12 ứng với file
 nào trong repo, kèm trạng thái nghiệm thu theo Mục 12.1.
 
@@ -174,8 +178,8 @@ quyết định ở Mục 7. Không liên quan tới hai hệ trên. Và `B3…B
 | D2 | Benchmark dự báo năng lượng | Phát | **Nghiệm thu 14/10/2026** — đạt 4/4 tiêu chí |
 | D3 | Bộ máy quyết định | Phát | **Nghiệm thu 20/10/2026** — đạt 13/13 tiêu chí, Duy đã kiểm chéo |
 | D4 | Benchmark kịch bản | Phát | **XONG 23/10/2026** — đạt 6/6 tiêu chí, Duy ký nhãn tham chiếu 21/10 |
-| D5 | Gói độ bền vững | **Duy** | Chưa bắt đầu — tuần 10–11, **sản phẩm cốt lõi cuối** |
-| D6 | Bản ghi nhiệm vụ tái lập được | **Duy** | Chưa bắt đầu — tuần 11 |
+| D5 | [Gói độ bền vững](reports/d5/README.md) | **Duy** | Đã triển khai và có bằng chứng kỹ thuật; chờ Phát kiểm tra chéo, chưa nghiệm thu |
+| D6 | [Bản ghi nhiệm vụ tái lập được](reports/d6/README.md) | **Duy** | Đã triển khai lược đồ và replay; bằng chứng kiểm thử tại báo cáo D6, chờ Phát kiểm tra chéo |
 | D7 | Prototype | **Duy** | Tuỳ chọn — chỉ sau khi D5 nghiệm thu |
 
 Tiến độ theo tab 11 của `NCKH.xlsx`: **xong tuần 1–9**.

@@ -1,0 +1,6 @@
+﻿ID,Loai_pin,Bien_phap,Truoc,Sau,Quyet_dinh_truoc,Quyet_dinh_sau,Nhan_REF1_sau,Nhan_REF2_sau,Dat_REF1,Dat_REF2,Can_doi_thoi_tiet
+41,TB47D,Tăng mức pin,0.441744911953447,0.47,NO_FLY,FLY,feasible,infeasible,True,False,False
+41,TB47D,Đổi sang TB48D,TB47D,TB48D,NO_FLY,FLY,feasible,infeasible,True,False,False
+49,TB47D,Chờ nhiệt độ phù hợp,7.31825045961871,18.4,CONDITIONAL,FLY,marginal,infeasible,False,False,True
+41,TB47D,Giảm tải,460.6331954340471,250.0,NO_FLY,FLY,feasible,infeasible,True,False,False
+10,TB47D,Rút ngắn đường bay,775.5926866952068,610.0,CONDITIONAL,FLY,feasible,feasible,True,True,False

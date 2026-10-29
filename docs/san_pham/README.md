@@ -21,12 +21,12 @@ Thư mục này bám **Mục 12** của file thầy (*Expected deliverables*) v�
 | `D3_bo_may_quyet_dinh.md` | D3 — Safety-aware decision engine | Phát | **Nghiệm thu 20/10/2026** — 13/13, Duy ký kiểm chéo |
 | `D4_benchmark_kich_ban.md` | D4 — Scenario benchmark | Phát | **Xong 23/10/2026** — 6/6, Duy ký nhãn tham chiếu 21/10 |
 
-## Chưa bắt đầu
+## Các sản phẩm tiếp theo
 
 | Mã | Sản phẩm | Người | Tuần | Ghi chú |
 |---|---|---|---|---|
-| **D5** | Gói độ bền vững | **Duy** | 10–11 | **sản phẩm CỐT LÕI thứ năm** — xem cảnh báo dưới |
-| D6 | Bản ghi nhiệm vụ tái lập được | Duy | 11 | ngoài năm sản phẩm cốt lõi |
+| **D5** | [Gói độ bền vững](../../reports/d5/README.md) | **Duy** | 10–11 | Đã có bằng chứng kỹ thuật; chờ Phát kiểm tra chéo, chưa nghiệm thu |
+| D6 | [Bản ghi nhiệm vụ tái lập được](../../reports/d6/README.md) | Duy | 11 | Đã triển khai và có bộ kiểm thử; chờ Phát kiểm tra chéo |
 | D7 | Prototype | Duy | 11 | **tuỳ chọn** — Mục 12.1 ghi rõ không bắt buộc |
 | D8 | Research paper | Cả nhóm | 12 | |
 | D9 | Reproducibility package | Cả nhóm | 12 | |

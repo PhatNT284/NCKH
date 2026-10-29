@@ -1,0 +1,13 @@
+﻿assessment_id,artifact_id,expected_verdict,replayed_verdict,exact_verdict_match,all_outputs_match,mismatched_fields,max_absolute_difference,batch_seconds,batch_size,numerical_atol,numerical_rtol,schema_valid,serialization_round_trip,snapshot_preserved
+fly,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,FLY,FLY,True,True,[],0.0,1.6292588000014803,1,1e-08,1e-08,True,True,True
+tb48d,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,FLY,FLY,True,True,[],0.0,1.5757911000000604,1,1e-08,1e-08,True,True,True
+conditional,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,CONDITIONAL,CONDITIONAL,True,True,[],0.0,1.5393734000008408,1,1e-08,1e-08,True,True,True
+no_fly,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,NO_FLY,NO_FLY,True,True,[],0.0,1.5844233999996504,1,1e-08,1e-08,True,True,True
+wind_veto,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,NO_FLY,NO_FLY,True,True,[],0.0,1.5824964999992517,1,1e-08,1e-08,True,True,True
+missing_soc,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,INSUFFICIENT_DATA,INSUFFICIENT_DATA,True,True,[],0.0,1.586525700000493,1,1e-08,1e-08,True,True,True
+nan_wind,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,INSUFFICIENT_DATA,INSUFFICIENT_DATA,True,True,[],0.0,1.5509186999988742,1,1e-08,1e-08,True,True,True
+invalid_soc,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,NO_FLY,NO_FLY,True,True,[],0.0,1.5499300999999832,1,1e-08,1e-08,True,True,True
+expired_weather,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,INSUFFICIENT_DATA,INSUFFICIENT_DATA,True,True,[],0.0,1.5071638000008534,1,1e-08,1e-08,True,True,True
+cmu_diagnostic,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,FLY,FLY,True,True,[],0.0,1.5776948000002449,1,1e-08,1e-08,True,True,True
+reserve_boundary,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,CONDITIONAL,CONDITIONAL,True,True,[],0.0,1.6821206000004167,1,1e-08,1e-08,True,True,True
+preflight_reassessment,71cb885417d65213ec8fd9c9f98e2338d47ae60a6a729f0ff5c6186d1bff74df,CONDITIONAL,CONDITIONAL,True,True,[],0.0,1.6472622999990563,1,1e-08,1e-08,True,True,True

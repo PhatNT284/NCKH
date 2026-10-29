@@ -1,0 +1,13 @@
+# D5 verifies exact SHA-256 bytes of these frozen upstream inputs.
+# Preserve their archived bytes on every checkout, including line endings.
+configs/d2_protocol.yaml -text whitespace=cr-at-eol
+configs/d3_protocol.yaml -text whitespace=cr-at-eol
+configs/d4_protocol.yaml -text whitespace=cr-at-eol
+reports/d2_oof_residuals.csv -text whitespace=cr-at-eol
+reports/d4_scenarios.csv -text whitespace=cr-at-eol
+reports/d4_scenarios_labelled.csv -text whitespace=cr-at-eol
+reports/d4_d2_frozen_coefficients.csv -text whitespace=cr-at-eol
+
+# Published evidence has its own byte-level checksums.
+reports/d5/published/** -text whitespace=cr-at-eol
+reports/d6/published/** -text whitespace=cr-at-eol

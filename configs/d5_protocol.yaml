@@ -1,0 +1,1182 @@
+# =============================================================================
+# GIAO THUC SAN PHAM D5 — GOI DO BEN VUNG CUA QUYET DINH
+# =============================================================================
+# BAN NHAP — CHUA DONG BANG. Da co Monte Carlo, OAT va module snapshot/replay
+# + workflow D5. Cac lan chay hien tai la phat trien; chua nghiem thu E4/E5.
+#
+# QUY TAC: moi thay doi trong file nay PHAI
+#   (1) ghi ly do, version va ngay vao `change_log` o cuoi file,
+#   (2) doi chieu cac thi nghiem bi anh huong truoc khi bao ket qua cuoi,
+#   (3) duoc Phat kiem cheo khi dong bang D5, theo ban giao 23/10/2026.
+#
+# BA DIEU CAN DOC TRUOC:
+#   - D5 la SAN PHAM BAN GIAO, khong phai mo hinh vat ly mang ma D5.
+#   - Dai gia tri kich ban KHONG tu xac dinh do chinh xac cua phep do.
+#   - TEAM_CHOICE = gia dinh thi nghiem duoc khai ro, khong phai do chinh xac do.
+#
+# Tham chieu:
+#   §x.y -> Delivery_UAV_Preflight_Feasibility_Proposal_updated.md (file thay)
+#   E4   -> Boundary and robustness analysis
+#   E5   -> Mission-record replay, workflow invariants, and explanation
+#   Muc 12.1 -> Bay tieu chi nghiem thu D5
+# =============================================================================
+
+meta:
+  version: "0.6.1"
+  frozen_on: null
+  owner: "Duy"
+  cross_checker: "Phat"
+  cross_check_status: "PENDING"
+  deliverable: "D5_ROBUSTNESS_PACKAGE"
+  experiment: "E4 — Boundary and robustness analysis; E5 — Replay and workflow"
+  research_question: "RQ3 / RQ4"
+  status: "DRAFT"
+  created_on: "2026-10-24"
+  frozen: false
+  reviewed_by: null
+  reviewed_on: null
+  assignment_source: "docs/san_pham/README.md — ban giao 23/10/2026"
+  implementation_status: "DEVELOPMENT_IMPLEMENTATION_COMPLETE_FINAL_CROSS_CHECK_AND_FREEZE_PENDING"
+  intended_module: "src/uncertainty.py"
+  naming_note: "D5 o day la san pham ban giao; mo hinh vat ly D5 la ma khac."
+  provenance_rule: >-
+    Giu cach khai nguon cua D3/D4. source_kind = INHERITED phai truy duoc ve giao
+    thuc da co; MEASURED chi den hien vat du lieu cu the; DRAFT_TEAM_CHOICE la
+    lua chon cua ban nhap, phai kem ly do va affects_results. TEAM_CHOICE la gia
+    dinh thi nghiem duoc nguoi dung cho phep chot ngay 2026-10-24, chua duoc
+    kiem chung bang do luong. PENDING_SOURCE chua
+    co can cu thi giu null va khai ro phan thi nghiem bi chan. Khong coi con so
+    ban nhap la so da duoc ky.
+  depends_on:
+    - "configs/d2_protocol.yaml v1.4.0 — mo hinh nang luong va phan du OOF"
+    - "configs/d3_protocol.yaml v1.4.0 — nang luong kha dung, luat va phan quyet"
+    - "configs/d4_protocol.yaml v1.0.11 — kich ban, nhan tham chieu va thuoc do"
+    - "docs/san_pham/README.md — phan cong Duy lam, Phat kiem cheo"
+  upstream_acceptance: >-
+    D1–D4 da duoc ghi nhan hoan thanh trong tai lieu ban giao; chua kiem dinh
+    lai khi viet ban nhap nay.
+
+# -----------------------------------------------------------------------------
+# 0. NGUON VA QUY UOC THAM CHIEU
+# -----------------------------------------------------------------------------
+# §x.y / E4 / E5 -> proposal cap nhat cua thay.
+# Ghi chu trong Google Sheet la nguon de tra cuu; can kiem toan van truoc khi
+# dung mot con so cua bai bao lam can sai so do.
+sources:
+  primary_proposal:
+    path: "D:/Documents/FPTU/NCKH/Delivery_UAV_Preflight_Feasibility_Proposal_updated.md"
+    sections: ["5.8", "5.9", "5.10", "E4", "E5", "12.1"]
+  upstream_protocols:
+    d2:
+      path: "configs/d2_protocol.yaml"
+      version: "1.4.0"
+    d3:
+      path: "configs/d3_protocol.yaml"
+      version: "1.4.0"
+    d4:
+      path: "configs/d4_protocol.yaml"
+      version: "1.0.11"
+  reading_notes:
+    spreadsheet_url: "https://docs.google.com/spreadsheets/d/1cGZqyNppVFGBwx7SsPvPUQGT-qNJDpS8DW6Zn0JjDdk/edit"
+    inspected_on: "2026-10-24"
+    scope: >-
+      Ghi chu doc tai lieu cua nhom; khong thay cho kiem tra toan van bai goc.
+    B1:
+      location: "2. Phiếu đọc!A5:Y5"
+      doi: "10.1016/j.est.2023.107380"
+      limitation: >-
+        Sai so mo hinh uoc luong SoC khong tu xac dinh sai so BMS cua nhom; ghi
+        chu cung canh bao thang MSE. Khong lay con so suy nguoc 3–4% lam can sai
+        so do.
+    C4:
+      location: "2. Phiếu đọc!A15:Y15"
+      doi: "10.1016/j.cie.2018.02.005"
+      limitation: >-
+        Quan he nhiet do–dung luong co pham vi hieu chinh; khong cung cap do chinh
+        xac chung cho moi pin.
+    C5:
+      location: "2. Phiếu đọc!A16:Y16"
+      doi: "10.3390/s20020515"
+      limitation: >-
+        Co toc do/huong gio trong bai toan, nhung ghi chu cho biet du bao duoc
+        gia dinh du chinh xac; chua xac dinh sai so du bao cua nhom.
+  provenance_policy:
+    kinds:
+      - "INHERITED"
+      - "MEASURED"
+      - "PROPOSAL_REQUIREMENT"
+      - "DRAFT_TEAM_CHOICE"
+      - "TEAM_CHOICE"
+      - "PENDING_SOURCE"
+    rule: >-
+      Moi khoang/phan bo moi phai co nguon hoac duoc ghi ro la gia dinh thi nghiem
+      truoc khi chay.
+
+  assumption_decision:
+    source_kind: "TEAM_CHOICE"
+    decided_on: "2026-10-24"
+    authority: "Nguoi dung cho phep chot gia dinh; proposal 5.8 buoc 2."
+    scope: "E4: SoC, SoH/capacity, wind forecast, temperature derating va phu thuoc."
+    validation_status: "EXPLICIT_ASSUMPTIONS_NOT_EMPIRICALLY_VALIDATED"
+    primary_half_widths:
+      soc_fraction: 0.02
+      soh_fraction: 0.02
+      wind_ms: 1.0
+      kappa_absolute: 0.02
+    stress_half_widths:
+      soc_fraction: 0.05
+      soh_fraction: 0.05
+      wind_ms: 2.0
+      kappa_absolute: 0.05
+    rationale: >-
+      SoC 0, +/-2, +/-5 diem phan tram da duoc nguoi dung dong y. Dung cung hai
+      muc 2/5 diem cho SoH va kappa de co thang nhieu nho/lon de doc va so sanh;
+      gio dung 1/2 m/s tren mien ke thua 0–10 m/s. Day la cac moc tron de thu
+      do nhay, khong phai gioi han sai so cua BMS, du bao hay pin da xac thuc.
+      Cac ty le fraction gan bien phai duoc bao kem khoang hieu dung.
+    selection_timing: "Chot truoc khi trien khai/chay va xem ket qua D5."
+    affects_results: true
+    reporting_requirement: >-
+      Bao rieng muc chinh, muc nhieu lon, stress residual va stress phu thuoc;
+      neu ket luan doi theo gia dinh thi bao ro. Khong chon muc co ket qua dep.
+
+# -----------------------------------------------------------------------------
+# 1. DAU VAO VA PHIEN BAN HIEN VAT
+# -----------------------------------------------------------------------------
+# Commit chi nhan dien ma nguon da luu trong Git. Cac output local da chay lai,
+# nen phai giu them SHA-256. Hash duoi day la anh chup luc soan ban nhap,
+# KHONG tu no chung nhan ket qua D4 da duoc kiem cheo.
+input_snapshot_at_draft:
+  base_git_commit: "651cc8350efca3fe05b7cc697ddae1a128a9a0e4"
+  tracked_local_outputs_modified: true
+  sha256:
+    configs/d2_protocol.yaml: "bc73374f2734ce8e30bfb4d86844ed461b6142ceae67a8740b7e5806f202bd59"
+    configs/d3_protocol.yaml: "70488c37a2307f5e17074376f06e3a4327eb303437de76c9f6e71b6a0e835143"
+    configs/d4_protocol.yaml: "84219016e8c83d7594a74d7d7a2f6f2db787e0e88115a64137576cbbd4391025"
+    reports/d2_oof_residuals.csv: "607d58f951498c40e94dd415ad3c8f598b66af5f9f496e2c55e8d9913ca0f2df"
+    reports/d4_scenarios.csv: "cc2550ef77267e877bc10398d538ceec00c86b8e51513f4591021b08ba341da8"
+    reports/d4_scenarios_labelled.csv: "3970c0041c2bd10e244015113a65b0097c723fee25e6f41ad03e726cb8089a61"
+    reports/d4_d2_frozen_coefficients.csv: "081c06e7a0aa2d0d79a0a255e1c707bce455e47cd7ec4c89d5fe9e09a7e0a423"
+  mismatch_policy: >-
+    Bao khac phien ban va lap manifest cho lan chay moi; khong ghi de hash de
+    che thay doi dau vao.
+
+# -----------------------------------------------------------------------------
+# 2. CAU HINH GOC KE THUA D2–D4
+# -----------------------------------------------------------------------------
+# Giu quy uoc nang luong, he so da dong bang va hai nhan tham chieu.
+# Moi so sanh phai noi ro ho so may bay, loai pin va chinh sach luat cung.
+inherited_baseline:
+  source_kind: "INHERITED"
+  scenario_file: "reports/d4_scenarios_labelled.csv"
+  scenario_key: "scenario_id"
+  observed_total_rows: 18000
+  primary_strata: ["main", "short_high"]
+  audit_only_strata: ["hard_rule_probe", "missing_input"]
+  unknown_reference_label: "unknown"
+  exclude_unknown_from_scored_denominators: true
+  report_exclusion_counts: true
+  reference_models: ["REF-1", "REF-2"]
+  reference_label_kind: "simulation-derived"
+  reference_reserve_ratio: 0.2
+  reference1_allowance_Wh: 1.2924
+  reference2_calibration_k: 7.44
+  candidate_methods: ["B0", "B1", "B1-pure", "B2", "B3", "B5", "B5-noHR"]
+  ablation_analysis_only: "B5-noHR"
+  energy_estimator: "D2_ridge_preflight"
+  frozen_estimator_artifact: "reports/d4_d2_frozen_coefficients.csv"
+  estimator_rule: >-
+    Dung dung he so, scaler, intercept va anh xa dac trung D4; khong dung he so
+    cua interpretability.py, khong huan luyen lai tren kich ban.
+
+  # ---------------------------------------------------------------------------
+  # 2.1 — HO SO MAY BAY: GHI RO KHAC NHAU D3 VA D4
+  # ---------------------------------------------------------------------------
+  aircraft_profile:
+    primary_diagnostic: "CMU_instrumented"
+    source: "src/baselines_decision.py PROFILE; configs/d3_protocol.yaml aircraft_profiles"
+    mtow_rule: "KNOWN_EXCEEDED_RECORD_ONLY"
+    operational_recommendation: false
+    review_required: true
+    reason: >-
+      D4 dung CMU_instrumented, trong khi mac dinh D3 la M100_stock. Phai kiem
+      cheo cach bao cao truoc khi dong bang D5; khong doi ngam ho so.
+    stock_profile_note: >-
+      Neu bo sung M100_stock, bao thanh phan tich rieng va neu sai khac khung
+      may voi du lieu hieu chinh nang luong.
+    diagnostic_verdict_note: >-
+      FLY o ho so CMU la ket qua trong che do phan tich co ngoai le HR-3,
+      khong phai quyen cho bay. Dai tai 0-500 g la do phu du lieu, KHONG thay
+      the gioi han MTOW. D5 workflow khong cho duyet/thuc thi cac ca CMU.
+
+  # ---------------------------------------------------------------------------
+  # 2.2 — QUY UOC NGAN SACH, CHONG CONG TRUNG
+  # ---------------------------------------------------------------------------
+  energy_budget:
+    distance_convention: "ROUND_TRIP"
+    target: "TOTAL_FLIGHT_ENERGY"
+    takeoff_landing: "INCLUDED_IN_ESTIMATOR_OUTPUT"
+    return_leg_carries_payload: true
+    delivery_hover_Wh: 0.0
+    rule: >-
+      Giu quy uoc D3/D4. Khong cong them luot ve hoac cat/ha canh. Nhiem vu co
+      tha hang/treo giao hang can protocol moi.
+
+  # ---------------------------------------------------------------------------
+  # 2.3 — NGUONG VA PHAN QUYET
+  # ---------------------------------------------------------------------------
+  decision_policy:
+    reserve_ratio: 0.2
+    fly_allowance_Wh: 1.4687
+    margin_Wh: "E_available - E_required"
+    margin_ratio: "(E_available - E_required) / E_required"
+    fly_threshold: "reserve_ratio + fly_allowance_Wh / E_required"
+    verdicts: ["FLY", "CONDITIONAL", "NO_FLY", "INSUFFICIENT_DATA"]
+    authority: >-
+      src/decision_rules.py va configs/d3_protocol.yaml; giu veto, fail-closed,
+      ha bac ngoai suy va yeu cau mitigation.
+
+  # ---------------------------------------------------------------------------
+  # 2.4 — DOI CHIEU TRUOC KHI CHAY
+  # ---------------------------------------------------------------------------
+  baseline_consistency_gate:
+    require_matching_hashes_and_versions: true
+    require_reproduce_frozen_estimator_predictions: true
+    require_validate_label_energy_and_reserve_consistency: true
+    note: >-
+      Doi chieu truoc lan chay D5; viec tao file nay chua thuc hien cac kiem dinh
+      do.
+
+# -----------------------------------------------------------------------------
+# 3. CAC YEU TO BAT DINH VA DO NHAY
+# -----------------------------------------------------------------------------
+# §5.8 / E4: phan biet MIEN KICH BAN voi SAI SO DO/DU BAO.
+# Mien SoH = 0.70–1.00 khong co nghia sai so do SoH la 30 diem phan tram.
+# Gia tri null o muc PENDING_SOURCE khong duoc tu thay bang gia dinh thuan loi.
+factors:
+
+  # ---------------------------------------------------------------------------
+  # 3.1 — SAI SO DU BAO NANG LUONG: PHAN DU OOF CO DAU
+  # ---------------------------------------------------------------------------
+  energy_prediction_error:
+    status: "SPECIFIED_FOR_DRAFT"
+    source_kind: "MEASURED"
+    file: "reports/d2_oof_residuals.csv"
+    id_column: "flight"
+    value_column: "D2_ridge_preflight"
+    expected_unique_flights: 192
+    unit: "Wh"
+    signed_residual: "e = E_predicted - E_measured"
+    empirical_distribution: >-
+      Lay mau co hoan lai tu 192 phan du OOF cap chuyen bay, moi chuyen trong
+      so bang nhau.
+    preserve_bias_and_sign: true
+    demand_draw: "E_demand_draw = E_predicted - e_draw"
+    note: >-
+      Phan du da gop du doan OOF theo chuyen; khong coi 25 fold la 25 sai so doc
+      lap cua moi chuyen.
+    nonpositive_demand_policy: >-
+      Ghi draw khong hop le va bao ty le; khong am tham clip hoac lay mau lai.
+    extrapolation_rule: >-
+      Phan phoi OOF chua duoc kiem chung ngoai mien du lieu; moi ket qua ap ra
+      ngoai phai gan co va bao rieng.
+
+  # ---------------------------------------------------------------------------
+  # 3.2 — SAI SO SoC: GIA DINH +/-2 / +/-5 DIEM PHAN TRAM
+  # ---------------------------------------------------------------------------
+  soc_measurement_error:
+    status: "SPECIFIED_ASSUMPTION"
+    source_kind: "TEAM_CHOICE"
+    reported_field: "soc"
+    unit: "fraction_0_to_1"
+    error_definition: "delta_soc = soc_true_scenario - soc_reported"
+    bounds: [-0.02, 0.02]
+    stress_bounds: [-0.05, 0.05]
+    deterministic_offsets: [-0.05, -0.02, 0.0, 0.02, 0.05]
+    distribution: "UNIFORM_ON_PHYSICALLY_TRUNCATED_INTERVAL"
+    parameters:
+      primary_half_width: 0.02
+      stress_half_width: 0.05
+      physical_support: [0.0, 1.0]
+    evidence: "Gia dinh thi nghiem theo proposal 5.8; khong lay tu sai so BMS/bai bao."
+    rationale: "Cac moc 0, +/-2, +/-5 diem phan tram da trao doi va duoc nguoi dung dong y."
+    affects_results: true
+    monte_carlo_enabled: true
+    percentage_point_rule: >-
+      Mot diem phan tram tuong ung 0.01 o don vi fraction; phai phan biet voi
+      sai so tuong doi.
+    candidate_vs_latent_rule: >-
+      Danh gia ban dau dung soc_reported; ngan sach kha dung trong draw dung soc_true_scenario.
+      Giu quyet dinh ban dau de do thieu hut du tru tiem an.
+    invalid_draw_policy: >-
+      Theo experiments.monte_carlo.bounded_sampling: cat khoang truoc khi lay
+      mau, khong clip gia tri sau lay mau. Offset co dinh ngoai [0,1] ghi
+      NOT_EVALUATED_INVALID_PERTURBATION va bao so luong; khong doi thanh 0/1.
+
+  # ---------------------------------------------------------------------------
+  # 3.3 — SoH / DUNG LUONG GIU LAI
+  # ---------------------------------------------------------------------------
+  soh_capacity_retention:
+    source_kind: "INHERITED"
+    scenario_domain: [0.7, 1.0]
+    source: "configs/d4_protocol.yaml scenario_generator.variables.soh"
+    deterministic_sensitivity_enabled: true
+    measurement_error_status: "SPECIFIED_ASSUMPTION"
+    uncertainty_source_kind: "TEAM_CHOICE"
+    error_definition: "delta_soh = soh_true_scenario - soh_assumed"
+    bounds: [-0.02, 0.02]
+    stress_bounds: [-0.05, 0.05]
+    deterministic_offsets: [-0.05, -0.02, 0.0, 0.02, 0.05]
+    distribution: "UNIFORM_ON_PHYSICALLY_TRUNCATED_INTERVAL"
+    parameters:
+      primary_half_width: 0.02
+      stress_half_width: 0.05
+      physical_support: [0.0, 1.0]
+    rationale: >-
+      Thu sai lech suc khoe pin gia dinh o hai muc 2/5 diem phan tram; chua co
+      du lieu de gan do chinh xac uoc luong SoH. Mien 0.70–1.00 van la mien
+      kich ban goc, khong duoc dung lam do rong sai so.
+    affects_results: true
+    monte_carlo_enabled: true
+    note: >-
+      SoH thuc te trong draw co the nho hon 0.70; giu draw va gan co ngoai mien
+      kich ban D4, khong am tham kep ve 0.70. SoC van la ty le theo dung luong
+      hien tai; chi nhan SoH mot lan trong E_available, khong them mot sai so
+      E_nominal nua cho cung suy giam dung luong.
+
+  # ---------------------------------------------------------------------------
+  # 3.4 — LOAI PIN VA NANG LUONG DANH DINH
+  # ---------------------------------------------------------------------------
+  nominal_battery_energy:
+    status: "SPECIFIED_FOR_DRAFT"
+    source_kind: "INHERITED"
+    cases:
+      - battery_type: "TB47D"
+        nominal_Wh: 99.9
+      - battery_type: "TB48D"
+        nominal_Wh: 129.96
+    source: "configs/d3_protocol.yaml available_energy.e_nominal; D4 S-1"
+    mode: "SEPARATE_CASES"
+    mixing_probabilities: null
+    note: >-
+      Chay va bao ca hai gia dinh loai pin; khong tu gan xac suat 50/50 hoac tron
+      thanh mot pin trung binh. Doi pin phai cap nhat cac tham so lien quan theo
+      cung ho so.
+
+  # ---------------------------------------------------------------------------
+  # 3.5 — DO LON GIO
+  # ---------------------------------------------------------------------------
+  wind_magnitude:
+    source_kind: "INHERITED"
+    field: "wind_forecast_ms"
+    scenario_domain_ms: [0.0, 10.0]
+    measured_coverage_ms: [2.81, 6.67]
+    deterministic_sensitivity_enabled: true
+    source: "configs/d4_protocol.yaml scenario_generator.variables.wind_forecast_ms"
+    forecast_error_status: "SPECIFIED_ASSUMPTION"
+    uncertainty_source_kind: "TEAM_CHOICE"
+    error_definition: "delta_wind = wind_true_scenario_ms - wind_forecast_ms"
+    bounds_ms: [-1.0, 1.0]
+    stress_bounds_ms: [-2.0, 2.0]
+    deterministic_offsets_ms: [-2.0, -1.0, 0.0, 1.0, 2.0]
+    distribution: "UNIFORM_ON_PHYSICALLY_TRUNCATED_INTERVAL"
+    parameters:
+      primary_half_width_ms: 1.0
+      stress_half_width_ms: 2.0
+      physical_support_ms: [0.0, null]
+    rationale: >-
+      Hai moc tron 1 va 2 m/s de thu do nhay quanh gio du bao trong mien D4;
+      khong phai sai so cua mot nha cung cap du bao hay duoc hoc tu CMU.
+    affects_results: true
+    monte_carlo_enabled: true
+    latent_mapping: >-
+      Thay wind_forecast_ms bang wind_true_scenario_ms tai dung anh xa D4 vao
+      dac trung wind_raw_mean_ms cua D2 dong bang; giu cac dac trung con lai
+      theo quy uoc D4, tinh lai du doan truoc khi tru residual. Dung gio tiem
+      an khi kiem luat gio; khong them he so gio nguoc/xuoi hoac mo hinh moi.
+    note: >-
+      Gan co rieng ngoai mien quan sat 2.81–6.67 m/s, ngoai mien kich ban 0–10
+      m/s va vi pham gio cua luat cung. Gio vuot gioi han van la draw hop le ve
+      vat ly nhung khong thoa rang buoc; khong loai de tang fraction.
+
+  # ---------------------------------------------------------------------------
+  # 3.6 — HUONG GIO: DIEU KIEN DE BO SUNG
+  # ---------------------------------------------------------------------------
+  wind_direction:
+    status: "NOT_ENABLED_WITH_CURRENT_MODEL"
+    reason: >-
+      Dac trung D2/D4 hien dung do lon gio. Chua co anh xa huong gio hop le theo
+      tuyen; khong tu them he so gio nguoc/xuoi.
+    requirement_to_enable: >-
+      Du lieu huong, quy uoc tuyen va mo hinh tac dong duoc kiem chung; theo muc
+      13 cua proposal co the dung do lon voi han che ro rang.
+
+  # ---------------------------------------------------------------------------
+  # 3.7 — SUY GIAM NHIET DO
+  # ---------------------------------------------------------------------------
+  temperature_derating:
+    source_kind: "INHERITED"
+    field: "ambient_temp_c"
+    scenario_domain_c: [-10.0, 40.0]
+    polynomial: "0.8814 + 0.0091*T - 0.0001*T^2"
+    calibrated_range_c: [4.5, 18.4]
+    clamp_rule: >-
+      T < 4.5: poly(4.5); 4.5 <= T <= 18.4: min(1, poly(T)); T > 18.4: 1.0
+    source: >-
+      configs/d3_protocol.yaml available_energy.kappa_temperature; D4 temperature
+      domain
+    deterministic_sensitivity_enabled: true
+    derating_error_status: "SPECIFIED_ASSUMPTION"
+    uncertainty_source_kind: "TEAM_CHOICE"
+    error_definition: "delta_kappa = kappa_true_scenario - kappa_D3(T)"
+    bounds: [-0.02, 0.02]
+    stress_bounds: [-0.05, 0.05]
+    deterministic_offsets: [-0.05, -0.02, 0.0, 0.02, 0.05]
+    distribution: "UNIFORM_ON_PHYSICALLY_TRUNCATED_INTERVAL"
+    parameters:
+      primary_half_width: 0.02
+      stress_half_width: 0.05
+      physical_support: [0.0, 1.0]
+    rationale: >-
+      Thu sai lech tuyet doi 0.02/0.05 cua he so dung luong vi D3 chua co do
+      luong bat dinh kappa. Khong coi hai moc nay la khoang tin cay cua da thuc
+      hoac suy ra tu do chinh xac cam bien nhiet do.
+    affects_results: true
+    monte_carlo_enabled: true
+    latent_mapping: >-
+      Giu T cua kich ban va cong thuc/kep D3 de tinh kappa trung tam; chi nhieu
+      kappa, khong nhieu them T. E_available_draw = E_nominal * soc_draw *
+      soh_draw * kappa_draw. Dung ngan sach nay ca cho dieu kien nang luong
+      PH-1; khong tinh lai bang kappa trung tam roi ghi de tac dong nhieu.
+    reporting: >-
+      Tach trong/ngoai dai hieu chinh, ty le bi kep va anh huong len margin. Duong
+      phang ngoai dai khong chung minh nhiet do khong anh huong pin. Khi kappa
+      trung tam bang 1, khoang hieu dung chi con phia giam; bao ro tinh bat doi
+      xung nay, khong coi mean error van bang 0.
+
+  # ---------------------------------------------------------------------------
+  # 3.8 — HE SO DU TRU: THAM SO CHINH SACH
+  # ---------------------------------------------------------------------------
+  reserve_policy:
+    source_kind: "INHERITED"
+    primary: 0.2
+    required_values: [0.1, 0.2, 0.3]
+    plotting_values: [0.1, 0.15, 0.2, 0.25, 0.3]
+    source: "D3 reserve_and_verdict.reserve_factor; D4 metrics.tradeoff_curve.reserve_sweep"
+    random_sampling: false
+    note: >-
+      Tham so chinh sach de quet; khong phai quy dinh chung hoac bien ngau nhien
+      da do duoc.
+
+# -----------------------------------------------------------------------------
+# 4. THIET KE THI NGHIEM E4
+# -----------------------------------------------------------------------------
+# Thay tung yeu to de doc tac dong rieng, sau do truyen bat dinh Monte Carlo.
+# Chi nhanh residual-only phai duoc ghi ro la phan tich MOT PHAN.
+# Cac phan bo dau vao duoi day la gia dinh thi nghiem theo proposal 5.8.
+experiments:
+
+  # ---------------------------------------------------------------------------
+  # 4.1 — VUNG BIEN VA OI-D4-7
+  # ---------------------------------------------------------------------------
+  boundary_analysis:
+    source_kind: "INHERITED"
+    reference_margin: "R_ref = (E_available_baseline - E_reference) / E_reference"
+    rule: "abs(R_ref) <= w OR abs(R_ref - r_ref) <= w"
+    primary_w: 0.05
+    sweep_w: [0.025, 0.05, 0.1]
+    reference_reserve_ratio: 0.2
+    reference_models: ["REF-1", "REF-2"]
+    membership_policy: >-
+      Tinh rieng tu margin cua dung REF va giu co dinh theo dau vao goc khi so
+      sanh tac dong nhieu. Khong dung boundary_ref1 cho REF-2.
+    required_outputs:
+      - "scenario_counts"
+      - "false_safe_count_and_rate"
+      - "outside_boundary_results"
+      - "marginal_group_results"
+    inherited_open_item: "OI-D4-7"
+    note: >-
+      Phai tinh lai bang phan tach vung bien cho tung w; chi chay lai bang tong
+      hop se khong giai quyet OI-D4-7.
+
+  # ---------------------------------------------------------------------------
+  # 4.2 — THAY DOI TUNG YEU TO
+  # ---------------------------------------------------------------------------
+  one_factor_at_a_time:
+    status: "IMPLEMENTED_FULL_PRIMARY_POPULATION_DEVELOPMENT"
+    population: >-
+      Toan bo primary_strata co dau vao/nhan hop le; audit_only_strata bao rieng.
+    numeric_grid:
+      source_kind: "TEAM_CHOICE"
+      points_per_continuous_domain: 11
+      construction: >-
+        linspace tren mien SoH, gio, nhiet do da ke thua; them 4.5 va 18.4 C cho
+        diem chuyen kappa, khu trung va sap tang.
+      rationale: >-
+        Chia mien thanh 10 khoang deu de ve do nhay; do phan giai tinh toan khong
+        phai do chinh xac thiet bi.
+      affects_results: true
+    factors:
+      - "soh_capacity_retention"
+      - "nominal_battery_energy"
+      - "wind_magnitude"
+      - "temperature_derating"
+      - "reserve_policy"
+    soc_error_sweep:
+      enabled: true
+      offsets: [-0.05, -0.02, 0.0, 0.02, 0.05]
+      source: "factors.soc_measurement_error"
+    other_input_error_sweeps:
+      soh_offsets: [-0.05, -0.02, 0.0, 0.02, 0.05]
+      wind_offsets_ms: [-2.0, -1.0, 0.0, 1.0, 2.0]
+      kappa_offsets: [-0.05, -0.02, 0.0, 0.02, 0.05]
+      source_kind: "TEAM_CHOICE"
+      rule: >-
+        Moi lan chi doi mot sai lech; cac yeu to con lai giu nguyen. Bao rieng
+        ngan sach tiem an so voi verdict goc va verdict khi tai danh gia. Offset
+        ngoai mien vat ly ghi NOT_EVALUATED_INVALID_PERTURBATION kem so luong;
+        ngoai mien D4/vi pham luat cung van giu de danh gia va gan co.
+    energy_error_sweep: >-
+      Dung moi gia tri phan du OOF da quan sat, co trong so bang nhau, giu nguyen
+      dau.
+    recomputation: >-
+      Moi diem quet dung dau vao moi de du doan lai neu dac trung thay doi, roi
+      tinh lai kha dung, luat, margin va verdict. Day la tai danh gia theo kich
+      ban.
+    outputs:
+      - "energy_and_margin_curves"
+      - "verdict_transition_matrices"
+      - "veto_and_extrapolation_reasons"
+    sensitivity_ranking: >-
+      Xep theo ty le doi verdict va khoang bien thien margin tren mien da khai;
+      bao mien/don vi, khong goi la muc anh huong nhan qua hay thu hang pho quat.
+
+  # ---------------------------------------------------------------------------
+  # 4.3 — TRUYEN BAT DINH MONTE CARLO
+  # ---------------------------------------------------------------------------
+  monte_carlo:
+    status: "IMPLEMENTED_MODULE_FINAL_EXPERIMENT_PENDING"
+    computational_choices:
+      source_kind: "TEAM_CHOICE"
+      seeds: [42, 43, 44]
+      draws_per_scenario: 10000
+      rationale: >-
+        Seed 42 ke thua D4; bao ca ba seed de quan sat bien thien Monte Carlo.
+        10000 la ngan sach tinh toan chon truoc, khong phai tham so vat ly.
+      affects_results: true
+    population: >-
+      Toan bo primary_strata hop le; thong ke tung scenario va tung nhom ho tro
+      du lieu.
+    paired_draws: >-
+      Dung cung chi so phan du cho cung scenario/seed o cac muc du tru va hai
+      loai pin. Luu RNG/phien ban thu vien va cach sinh chi so.
+    bounded_sampling:
+      source_kind: "TEAM_CHOICE"
+      family: "CONDITIONAL_UNIFORM"
+      formula: "x_draw ~ Uniform(max(L, x0 - h), min(U, x0 + h))"
+      definitions: >-
+        x0 la dau vao goc hoac kappa_D3(T); h theo cau hinh chinh/stress.
+        SoC, SoH, kappa co [L,U]=[0,1]; gio co L=0, U=+infinity.
+        null upper support cua gio nghia la +infinity, khong phai thieu du lieu.
+      rationale: >-
+        Chua co can cu chon hinh dang loi; phan bo deu la gia dinh huu han de
+        moi diem trong khoang hieu dung co mat do nhu nhau, khong khang dinh
+        day la phan bo loi thuc. Khong suy phan bo tu mien kich ban D4.
+      edge_rule: >-
+        Cat khoang truoc lay mau, khong clip gia tri sau lay mau. Gan bien,
+        khoang/ky vong sai lech co the bat doi xung; luu effective_lower,
+        effective_upper va mean_delta=(lower+upper)/2-x0 theo scenario/factor.
+      missing_invalid_baseline: >-
+        Dau vao goc None/NaN/ngoai mien hop le di nhanh audit fail-closed, khong
+        duoc phan bo deu hoac kep bien de sua du lieu.
+    random_number_contract:
+      generator: "NumPy Generator(PCG64(SeedSequence([seed, scenario_id, stream_id])))"
+      independent_stream_ids: {residual: 0, soc: 1, soh: 2, wind: 3, kappa: 4}
+      coupled_stream_id: 5
+      pairing: >-
+        Sinh uniform u theo tung stream; dung cung u giua muc chinh/muc rong,
+        giua pin va reserve, khong lay draw moi theo thu tu vong lap.
+      empirical_sampling: >-
+        Voi pool phan du n phan tu theo thu tu flight tang, chi so=floor(n*u).
+        Nhanh phu thuoc dung pool sap tang va empirical inverse CDF voi index
+        min(n-1,floor(n*q)); khong noi suy tao residual chua quan sat.
+    residual_only:
+      enabled_when_implemented: true
+      vary: ["energy_prediction_error"]
+      fixed_inputs: ["soc", "soh", "wind_forecast_ms", "ambient_temp_c"]
+      label: "Phan tich mot phan: chi truyen bat dinh sai so du doan nang luong."
+    full_input_uncertainty:
+      enabled: true
+      requires_implementation: false
+      assumption_items: ["OI-D5-1", "OI-D5-2", "OI-D5-3", "OI-D5-4", "OI-D5-5"]
+      vary:
+        - "energy_prediction_error"
+        - "soc_measurement_error"
+        - "soh_capacity_retention"
+        - "wind_magnitude"
+        - "temperature_derating"
+      dependency_model: "INDEPENDENT_PRIMARY_WITH_ADVERSE_RANK_COUPLING_STRESS"
+      dependency_source_kind: "TEAM_CHOICE"
+      configurations:
+        - id: "PRIMARY_INDEPENDENT"
+          widths: "primary"
+          residual_pool: "ALL_SIGNED_OOF_RESIDUALS"
+          dependence: "INDEPENDENT"
+        - id: "WIDER_RANGES"
+          widths: "stress"
+          residual_pool: "ALL_SIGNED_OOF_RESIDUALS"
+          dependence: "INDEPENDENT"
+        - id: "ADVERSE_RESIDUAL_POOL"
+          widths: "primary"
+          residual_pool: "NEGATIVE_OOF_RESIDUALS_ONLY"
+          dependence: "INDEPENDENT"
+        - id: "ADVERSE_DEPENDENCE"
+          widths: "primary"
+          residual_pool: "ALL_SIGNED_OOF_RESIDUALS"
+          dependence: "ADVERSE_RANK_COUPLING"
+      adverse_rank_coupling: >-
+        Dung chung u tu coupled_stream: q_soc=q_soh=q_kappa=1-u, q_wind=u,
+        q_residual=1-u. Khi u lon: SoC/SoH/kappa thap, gio lon, residual am hon
+        (nhu cau cao hon). Kiem he so wind dong bang la duong truoc chay;
+        neu khong dung thi dung va sua protocol, khong tu doi anh xa.
+      demand_formula: "E_demand_draw = D2_frozen(x_with_latent_wind) - e_draw"
+      available_formula: "E_available_draw = E_nominal * soc_draw * soh_draw * kappa_draw"
+      constraint_propagation: >-
+        Kiem luat D3 voi dau vao tiem an va cung E_available_draw cho PH-1;
+        giu floor ha canh/he so/ho so D3. Vi pham luat la constraint failure,
+        khong phai invalid draw de loai. Nhan tham chieu D4 van co dinh trong
+        bang false-safe chinh; fraction Monte Carlo la dau ra rieng.
+      note: >-
+        Doc lap la gia dinh tinh toan, khong duoc suy ra tu du lieu. Nhanh rank
+        coupling co chu y gom cac yeu to bat loi, khong phai tuong quan do duoc.
+        OOF co the da gom anh huong pin/nhiet/gio khong quan sat; cong them nhieu
+        dau vao co nguy co tinh trung mot phan bat dinh. Bao residual-only lam
+        doi chieu va goi full-input la phan tich theo gia dinh, khong phai phan
+        ra cac nguon loi doc lap da duoc xac thuc.
+    reserve_constraint: "E_available_draw >= (1 + reserve_ratio) * E_demand_draw"
+    fraction_definition: >-
+      So draw hop le thoa reserve_constraint / so draw hop le; bao tong draw va
+      so draw khong hop le cung mau so.
+    output_label: "model-based feasibility fraction under stated assumptions"
+    candidate_policy: >-
+      Giu verdict ban dau theo du lieu he thong da nhan de do do ben du tru. Neu
+      chay lai verdict theo tung draw, bao thanh phan tich tai danh gia rieng.
+    no_double_counting: >-
+      E_demand_draw dung du doan diem tru residual. Khong cong tiep allowance
+      REF-1 hoac allowance FLY vao nhu cau draw; allowance van thuoc nhan/chinh
+      sach goc.
+    safety_reporting: >-
+      Bao rieng fraction chi xet nang luong va fraction dong thoi qua luat VETO/dau
+      vao; fraction nang luong khong co quyen cho phep FLY. Khong dien mac dinh
+      cho missing_input.
+    distribution_assumption_stress:
+      primary_pool: "ALL_SIGNED_OOF_RESIDUALS"
+      adverse_pool: "NEGATIVE_OOF_RESIDUALS_ONLY"
+      source_kind: "TEAM_CHOICE"
+      affects_results: true
+      meaning: >-
+        Nhanh chi lay residual am mo ta gia dinh bat loi hon ve du doan thieu;
+        day la stress test co chu y, khong phai phan phoi loi thuc te da xac thuc.
+      distribution_shift_limit: >-
+        Phan tach trong/ngoai mien va neu OOF khong bao phu dich chuyen thuc te.
+        Khong coi stress test nay la kiem chung ngoai phan phoi tren chuyen bay
+        that.
+    numerical_reporting: >-
+      Bao fraction theo tung seed va do chenh giua cac seed; sai so lay mau Monte
+      Carlo khong dai dien toan bo bat dinh mo hinh. Luu assumption_config_id,
+      khoang hieu dung tung yeu to va co ngoai mien; khong gop trung binh bon
+      cau hinh gia dinh thanh mot xac suat.
+
+  # ---------------------------------------------------------------------------
+  # 4.4 — NHAN THAM CHIEU VA CACH GOP LOP
+  # ---------------------------------------------------------------------------
+  reference_and_policy_sensitivity:
+    fixed_reference_primary: >-
+      Giu nhan REF-1/REF-2, r_ref va membership goc khi quet chinh sach ung vien
+      hoac gia dinh pin; do thay doi so voi cung chuan D4.
+    matched_reference_secondary: >-
+      Neu doi chinh gia dinh cua the gioi mo phong, tinh lai reference demand/availability/labels
+      mot cach nhat quan bang cung phien ban REF; luu file moi va bao rieng, khong
+      thay nhan D4.
+    matched_reference_implementation:
+      status: "IMPLEMENTED_ALL_SAVED_OAT_DEVELOPMENT"
+      evidence_run: "reports/d5/matched_counterfactual_20261026_01"
+      source_kind: "TEAM_CHOICE"
+      population: "All saved valid OAT points; both batteries; no new Monte Carlo draws"
+      reference_reserve_ratio: 0.20
+      reserve_policy_rule: "Candidate reserve sweeps do not change the reference requirement"
+      demand_rule: >-
+        REF-1 = frozen D2 on changed mission features + frozen D4 allowance;
+        REF-2 = frozen k times ideal hover power at changed configured mass
+        times changed planned duration. No refit or recalibration.
+      residual_rule: >-
+        OAT energy_error is candidate-model discrepancy, not a shared measured
+        energy shock. Do not inject it into either reference or count its
+        allowance twice. REF-2 has no validated wind-demand mapping; keep its
+        original definition and report that limitation.
+      availability_rule: "Same changed SoC/SoH/kappa/nominal battery energy for both references"
+      boundary_reporting: "Both fixed original membership and recomputed world membership"
+      profile_rule: >-
+        CMU_instrumented only. Keep its documented 3680 g configured mass;
+        changing the battery-energy assumption does not silently add a new
+        mass correction. This is a diagnostic scenario assumption.
+    marginal_primary_mapping: "INFEASIBLE"
+    marginal_secondary_mapping: "FEASIBLE"
+    conditional_primary_mapping: "NOT_APPROVED"
+    conditional_reporting: >-
+      Bao ca ty le CONDITIONAL; neu thu gop thanh approved de so sanh, ghi day
+      chi la cach cham diem, khong phai quyen thuc thi nhiem vu.
+    stock_and_cmu_profiles_must_not_be_pooled: true
+
+# -----------------------------------------------------------------------------
+# 5. THUOC DO VA CACH BAO CAO
+# -----------------------------------------------------------------------------
+# Giu dinh nghia thuoc do D4. Luon bao tu so, mau so va truong hop bi loai;
+# khong thay NA bang 0 khi khong co kich ban trong nhom.
+metrics:
+  source: "D4 metrics va proposal E4/E5"
+  false_safe_rate: >-
+    count(verdict == FLY AND reference_binary == infeasible) / count(reference_binary
+    == infeasible)
+  infeasible_recall: >-
+    count(verdict != FLY AND reference_binary == infeasible) / count(reference_binary
+    == infeasible)
+  unnecessary_rejection_rate: >-
+    count(verdict == NO_FLY AND reference_binary == feasible) / count(reference_binary
+    == feasible)
+  conditional_rate_among_feasible: >-
+    count(verdict == CONDITIONAL AND reference_binary == feasible) / count(reference_binary
+    == feasible)
+  zero_denominator: "Ghi null/NA va mau so bang 0; khong ghi ty le 0."
+  additional:
+    - "verdict_transition_counts_and_rates"
+    - "margin_changes_Wh"
+    - "margin_ratio_changes"
+    - "reserve_feasibility_fraction"
+    - "veto_incorrect_approval_count"
+    - "missing_input_fail_closed_rate"
+    - "replay_verdict_match_rate"
+  report_groups:
+    - "reference_model"
+    - "aircraft_profile"
+    - "battery_type"
+    - "stratum"
+    - "boundary_membership"
+    - "reference_class"
+    - "distance_support"
+    - "wind_support"
+    - "temperature_calibration_support"
+  interpretation: >-
+    Cac ty le tren mo ta tap kich ban do thiet ke va nhan simulation-derived;
+    khong phai xac suat su co hay muc an toan ngoai thuc dia.
+
+# -----------------------------------------------------------------------------
+# 6. DANH MUC TRUONG HOP THAT BAI
+# -----------------------------------------------------------------------------
+# Muc 12.1 doi it nhat mot failure-case catalogue co mo ta.
+# Khong chi dua bang diem trung binh; phai luu du dieu kien de xem lai tung ca.
+failure_catalogue:
+  required: true
+  implementation_status: "IMPLEMENTED_DEVELOPMENT_FINAL_CROSS_CHECK_PENDING"
+  evidence_run: "reports/d5/failure_catalogue_20261026_03"
+  categories:
+    - "energy_underprediction"
+    - "soc_overstatement"
+    - "degraded_capacity"
+    - "battery_identity_assumption"
+    - "boundary_verdict_flip"
+    - "marginal_mapping_effect"
+    - "distance_extrapolation"
+    - "wind_extrapolation"
+    - "temperature_clamp"
+    - "hard_veto_with_high_margin"
+    - "missing_or_stale_input"
+  selection: >-
+    Moi nhom co it nhat mot vi du neu quan sat duoc; chon scenario_id nho nhat
+    thoa tieu chi nhom. Nhom khong co truong hop phai ghi NOT_OBSERVED/PENDING_FACTOR.
+  fields:
+    - "case_id"
+    - "scenario_id"
+    - "category"
+    - "baseline_inputs"
+    - "perturbation_and_source"
+    - "reference_model"
+    - "baseline_verdict"
+    - "changed_verdict_or_reserve_failure"
+    - "margin_before_after"
+    - "rule_results"
+    - "mitigation_if_valid"
+    - "limitation"
+  note: >-
+    Truong hop thieu du tru trong draw va truong hop doi verdict khi tai danh
+    gia phai duoc ghi phan biet.
+
+# -----------------------------------------------------------------------------
+# 7. SNAPSHOT BAT BIEN, REPLAY VA BAT BIEN AN TOAN
+# -----------------------------------------------------------------------------
+# §5.10 / E5 / Muc 12.1. Cac muc nay NAM TRONG D5, du D6 se mo rong ban ghi.
+# MissionRecord hien co la nen de phat trien, chua phai bang chung nghiem thu
+# cho toan bo yeu cau snapshot/replay duoi day.
+replay_and_workflow:
+  source: "Proposal 5.10, E5, 12.1; nen hien co src/workflow_state.py MissionRecord"
+  implementation_status: "IMPLEMENTED_DEVELOPMENT_FINAL_CROSS_CHECK_PENDING"
+  entrypoint: "src/mission_record.py"
+  validation_runner: "src/replay_validation.py"
+  legacy_api_note: >-
+    src/workflow_state.py la API D3 cu, khong phai duong nghiem thu E5 moi.
+    D5 dung module rieng de luu nguon/config/model/scaler, thuc thi replay
+    bang tien trinh Python doc lap va kiem hieu luc thoi tiet/workflow.
+  replay_artifacts: >-
+    Luu ban ma nguon Python, protocol D2-D5, he so/scaler/intercept D2 va OOF;
+    luu hash du lieu nen va day du dau vao/nguon dong kich ban da chon.
+    Doi chieu checksum moi hien vat va dung phien ban Python/thu vien da luu.
+    Thieu hoac sai phien ban thi bao khong replay duoc, khong doc ban moi nhat.
+  immutability_scope: >-
+    API tu choi ghi de ID snapshot; cac su kien workflow them file moi va noi
+    chuoi checksum. Day la bao ve qua API va phat hien sua nham, khong phai
+    luu tru WORM hay chu ky so chong sua doi ac y.
+  remaining_scope: >-
+    Counterfactual da duoc kiem tren toan bo tap marginal chon truoc tai
+    reports/d5/matched_counterfactual_20261026_01. Kiem cheo cuoi, dong bang
+    quy trinh va nghiem thu van con cho; khong tu danh dau D5 da hoan tat.
+  snapshot_mode: "IMMUTABLE_ASSESSMENT_PLUS_APPEND_ONLY_WORKFLOW_EVENTS"
+  required_snapshot_fields:
+    - "mission_id_and_assessment_id"
+    - "assessment_timestamp_utc"
+    - "complete_mission_battery_environment_inputs_and_units"
+    - "weather_observed_at_valid_until_and_source"
+    - "aircraft_profile_and_energy_budget_conventions"
+    - "dataset_model_scaler_feature_mapping_and_config_snapshots"
+    - "source_commit_dirty_state_and_dependency_versions"
+    - "sha256_for_inputs_code_model_configs_and_outputs"
+    - "energy_prediction_available_energy_margin_and_thresholds"
+    - "hard_rule_results_severities_and_veto_reasons"
+    - "verdict_actionability_and_mitigation"
+    - "uncertainty_settings_seed_and_sampling_method"
+    - "explanation_and_counterfactual_details"
+  replay_rule: >-
+    Khoi phuc dung noi dung/hien vat da luu; khong doc cau hinh moi nhat roi nhan
+    la replay lich su. Thieu phien ban cu phai bao khong replay duoc.
+  comparison:
+    source_kind: "TEAM_CHOICE"
+    verdict: "EXACT_MATCH"
+    numerical_atol: 1.0e-08
+    numerical_rtol: 1.0e-08
+    affects_results: true
+    rationale: >-
+      Dung sai so thuc ban dau cho cung phien ban phan mem; khong phai dung sai
+      sai so du bao. Phai bao gia tri chenh lon nhat va ra lai khi thay moi truong.
+  representative_coverage:
+    - "all_four_verdicts"
+    - "boundary"
+    - "hard_veto"
+    - "missing_None_and_NaN"
+    - "invalid_battery_input"
+    - "expired_weather"
+    - "conditional_with_and_without_mitigation"
+  required_invariants:
+    - >-
+      Doi nhiem vu, SoC/SoH, may bay/pin, thoi tiet, mo hinh, nguong hoac luat
+      danh dau danh gia cu STALE.
+    - >-
+      Thoi diem danh gia >= weather.valid_until thi thoi tiet het han; timestamp/validity
+      bi thieu phai fail closed.
+    - >-
+      Du lieu bat buoc thieu/khong hop le khong tao FLY; chuan hoa None/NaN tai
+      moi ranh gioi du lieu.
+    - >-
+      Moi vi pham co severity VETO dan toi NO_FLY du margin cao; HR-3 record-only
+      cua ho so CMU phai ghi ro la ngoai le da biet.
+    - >-
+      CONDITIONAL khong duoc thuc thi neu chua co mitigation hop le; thay doi
+      nhu cau/rang buoc phai danh gia lai.
+    - "Tai danh gia truoc bay xau di can nguoi duyet lai trong mo phong workflow."
+    - >-
+      Doi cau hinh hien tai khong sua snapshot lich su; hash snapshot cu phai
+      giu nguyen.
+    - >-
+      Observed outcome luu doc lap voi verdict, cho phep UNKNOWN va khong suy
+      nhan ket cuc tu loi khuyen.
+  weather_validity_policy: >-
+    Dung valid_until ro rang trong fixture de kiem logic het han; TTL van hanh
+    thuc te chua duoc xac lap va khong tu dien phut mac dinh.
+  counterfactuals: >-
+    Tap ca marginal duoc chon truoc theo scenario_id; chi doi bien dieu khien
+    hop le, du doan/tinh lai va kiem REF/luat. Bao so hop le tren tong de xuat,
+    khong chon rieng de xuat thanh cong.
+  counterfactual_validation:
+    implementation_status: "IMPLEMENTED_FULL_PREDEFINED_SET_DEVELOPMENT"
+    evidence_run: "reports/d5/matched_counterfactual_20261026_01"
+    source_kind: "TEAM_CHOICE"
+    selection: "All primary-strata IDs marginal in original D4 REF-1 OR REF-2, sorted by scenario_id; both batteries"
+    selection_timing: "Write selection_manifest before evaluating any proposed changes"
+    actions: ["M1", "M2", "M3", "M4", "M5", "M6", "M7"]
+    one_control_at_a_time: true
+    soc_absolute_grid_step: 0.01
+    payload_levels_g: [0, 250, 500]
+    commanded_speed_levels_ms: [4, 6, 8, 10, 12]
+    distance_grid_step_m: 10.0
+    distance_domain: "Inherited D3 validity envelope, inclusive endpoints; only shorter supported distances"
+    other_actions: >-
+      M2 switches TB47D to TB48D. M3 only if wind exceeds HR-1, target its
+      documented limit. M4 waits hypothetically until the upper calibrated
+      temperature endpoint. M3/M4 require fresh real observations before use;
+      their target conditions are not promised weather forecasts.
+    proposal_rule: >-
+      Among applicable one-control trials, offer the smallest change per
+      action reaching candidate FLY with no VETO and valid control values;
+      baseline FLY needs no proposal. Never use REF success to choose or rank
+      proposals. No global comparison of costs across unlike controls.
+    reference_validation: >-
+      Recompute both matched references for every changed mission. Report
+      feasible-only primary and feasible-or-marginal secondary pass rates;
+      require valid inputs and no VETO. Keep in/out-of-model-support results
+      separate and retain all failed/inapplicable attempts.
+    rationale: >-
+      1 percentage point and 10 m are transparent numerical grid resolutions,
+      not measured sensor accuracy or operational guarantees. Payload/speed
+      levels come from the existing dataset-supported mitigation catalogue.
+    affects_results: true
+
+# -----------------------------------------------------------------------------
+# 8. DAU RA PHAI LUU
+# -----------------------------------------------------------------------------
+# Moi lan chay co run_id rieng, bang/hinh truy duoc ve input manifest.
+# Khong ghi de ket qua D4 hoac mot lan chay D5 da luu.
+outputs:
+  root_pattern: "reports/d5/{run_id}/"
+  overwrite_existing_run: false
+  tables:
+    - "input_manifest.json"
+    - "baseline_consistency.json"
+    - "boundary_breakdown.csv"
+    - "one_factor_sensitivity.csv"
+    - "verdict_transitions.csv"
+    - "monte_carlo_fractions.csv"
+    - "reference_policy_sensitivity.csv"
+    - "failure_catalogue.csv"
+    - "replay_results.csv"
+    - "workflow_invariant_results.csv"
+  documents: ["failure_catalogue.md", "robustness_report.md"]
+  directories: ["snapshots", "figures"]
+  figures:
+    - "reserve_tradeoff"
+    - "boundary_verdict_transitions"
+    - "energy_and_margin_sensitivity"
+    - "monte_carlo_fraction_sensitivity"
+  provenance_per_table:
+    - "run_id"
+    - "protocol_version"
+    - "input_manifest_hash"
+    - "reference_model"
+    - "aircraft_profile"
+    - "seed_if_applicable"
+    - "assumption_config_id_if_applicable"
+
+# -----------------------------------------------------------------------------
+# 9. THU TU THUC HIEN VA TIEU CHI NGHIEM THU
+# -----------------------------------------------------------------------------
+# Muc 12.1 cua proposal la co so nghiem thu. Tao file protocol khong co
+# nghia runner, test hay thi nghiem D5 da duoc trien khai/chay.
+execution_and_acceptance:
+  specification_is_not_execution: true
+  final_run_requires_frozen_protocol: true
+  partial_run_label_required: true
+  stages:
+    - >-
+      Kiem cheo protocol va hoan thien cac open item lien quan; dong bang cau
+      hinh/hien vat cho pham vi chay.
+    - >-
+      Trien khai loader va bo kiem dieu kien, doi chieu baseline voi cac hien
+      vat D2–D4.
+    - >-
+      Chay boundary, quet chinh sach va one-factor sensitivity; bao du hai REF
+      va hai loai pin.
+    - >-
+      Chay Monte Carlo residual-only va bon cau hinh full-input da chot gia
+      dinh; bao rieng tung cau hinh, khong goi nhanh mot phan la D5 da hoan tat.
+    - "Gom failure catalogue, snapshot, replay va kiem bat bien workflow."
+    - "Sinh bang/hinh tu output da luu va doi chieu du bay tieu chi proposal 12.1."
+  required_d5_items:
+    - "reserve_threshold_sweep"
+    - "boundary_case_analysis"
+    - "uncertainty_and_sensitivity"
+    - "failure_case_catalogue"
+    - "immutable_replayable_snapshots"
+    - "workflow_and_safety_invariant_checks"
+    - "repeatable_figures_and_tables"
+  honest_result_rule: >-
+    Khong yeu cau B5 phai thang de nghiem thu. Bao that bai, doi thu hang va gioi
+    han gia dinh; khong chon seed/nguong/ca dep sau khi xem ket qua.
+
+# -----------------------------------------------------------------------------
+# 10. CAC MUC CON MO — GHI RO CHAN PHAN NAO
+# -----------------------------------------------------------------------------
+# Hoan thien truoc khi dong bang pham vi thi nghiem tuong ung.
+# Nguoi lam D5 la Duy; Phat kiem cheo theo ban giao 23/10/2026.
+# Trang thai OPEN duoi day khong phai yeu cau tao them du lieu do ngay lap tuc;
+# nhom co the chot gia dinh thi nghiem co ly do va khai ro gioi han.
+open_items:
+  - id: "OI-D5-1"
+    status: "RESOLVED_BY_EXPLICIT_ASSUMPTION"
+    topic: >-
+      Nguon hoac gia dinh cho khoang/phan bo sai so SoC, quy uoc dau va xu ly
+      bien.
+    resolution: >-
+      SoC +/-0.02 chinh, +/-0.05 stress; phan bo deu tren khoang cat theo bien
+      vat ly [0,1], dau true-minus-reported; xem factors va bounded_sampling.
+    blocks: null
+  - id: "OI-D5-2"
+    status: "RESOLVED_BY_EXPLICIT_ASSUMPTION"
+    topic: >-
+      Sai so SoH/dung luong: xac dinh phan ngau nhien va nguon; mien kich ban
+      0.70–1.00 chua phai sai so do.
+    resolution: >-
+      Sai lech SoH gia dinh +/-0.02 / +/-0.05, cung quy tac lay mau [0,1];
+      E_nominal giu co dinh theo tung loai pin de tranh tinh trung dung luong.
+    blocks: null
+  - id: "OI-D5-3"
+    status: "RESOLVED_BY_EXPLICIT_ASSUMPTION"
+    topic: >-
+      Sai so gio du bao va anh xa gio tiem an vao nhu cau/luat; huong gio chi
+      them khi co mo hinh hop le.
+    resolution: >-
+      Gio tiem an +/-1 / +/-2 m/s, phan bo deu cat tai 0; anh xa vao D2 dong
+      bang va kiem luat gio; giu cac draw vuot gioi han de dem failure.
+      Huong gio khong bat theo han che cho phep o proposal 13.
+    blocks: null
+  - id: "OI-D5-4"
+    status: "RESOLVED_BY_EXPLICIT_ASSUMPTION"
+    topic: >-
+      Bat dinh he so suy giam nhiet do, phan biet voi quet nhiet do moi truong.
+    resolution: >-
+      Nhieu tuyet doi kappa +/-0.02 / +/-0.05 quanh cong thuc D3, phan bo deu
+      cat theo [0,1]; khong nhieu them T hay thay he so da thuc.
+    blocks: null
+  - id: "OI-D5-5"
+    status: "RESOLVED_BY_EXPLICIT_ASSUMPTION"
+    topic: >-
+      Gia dinh phu thuoc giua cac sai so, gioi han tong quat hoa residual OOF
+      va thiet ke stress test.
+    resolution: >-
+      Doc lap o nhanh chinh; stress rieng voi khoang rong, residual am va
+      rank coupling bat loi. Ghi ro nguy co tinh trung va gioi han OOF.
+    blocks: null
+  - id: "OI-D5-6"
+    status: "OPEN"
+    topic: >-
+      Phat kiem cheo ho so CMU_instrumented cua D4 so voi mac dinh M100_stock
+      cua D3 va cach dien giai HR-3.
+    blocks: "FINAL_PROTOCOL_FREEZE"
+  - id: "OI-D5-7"
+    status: "OPEN"
+    topic: >-
+      Kiem cheo cac lua chon tinh toan ban nhap, snapshot/replay, validity thoi
+      tiet va bay tieu chi nghiem thu.
+    blocks: "FINAL_PROTOCOL_FREEZE"
+
+# -----------------------------------------------------------------------------
+# 11. NHAT KY THAY DOI
+# -----------------------------------------------------------------------------
+# Moi thay doi sau ban nhap deu ghi version, date va changes.
+# Chi ghi ngay dong bang/nguoi kiem cheo sau khi viec do thuc su duoc xac nhan.
+change_log:
+  - version: "0.6.1"
+    date: "2026-10-26"
+    changes: >-
+      Cap nhat TRANG THAI sau khi thuc thi ban ke hoach v0.6.0: matched REF
+      tren 7,467,600 diem OAT; counterfactual tren 2,245 ID x hai pin, thu
+      244,596 thay doi ap dung duoc, luu 259,299 dong gom ca loai/khong ap
+      dung va 2,915 de xuat ung vien. Ghi duong dan bang chung cho catalogue,
+      matched reference va counterfactual. Khong doi cong thuc, luoi, dieu
+      kien chon, metric hoac noi dung lan chay v0.6.0 da luu. Ban protocol
+      trong thu muc lan chay van la v0.6.0; ban hien tai chi ghi nhan ket qua.
+      DRAFT/frozen=false, Phat PENDING, final acceptance van chua duoc xac nhan.
+  - version: "0.6.0"
+    date: "2026-10-26"
+    changes: >-
+      Khai bao truoc khi chay matched-reference secondary va counterfactual:
+      tinh lai hai REF tren moi diem OAT, giu r_ref va dinh nghia nhu cau REF
+      dong bang; tach phan du sai so cua ung vien. Bao boundary membership
+      goc va tinh lai. Chon toan bo union marginal D4 theo ID cho hai pin;
+      thu du M1-M7, luoi SoC 1 diem phan tram va cu ly 10 m, cac muc tai/toc
+      do tu du lieu; chi doi mot bien, du bao va kiem luat/REF lai. Chon de
+      xuat bang ung vien truoc khi cham REF, giu ca that bai/khong ap dung.
+      Luoi la TEAM_CHOICE co giai thich, khong phai do chinh xac thiet bi.
+      DRAFT/frozen=false va kiem cheo PENDING; khong tu nghiem thu hay dong
+      open item OI-D5-6/OI-D5-7. Khong sua ket qua va hien vat D2-D4/MC/OAT cu.
+  - version: "0.5.0"
+    date: "2026-10-26"
+    changes: >-
+      Them src/mission_record.py va src/replay_validation.py: snapshot JSON
+      bat bien qua API, archive nguon/config/model/scaler va metadata runtime;
+      replay bang ma nguon da luu trong tien trinh rieng, doi chieu hash va
+      sai so so hoc, tu choi hien vat/phien ban thieu hoac bi doi.
+      Them su kien workflow noi tiep, dau vao/thoi tiet het han hoac thay doi
+      danh dau STALE, chan duyet/start khi khong hop le; conditional can bien
+      phap trong danh muc, duoc duyet va tai danh gia co cai thien. Ket cuc
+      luu doc lap. Ghi ro ngoai le MTOW cua CMU va chan duyet van hanh ho so
+      phan tich nay; M100_stock chi dung cho fixture kiem logic phan mem.
+      Khong doi can sai so, seed, mo hinh D2 hay ket qua MC/OAT da luu.
+      Khong dong cac open item kiem cheo, khong dong bang, khong danh dau
+      nghiem thu. Failure catalogue, matched-reference secondary va danh gia
+      day du counterfactual van can hoan tat.
+  - version: "0.4.0"
+    date: "2026-10-25"
+    changes: >-
+      Them src/sensitivity.py cho OAT tren toan bo primary_strata va hai pin:
+      cac offset da khai, luoi mien 11 diem voi diem chuyen kappa, quet reserve,
+      doi pin va 192 residual OOF co dau. Tai tinh nang luong/PH-1/verdict;
+      luu diem khong hop le thay vi clip. Giu nhan va boundary D4, bao rieng
+      REF-1/REF-2, cach gop marginal va cac w; tach input-error voi domain/policy.
+      Doi chieu baseline voi output MC, kiem engine vector voi D3 scalar.
+      Phan tich sau cac ca FLY da loc; khong suy nguyen nhan nhan qua hoac
+      xac suat tu tan suat tren luoi. Giu nguyen cac gia dinh va can sai so.
+      Chua hoan tat E5, matched-reference secondary hay kiem cheo/dong bang D5.
+  - version: "0.3.1"
+    date: "2026-10-25"
+    changes: >-
+      Bo sung tien do completed/total va bang tom tat terminal cho runner
+      uncertainty. Tong hop tu so/mau so theo tung ho so, reserve, cau hinh,
+      pin va seed; khong tron cac gia dinh. Kich ban audit/invalid duoc dem
+      theo ID, khong dua vao mau so. Luu terminal_summary.txt/csv kem hash.
+      Them --summary-only de xem lai ket qua cu da doi chieu hash, khong
+      lay mau lai va khong ghi de hien vat cu. Khong doi gia dinh, phep lay
+      mau, so draw hay tieu chi nghiem thu; protocol van la ban nhap.
+  - version: "0.3.0"
+    date: "2026-10-25"
+    changes: >-
+      Trien khai src/uncertainty.py: nap he so D2 da luu va pool OOF co dau,
+      kiem hash/phien ban, PCG64 theo scenario/stream, bon cau hinh full-input
+      va residual-only, cat khoang truoc lay mau, tinh demand/available/reserve
+      va VETO/PH-1 tren ngan sach da nhieu. Them runner development mot phan
+      co manifest, hash output, seed va runtime; khong ghi de lan chay.
+      Them tests/test_uncertainty.py cho cong thuc, pairing, bien vat ly,
+      fail-closed, residual am, draw khong hop le va luat cung. Giu nguyen
+      cac gia dinh/seed/so draw. Chua chay toan bo E4, chua hoan thien E5,
+      chua kiem cheo Phat va chua dong bang protocol.
+  - version: "0.1.0"
+    date: "2026-10-24"
+    changes: >-
+      Tao dac ta D5 tu proposal cap nhat, D3/D4 va ban giao; ghi nhan hash hien
+      vat local, giu sai so dau vao chua co can cu o trang thai mo.
+  - version: "0.1.1"
+    date: "2026-10-24"
+    changes: >-
+      Chinh format theo configs/d2_protocol.yaml, d3_protocol.yaml va d4_protocol.yaml:
+      tieu de khoi, danh so muc/tieu muc, chu thich tieng Viet khong dau, chuoi
+      dai dung folded scalar va danh sach dai tach dong. Bo sung frozen_on, cross_check_status,
+      depends_on va quy uoc nguon o meta. Giu nguyen tham so, cong thuc, hash
+      dau vao va cac muc chua co can cu; khong chay thi nghiem.
+  - version: "0.2.0"
+    date: "2026-10-24"
+    changes: >-
+      Theo yeu cau nguoi dung, chot cac gia dinh can cho proposal 5.8/E4 va
+      giai quyet OI-D5-1 den OI-D5-5 bang gia dinh ro rang: SoC/SoH/kappa
+      +/-0.02 va +/-0.05, gio +/-1 va +/-2 m/s; phan bo deu co cat khoang
+      theo bien vat ly. Chot anh xa nhu cau/ngan sach/luat, doc lap chinh va
+      stress phu thuoc bat loi, quy tac RNG va bao cao rieng bon cau hinh.
+      Giu 192 residual OOF co dau lam bang chung do duoc. Ghi muc duoc chon
+      khong phai sai so thiet bi hay khoang tin cay da xac thuc. Chua dong
+      bang/kiem cheo Phat, chua trien khai module hoac chay thi nghiem D5.

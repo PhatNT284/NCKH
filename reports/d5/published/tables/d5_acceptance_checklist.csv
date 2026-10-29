@@ -1,0 +1,23 @@
+﻿criterion_id,requirement_vi,technical_evidence_complete,evidence_status,formal_review_status,summary,proposal_file,proposal_line,evidence_files,limitation
+D5-1,Quét nhiều mức dự trữ,True,CO_BANG_CHUNG_PHAT_TRIEN,PENDING,"5 mức × hai pin; cả REF-1 và REF-2, nhãn cố định và tính lại",Delivery_UAV_Preflight_Feasibility_Proposal_updated.md,677,"reports\d5\oat_all_scenarios_20261025_01\one_factor_curves.csv
+reports\d5\oat_all_scenarios_20261025_01\reference_metrics.csv
+reports\d5\matched_counterfactual_20261026_01\fixed_vs_matched_metrics.csv","Mức dự trữ là giả định chính sách của nghiên cứu, không phải quy định phổ quát."
+D5-2,Phân tích tình huống gần ngưỡng,True,CO_BANG_CHUNG_PHAT_TRIEN,PENDING,Ba độ rộng w; nhóm biên/ngoài biên riêng theo hai REF và hai pin,Delivery_UAV_Preflight_Feasibility_Proposal_updated.md,677,"reports\d5\oat_all_scenarios_20261025_01\reference_metrics.csv
+reports\d5\matched_counterfactual_20261026_01\matched_reference_metrics.csv",Không dùng thành viên nhóm REF-1 thay cho REF-2; nhóm tính lại có thể đổi mẫu số.
+D5-3,Kiểm tra bất định và độ nhạy,True,CO_BANG_CHUNG_PHAT_TRIEN,PENDING,"4,410,000,000 lượt MC; 7,467,600 điểm thử từng yếu tố",Delivery_UAV_Preflight_Feasibility_Proposal_updated.md,677,"reports\d5\all_scenarios_dev_01\terminal_summary.csv
+reports\d5\oat_all_scenarios_20261025_01\sensitivity_ranking.csv
+reports\d5\oat_all_scenarios_20261025_01\fly_case_diagnosis.csv",Các phạm vi sai số là giả định; tỷ lệ mô phỏng không phải xác suất thành công ngoài thực tế.
+D5-4,Danh mục các trường hợp cần chú ý,True,CO_BANG_CHUNG_PHAT_TRIEN,PENDING,"31 ví dụ, đủ 11 nhóm đã khai; nguồn/đầu vào/kết quả trước–sau rõ ràng",Delivery_UAV_Preflight_Feasibility_Proposal_updated.md,677,"reports\d5\failure_catalogue_20261026_03\failure_catalogue.json
+reports\d5\failure_catalogue_20261026_03\failure_cases_explained.csv",31 là số ví dụ đại diện; cảnh báo hoặc chặn đúng không phải sự cố bay quan sát được.
+D5-5,Bản đánh giá bất biến và chạy lại được,True,CO_BANG_CHUNG_PHAT_TRIEN,PENDING,24/24 bản chạy lại khớp; chênh lệch số lớn nhất bằng 0,Delivery_UAV_Preflight_Feasibility_Proposal_updated.md,677,"reports\d5\replay_workflow_20261026_03\replay_results.csv
+reports\d5\replay_workflow_20261026_03\snapshots
+reports\d5\replay_workflow_20261026_03\artifacts",Bất biến qua API và phát hiện thay đổi bằng hash; không phải WORM hay chữ ký chống sửa đổi ác ý.
+D5-6,"Kiểm tra dữ liệu cũ/thiếu, luật chặn và điều kiện duyệt",True,CO_BANG_CHUNG_PHAT_TRIEN,PENDING,"41/41 kiểm tra quy trình; có chặn hết hạn, dữ liệu sai/thiếu, VETO và CONDITIONAL chưa xử lý",Delivery_UAV_Preflight_Feasibility_Proposal_updated.md,677,"reports\d5\replay_workflow_20261026_03\workflow_checks.json
+tests\test_mission_record.py
+reports\d5\matched_counterfactual_20261026_01\counterfactual_validation_summary.csv","Kiểm tra quy trình dùng entry point D5 mới; thời tiết là fixture, chưa thiết lập TTL vận hành thực tế."
+D5-7,Bảng và hình có thể tạo lại,True,CO_BANG_CHUNG_PHAT_TRIEN,PENDING,"Sáu hình PNG đúng hash; các bảng và bản xuất hình có script, manifest, hash nguồn",Delivery_UAV_Preflight_Feasibility_Proposal_updated.md,677,"src\sensitivity_report.py
+src\complete_robustness.py
+src\failure_catalogue.py
+src\d5_report.py
+reports\d5\oat_all_scenarios_20261025_01\figures
+reports\d5\figure_rebuild_20261026_01\figure_rebuild_audit.json",Các lần chạy vẫn là phát triển; cần chốt quy trình và thực hiện bản cuối theo quy trình đã chốt.

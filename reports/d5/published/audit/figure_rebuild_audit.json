@@ -1,0 +1,15 @@
+{
+  "kind": "EXPORT_REBUILD_NOT_NEW_EXPERIMENT",
+  "source_run": "reports\\d5\\oat_all_scenarios_20261025_01",
+  "all_png_match_original": true,
+  "png_checks": {
+    "energy_curves.png": true,
+    "false_safe_vs_reserve.png": true,
+    "fly_single_factor_responses.png": true,
+    "margin_curves.png": true,
+    "sensitivity_ranking.png": true,
+    "verdict_transitions.png": true
+  },
+  "svg_policy": "New export metadata and IDs; new hashes, not byte-identical historical restoration",
+  "simulation_rerun": false
+}

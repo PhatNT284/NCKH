@@ -66,7 +66,7 @@ class TestAnhXa:
 
     def test_do_nhay_s3_doi_chieu_marginal(self):
         s = pd.Series([MARGINAL])
-        assert nhan_sang_nhi_phan(s, marginal_la_kha_thi=True).iloc[0] is True
+        assert list(nhan_sang_nhi_phan(s, marginal_la_kha_thi=True)) == [True]
 
     def test_conditional_mac_dinh_khong_tinh_la_duyet(self):
         """

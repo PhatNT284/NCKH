@@ -1,0 +1,3 @@
+﻿ID,Tham_chieu,Pin_truoc,Pin_sau,Nang_luong_pin_truoc_Wh,Nang_luong_pin_sau_Wh,Nhan_cu_D4,Nhan_tinh_lai_TB48D,Quyet_dinh_TB47D,Quyet_dinh_TB48D
+5,REF-1,TB47D,TB48D,26.06643920423443,33.90985424406714,marginal,feasible,NO_FLY,CONDITIONAL
+1,REF-2,TB47D,TB48D,42.31176860135325,55.04341789221089,infeasible,marginal,FLY,FLY

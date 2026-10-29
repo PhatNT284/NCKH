@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:nckh:mission-record:1.0.0",
+  "title": "D6 research mission record, version 1.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "record_kind", "snapshot", "artifact_manifest", "assumptions", "metadata", "workflow"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "record_kind": {"const": "RESEARCH_MISSION_RECORD"},
+    "snapshot": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sha256", "assessment"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/hash"},
+        "assessment": {"$ref": "#/$defs/assessment"}
+      }
+    },
+    "artifact_manifest": {
+      "type": "object",
+      "required": ["schema_version", "runtime", "git", "files", "upstream_data_hashes"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "runtime": {"type": "object", "required": ["python", "implementation", "packages"]},
+        "git": {"type": "object", "required": ["commit", "dirty_state"]},
+        "files": {"$ref": "#/$defs/hashes"},
+        "upstream_data_hashes": {"$ref": "#/$defs/hashes"}
+      }
+    },
+    "assumptions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source", "config_sha256", "energy_available", "input_provenance"],
+      "properties": {
+        "source": {"const": "ARCHIVED_CONFIG:configs/d3_protocol.yaml"},
+        "config_sha256": {"$ref": "#/$defs/hash"},
+        "energy_available": {"type": "object"},
+        "input_provenance": {"type": "object"}
+      }
+    },
+    "metadata": {
+      "type": "object", "additionalProperties": false,
+      "required": ["distance_convention", "wind_direction", "versions", "battery", "explanation"],
+      "properties": {
+        "distance_convention": {"const": "TOTAL_PLANNED_PATH_M_NOT_ONE_WAY_DELIVERY"},
+        "wind_direction": {
+          "type": "object", "additionalProperties": false,
+          "required": ["value", "status"],
+          "properties": {"value": {"type": "null"}, "status": {"const": "NOT_AVAILABLE_NOT_USED_BY_MODEL"}}
+        },
+        "versions": {"type": "object", "required": ["dataset", "model_sha256", "config_sha256", "software"]},
+        "battery": {"type": "object", "required": ["available", "assumptions"]},
+        "explanation": {"type": "object", "required": ["reasons", "sensitivity"]}
+      }
+    },
+    "workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["as_of", "mission_status", "assessment_status", "stale_reason", "approval_action", "approval_actor_role", "approval_timestamp", "preflight_reassessment_id", "observed_outcome", "events"],
+      "properties": {
+        "as_of": {"$ref": "#/$defs/time"},
+        "mission_status": {"enum": ["DRAFT", "DEFINED", "PLANNED", "ASSESSED", "APPROVED", "IN_FLIGHT", "COMPLETED", "ABORTED", "BLOCKED", "CANCELLED", "CLOSED"]},
+        "assessment_status": {"enum": ["CURRENT", "STALE"]},
+        "stale_reason": {"type": "array", "items": {"type": "string"}},
+        "approval_action": {"enum": [null, "APPROVED", "APPROVED_WITH_MITIGATION", "ADJUST", "BLOCK", "CANCEL"]},
+        "approval_actor_role": {"enum": [null, "REVIEWER", "PILOT", "COORDINATOR"]},
+        "approval_timestamp": {"anyOf": [{"$ref": "#/$defs/time"}, {"type": "null"}]},
+        "preflight_reassessment_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "observed_outcome": {
+          "type": "object", "required": ["outcome", "note", "evidence_source"],
+          "properties": {
+            "outcome": {"enum": ["UNKNOWN", "COMPLETED", "ABORTED", "NOT_FLOWN"]},
+            "note": {"type": "string"}, "evidence_source": {"type": ["string", "null"]}
+          }
+        },
+        "events": {"type": "array", "items": {"$ref": "#/$defs/event"}}
+      }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/hash"}},
+    "time": {"type": "string", "format": "date-time"},
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,95}$"},
+    "event": {
+      "type": "object", "additionalProperties": false,
+      "required": ["assessment_id", "snapshot_sha256", "sequence", "previous_sha256", "event_type", "at", "detail", "sha256"],
+      "properties": {
+        "assessment_id": {"$ref": "#/$defs/id"}, "snapshot_sha256": {"$ref": "#/$defs/hash"},
+        "sequence": {"type": "integer", "minimum": 1},
+        "previous_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+        "event_type": {"enum": ["APPROVED", "IN_FLIGHT", "STALE", "OUTCOME_RECORDED"]},
+        "at": {"$ref": "#/$defs/time"}, "detail": {"type": "object"}, "sha256": {"$ref": "#/$defs/hash"}
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "required": ["schema_version", "artifact_id", "assessment_id", "mission_id", "assessed_at", "inputs", "weather", "units", "uncertainty", "result", "previous_snapshot_sha256", "mitigation", "normalization_nonfinite_to_null"],
+      "properties": {
+        "schema_version": {"const": "1.0.0"},
+        "artifact_id": {"$ref": "#/$defs/hash"},
+        "assessment_id": {"$ref": "#/$defs/id"}, "mission_id": {"$ref": "#/$defs/id"},
+        "assessed_at": {"$ref": "#/$defs/time"},
+        "inputs": {
+          "type": "object", "additionalProperties": false,
+          "required": ["payload_g", "speed_commanded_ms", "altitude_m", "distance_2d_m", "wind_forecast_ms", "ambient_temp_c", "soc", "soh", "battery_type", "profile", "reserve_factor"],
+          "description": "Values may be invalid or null in saved fail-closed test cases. Semantic input validation is performed by the archived decision engine.",
+          "properties": {
+            "payload_g": {}, "speed_commanded_ms": {}, "altitude_m": {}, "distance_2d_m": {},
+            "wind_forecast_ms": {}, "ambient_temp_c": {}, "soc": {}, "soh": {},
+            "battery_type": {}, "profile": {}, "reserve_factor": {}
+          }
+        },
+        "weather": {"type": "object"}, "units": {"type": "object"},
+        "uncertainty": {
+          "type": "object", "required": ["mode", "sampled", "seed"],
+          "properties": {"mode": {"const": "DETERMINISTIC_ASSESSMENT"}, "sampled": {"const": false}, "seed": {"type": "null"}}
+        },
+        "result": {
+          "type": "object",
+          "required": ["verdict", "prediction_Wh", "decision", "reasons", "assessment_status", "diagnostic_only", "review_eligible", "mitigation_validated"],
+          "properties": {
+            "verdict": {"enum": ["FLY", "CONDITIONAL", "NO_FLY", "INSUFFICIENT_DATA"]},
+            "prediction_Wh": {"type": ["number", "null"]},
+            "decision": {
+              "type": "object",
+              "if": {"minProperties": 1},
+              "then": {
+                "required": ["available", "e_available_Wh", "e_required_Wh", "margin_Wh", "margin_ratio", "reserve_factor", "r_min", "r_fly", "uncertainty_allowance_Wh", "hard_rule_report", "verdict", "reasons"],
+                "properties": {
+                  "available": {"type": "object", "required": ["e_nominal_Wh", "kappa", "soc", "soh", "status", "value_Wh"]},
+                  "hard_rule_report": {"type": "object", "required": ["checks", "profile"]},
+                  "e_available_Wh": {"type": ["number", "null"]},
+                  "e_required_Wh": {"type": ["number", "null"]},
+                  "margin_Wh": {"type": ["number", "null"]},
+                  "margin_ratio": {"type": ["number", "null"]}
+                }
+              }
+            },
+            "reasons": {"type": "array", "items": {"type": "string"}},
+            "assessment_status": {"enum": ["CURRENT", "STALE"]},
+            "diagnostic_only": {"type": "boolean"}, "review_eligible": {"type": "boolean"},
+            "mitigation_validated": {"type": "boolean"}
+          }
+        },
+        "previous_snapshot_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+        "mitigation": {"type": ["object", "null"]},
+        "normalization_nonfinite_to_null": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}
