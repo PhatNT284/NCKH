@@ -1,8 +1,8 @@
 # =============================================================================
 # GIAO THUC SAN PHAM D5 — GOI DO BEN VUNG CUA QUYET DINH
 # =============================================================================
-# BAN NHAP — CHUA DONG BANG. Da co Monte Carlo, OAT va module snapshot/replay
-# + workflow D5. Cac lan chay hien tai la phat trien; chua nghiem thu E4/E5.
+# BAN DONG BANG v1.0.0 (2026-10-31), Phat da kiem cheo. Lan chay cuoi theo
+# protocol nay CHUA thuc hien — xem change_log v1.0.0.
 #
 # QUY TAC: moi thay doi trong file nay PHAI
 #   (1) ghi ly do, version va ngay vao `change_log` o cuoi file,
@@ -22,21 +22,21 @@
 # =============================================================================
 
 meta:
-  version: "0.6.1"
-  frozen_on: null
+  version: "1.0.0"
+  frozen_on: "2026-10-31"
   owner: "Duy"
   cross_checker: "Phat"
-  cross_check_status: "PENDING"
+  cross_check_status: "APPROVED"
   deliverable: "D5_ROBUSTNESS_PACKAGE"
   experiment: "E4 — Boundary and robustness analysis; E5 — Replay and workflow"
   research_question: "RQ3 / RQ4"
-  status: "DRAFT"
+  status: "FROZEN"
   created_on: "2026-10-24"
-  frozen: false
-  reviewed_by: null
-  reviewed_on: null
+  frozen: true
+  reviewed_by: "Phat"
+  reviewed_on: "2026-10-31"
   assignment_source: "docs/san_pham/README.md — ban giao 23/10/2026"
-  implementation_status: "DEVELOPMENT_IMPLEMENTATION_COMPLETE_FINAL_CROSS_CHECK_AND_FREEZE_PENDING"
+  implementation_status: "CROSS_CHECKED_AND_FROZEN_FINAL_RUN_PENDING"
   intended_module: "src/uncertainty.py"
   naming_note: "D5 o day la san pham ban giao; mo hinh vat ly D5 la ma khac."
   provenance_rule: >-
@@ -208,6 +208,11 @@ inherited_baseline:
       FLY o ho so CMU la ket qua trong che do phan tich co ngoai le HR-3,
       khong phai quyen cho bay. Dai tai 0-500 g la do phu du lieu, KHONG thay
       the gioi han MTOW. D5 workflow khong cho duyet/thuc thi cac ca CMU.
+    cross_check_outcome: >-
+      OI-D5-6 dong ngay 2026-10-31. Khong co mau thuan giua D3/D4 va D5: tang
+      phan quyet giu KNOWN_EXCEEDED, tang workflow chan duyet. Tang chan
+      workflow KHONG ap vao mau so thuoc do. Ba dieu kien bao cao ghi o
+      open_items OI-D5-6.
 
   # ---------------------------------------------------------------------------
   # 2.2 — QUY UOC NGAN SACH, CHONG CONG TRUNG
@@ -246,6 +251,10 @@ inherited_baseline:
     note: >-
       Doi chieu truoc lan chay D5; viec tao file nay chua thuc hien cac kiem dinh
       do.
+    final_run_requirement: >-
+      Lan chay cuoi PHAI sinh baseline_consistency.json trong thu muc run_id va
+      ghi ket qua ba kiem dinh tren. Day la bang chung D5 tinh tren dung bo he
+      so D2 ma D4 da dung; thieu no thi moi so sanh D5 voi D4 khong co nen.
 
 # -----------------------------------------------------------------------------
 # 3. CAC YEU TO BAT DINH VA DO NHAY
@@ -312,6 +321,10 @@ factors:
       Theo experiments.monte_carlo.bounded_sampling: cat khoang truoc khi lay
       mau, khong clip gia tri sau lay mau. Offset co dinh ngoai [0,1] ghi
       NOT_EVALUATED_INVALID_PERTURBATION va bao so luong; khong doi thanh 0/1.
+    reporting_note_for_paper: >-
+      Gia dinh chinh +/-0.02 co the lac quan so voi sai so BMS thuc te. Khi ban
+      ve do ben trong bai, trich nhanh stress +/-0.05, khong chi trich nhanh
+      chinh.
 
   # ---------------------------------------------------------------------------
   # 3.3 — SoH / DUNG LUONG GIU LAI
@@ -499,6 +512,10 @@ experiments:
     note: >-
       Phai tinh lai bang phan tach vung bien cho tung w; chi chay lai bang tong
       hop se khong giai quyet OI-D4-7.
+    final_run_requirement: >-
+      Lan chay cuoi phai xuat boundary_breakdown.csv co CAC COT DIEM SO tach
+      theo tung w, khong chi dem so thanh vien nhom bien. Chi khi do OI-D4-7
+      moi dong duoc.
 
   # ---------------------------------------------------------------------------
   # 4.2 — THAY DOI TUNG YEU TO
@@ -855,6 +872,10 @@ replay_and_workflow:
     - "verdict_actionability_and_mitigation"
     - "uncertainty_settings_seed_and_sampling_method"
     - "explanation_and_counterfactual_details"
+  schema_note: >-
+    Lan chay cuoi phai xac nhan snapshot D5 dung cung luoc do
+    schemas/mission_record/1.0.0.json ma D6 dung; neu khac phien ban thi ghi ro
+    ban nao dung ban nao.
   replay_rule: >-
     Khoi phuc dung noi dung/hien vat da luu; khong doc cau hinh moi nhat roi nhan
     la replay lich su. Thieu phien ban cu phai bao khong replay duoc.
@@ -973,6 +994,12 @@ outputs:
     - "aircraft_profile"
     - "seed_if_applicable"
     - "assumption_config_id_if_applicable"
+  integrity_rule: >-
+    Ghi moi CSV MOT LAN, kiem hash ngay sau khi ghi, roi dat thu muc run_id o
+    che do chi doc. KHONG mo file ket qua bang Excel hay cong cu tu luu lai:
+    lan chay v0.3.1 da bi lech hash o 474,418 o so (chenh lech lon nhat
+    4.96e-08) do CSV bi doc roi ghi lai, trong khi JSON van nguyen. Xem
+    reports/d5/published/audit/recovery_audit.json.
 
 # -----------------------------------------------------------------------------
 # 9. THU TU THUC HIEN VA TIEU CHI NGHIEM THU
@@ -1009,6 +1036,14 @@ execution_and_acceptance:
   honest_result_rule: >-
     Khong yeu cau B5 phai thang de nghiem thu. Bao that bai, doi thu hang va gioi
     han gia dinh; khong chon seed/nguong/ca dep sau khi xem ket qua.
+  final_run_status: "NOT_YET_EXECUTED"
+  final_run_rule: >-
+    Bang chung hien tai den tu BON phien ban protocol khac nhau (v0.3.1 cho
+    Monte Carlo va review, v0.4.0 cho OAT, v0.5.0 cho replay va catalogue,
+    v0.6.0 cho matched/counterfactual). Lan chay cuoi theo protocol v1.0.0 phai
+    sinh TOAN BO bang chung vao MOT run_id duy nhat truoc khi trich so vao bai.
+    Doi chieu ket qua moi voi ban phat trien va giai thich moi cho lech.
+    Sua metadata KHONG bien lan chay cu thanh lan chay cuoi.
 
 # -----------------------------------------------------------------------------
 # 10. CAC MUC CON MO — GHI RO CHAN PHAN NAO
@@ -1064,17 +1099,48 @@ open_items:
       rank coupling bat loi. Ghi ro nguy co tinh trung va gioi han OOF.
     blocks: null
   - id: "OI-D5-6"
-    status: "OPEN"
+    status: "RESOLVED_BY_CROSS_CHECK"
+    resolved_on: "2026-10-31"
+    resolved_by: "Phat"
     topic: >-
       Phat kiem cheo ho so CMU_instrumented cua D4 so voi mac dinh M100_stock
       cua D3 va cach dien giai HR-3.
-    blocks: "FINAL_PROTOCOL_FREEZE"
+    resolution: >-
+      Khong co mau thuan. Tang phan quyet giu nguyen KNOWN_EXCEEDED theo quyet
+      dinh B6 cua D3; tang workflow cua D5 chan duyet/thuc thi ca CMU. Hai tang
+      khac nhau, khong xung dot; D5 cai dat dung dieu D3 da khai bang loi. Tang
+      chan workflow KHONG ap vao mau so thuoc do, nen so sanh voi D4 van hop le.
+    conditions:
+      - >-
+        DK-1: bao gioi han MTOW ngay tai phan ket qua cua bai, khong chi o phan
+        mo ta du lieu. Moi ty le FLY cua D4/D5 tinh cho cau hinh vuot MTOW.
+      - >-
+        DK-2: khong trinh bay dai tai 0-500 g nhu thay the gioi han MTOW.
+      - >-
+        DK-3: khai ro M100_stock khong duoc phan tich, va ly do: mo hinh nang
+        luong D2 hieu chinh tren khung 3680 g nen ap sang 2355 g la ngoai suy
+        khoi luong chua co du lieu do lung.
+    blocks: null
   - id: "OI-D5-7"
-    status: "OPEN"
+    status: "RESOLVED_BY_CROSS_CHECK"
+    resolved_on: "2026-10-31"
+    resolved_by: "Phat"
     topic: >-
       Kiem cheo cac lua chon tinh toan ban nhap, snapshot/replay, validity thoi
       tiet va bay tieu chi nghiem thu.
-    blocks: "FINAL_PROTOCOL_FREEZE"
+    resolution: >-
+      Dat. Cac lua chon tinh toan deu chot truoc khi chay va xem ket qua, deu
+      dan TEAM_CHOICE va affects_results, va deu phan biet gia dinh thi nghiem
+      voi sai so do. Snapshot/replay 24/24 khop, chenh lech so lon nhat bang 0.
+      Hieu luc thoi tiet dung fixture co observed_at va valid_until, tu choi
+      dien TTL van hanh chua xac lap. Bay tieu chi Muc 12.1 deu co bang chung.
+      Chi tiet: reports/d5/d5_cross_check_phat.md.
+    follow_up_not_blocking:
+      - "Xac nhan baseline_consistency.json o lan chay cuoi."
+      - "Xac nhan boundary_breakdown.csv co cot diem so theo tung w (OI-D4-7)."
+      - "Xac nhan snapshot D5 va D6 dung cung luoc do 1.0.0."
+      - "Khong cong 24 ban replay cua D5 voi 12 ban cua D6 thanh 36 trong bai."
+    blocks: null
 
 # -----------------------------------------------------------------------------
 # 11. NHAT KY THAY DOI
@@ -1082,6 +1148,18 @@ open_items:
 # Moi thay doi sau ban nhap deu ghi version, date va changes.
 # Chi ghi ngay dong bang/nguoi kiem cheo sau khi viec do thuc su duoc xac nhan.
 change_log:
+  - version: "1.0.0"
+    date: "2026-10-31"
+    changes: >-
+      DONG BANG sau kiem cheo cua Phat. Dong OI-D5-6 va OI-D5-7 kem ly do va ba
+      dieu kien bao cao DK-1..DK-3. Khong doi cong thuc, gia dinh, luoi, seed,
+      metric hay dinh nghia nao; chi doi trang thai, ghi ket luan kiem cheo va
+      them bon ghi chu yeu cau cho lan chay cuoi (baseline_consistency.json,
+      cot diem so theo w, toan ven hien vat, va quy tac mot run_id duy nhat).
+      Ban kiem cheo day du: reports/d5/d5_cross_check_phat.md.
+      LAN CHAY CUOI theo protocol nay VAN CHUA thuc hien — bang chung hien tai
+      den tu bon phien ban protocol (v0.3.1, v0.4.0, v0.5.0, v0.6.0) nen phai
+      chay lai toan bo vao mot run_id truoc khi trich so vao bai.
   - version: "0.6.1"
     date: "2026-10-26"
     changes: >-
@@ -1156,19 +1234,6 @@ change_log:
       fail-closed, residual am, draw khong hop le va luat cung. Giu nguyen
       cac gia dinh/seed/so draw. Chua chay toan bo E4, chua hoan thien E5,
       chua kiem cheo Phat va chua dong bang protocol.
-  - version: "0.1.0"
-    date: "2026-10-24"
-    changes: >-
-      Tao dac ta D5 tu proposal cap nhat, D3/D4 va ban giao; ghi nhan hash hien
-      vat local, giu sai so dau vao chua co can cu o trang thai mo.
-  - version: "0.1.1"
-    date: "2026-10-24"
-    changes: >-
-      Chinh format theo configs/d2_protocol.yaml, d3_protocol.yaml va d4_protocol.yaml:
-      tieu de khoi, danh so muc/tieu muc, chu thich tieng Viet khong dau, chuoi
-      dai dung folded scalar va danh sach dai tach dong. Bo sung frozen_on, cross_check_status,
-      depends_on va quy uoc nguon o meta. Giu nguyen tham so, cong thuc, hash
-      dau vao va cac muc chua co can cu; khong chay thi nghiem.
   - version: "0.2.0"
     date: "2026-10-24"
     changes: >-
@@ -1180,3 +1245,16 @@ change_log:
       Giu 192 residual OOF co dau lam bang chung do duoc. Ghi muc duoc chon
       khong phai sai so thiet bi hay khoang tin cay da xac thuc. Chua dong
       bang/kiem cheo Phat, chua trien khai module hoac chay thi nghiem D5.
+  - version: "0.1.1"
+    date: "2026-10-24"
+    changes: >-
+      Chinh format theo configs/d2_protocol.yaml, d3_protocol.yaml va d4_protocol.yaml:
+      tieu de khoi, danh so muc/tieu muc, chu thich tieng Viet khong dau, chuoi
+      dai dung folded scalar va danh sach dai tach dong. Bo sung frozen_on, cross_check_status,
+      depends_on va quy uoc nguon o meta. Giu nguyen tham so, cong thuc, hash
+      dau vao va cac muc chua co can cu; khong chay thi nghiem.
+  - version: "0.1.0"
+    date: "2026-10-24"
+    changes: >-
+      Tao dac ta D5 tu proposal cap nhat, D3/D4 va ban giao; ghi nhan hash hien
+      vat local, giu sai so dau vao chua co can cu o trang thai mo.

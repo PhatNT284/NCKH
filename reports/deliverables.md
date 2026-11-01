@@ -15,17 +15,17 @@ kỹ thuật, kiểm tra chéo của Phát vẫn PENDING.
 
 ## Tổng quan
 
-| Mã | Sản phẩm | Người | Tuần | Trạng thái |
-|---|---|---|---|---|
+| Mã     | Sản phẩm | Người | Tuần | Trạng thái |
+|--------|---|---|---|---|
 | **D1** | Dataset audit package | Phát | 2–3 | **NGHIỆM THU** 14/10/2026 |
 | **D2** | Energy prediction benchmark | Phát | 4–6 | **NGHIỆM THU** 14/10/2026 |
 | **D3** | Safety-aware decision engine | Phát | 7 | **NGHIỆM THU** 20/10/2026 — 13/13 tiêu chí, Duy đã kiểm chéo |
 | **D4** | Scenario benchmark | Phát | 8–9 | **XONG 23/10/2026** — 6/6 tiêu chí, Duy ký nhãn tham chiếu 21/10 |
-| D5 | [Robustness package](d5/README.md) | Duy | 10–11 | Đã triển khai và có bằng chứng kỹ thuật; Phát kiểm tra chéo PENDING |
-| D6 | Reproducible mission record | Duy | 11 | Đã triển khai; [bằng chứng D6](d6/README.md), Phát kiểm tra chéo PENDING |
-| D7 | Prototype (tuỳ chọn) | Phát | 11 | Chưa bắt đầu |
-| D8 | Research paper | Cả nhóm | 12 | Chưa bắt đầu |
-| D9 | Reproducibility package | Cả nhóm | 12 | Chưa bắt đầu |
+| **D5** | [Robustness package](d5/README.md) | Duy | 10–11 | Kiểm chéo ĐẠT 31/10/2026 — 7/7 tiêu chí, protocol đóng băng v1.0.0 |
+| **D6** | Reproducible mission record | Duy | 11 | Kiểm chéo ĐẠT 31/10/2026 — schema 1.0.0, replay 12/12 |
+| D7     | Prototype (tuỳ chọn) | Phát | 11 | Chưa bắt đầu |
+| D8     | Research paper | Cả nhóm | 12 | Chưa bắt đầu |
+| D9     | Reproducibility package | Cả nhóm | 12 | Chưa bắt đầu |
 
 > **Phân công đổi 14/10/2026:** Quyền chuyển sang project khác. Phát nhận WP3,
 > WP4, WP5; Duy kiểm chéo toàn bộ phần còn lại (giữ nguyên tắc Mục 10).
