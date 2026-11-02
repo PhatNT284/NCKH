@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0.0",
+  "schema_path": "schemas/mission_record/1.0.0.json",
+  "schema_sha256": "13af21553e6e466b13b4a06f48404db2151321e82ffbaf8053a5ce2d297ee2b2",
+  "raw_snapshot_version": "1.0.0",
+  "validated_records": 24,
+  "d6_records_added": 0,
+  "all_original_snapshot_hashes_preserved": true,
+  "note": "Raw D5 assessments are embedded unchanged in the same versioned exchange envelope used by D6."
+}

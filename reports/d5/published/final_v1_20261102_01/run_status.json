@@ -1,0 +1,26 @@
+{
+  "status": "COMPLETED_FROZEN_PROTOCOL_V1",
+  "protocol_version": "1.0.0",
+  "all_required_technical_checks_passed": true,
+  "run_acceptance_status": "PENDING_REVIEW",
+  "protocol_review_status": "APPROVED_BY_PHAT_2026_10_31",
+  "comparison_mismatches": 0,
+  "checks": {
+    "frozen_protocol_v1": true,
+    "complete_mc_population": true,
+    "declared_mc_design": true,
+    "complete_oat": true,
+    "boundary_scoring_all_w": true,
+    "matched_all_oat": true,
+    "full_counterfactual_set": true,
+    "replay_24": true,
+    "workflow_41": true,
+    "shared_schema_1_0_0": true,
+    "same_numerical_results": true,
+    "four_figures": true,
+    "mc_protocol_v1": true,
+    "oat_protocol_v1": true,
+    "matched_protocol_v1": true
+  },
+  "integrity": "SHA256 ledger verified before setting all output files and directories read-only"
+}

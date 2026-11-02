@@ -1,5 +1,21 @@
 # D5 — Bắt đầu đọc từ đây
 
+## Lần chạy đầy đủ v1.0.0 — 02/11/2026
+
+Mở [báo cáo v1.0.0](published/final_v1_20261102_01/robustness_report.md)
+và [bộ chia sẻ để kiểm tra](published/final_v1_20261102_01/README.md).
+Run `final_v1_20261102_01` chạy mới toàn bộ MC, OAT, matched-reference,
+counterfactual, replay/workflow và schema 1.0.0 trong cùng một thư mục.
+875 test qua; 15 kiểm tra kỹ thuật qua; 366 cột của 17 bảng đối chiếu không
+có ô sai khác; replay 24/24, workflow 41/41. Pipeline 1.158,638 giây.
+
+Protocol đã được Phát duyệt; kết quả lần chạy mới còn chờ kiểm tra/nghiệm thu.
+Mã tái lập: `src/d5_final.py`; hướng dẫn: `docs/cach_lam/D5_chay_cuoi_v1.md`.
+Bộ đầy đủ ở `reports/d5/final_v1_20261102_01/` trên máy chạy, đã kiểm SHA-256
+và đặt chỉ đọc. CSV/JSON lớn và kho replay được giữ cục bộ, không xóa.
+
+## Báo cáo phát triển lịch sử
+
 **Báo cáo để đọc trên GitHub:** [Báo cáo tổng hợp D5](published/d5_robustness_report.md).
 
 **Đối chiếu proposal:** [Bảng 7 tiêu chí](published/tables/d5_acceptance_checklist.csv).

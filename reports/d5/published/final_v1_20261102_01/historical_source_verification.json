@@ -1,0 +1,121 @@
+[
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\all_scenarios_dev_01\\monte_carlo_fractions.csv",
+    "original_sha256": "a08fc259f45b8ca35ea4abec3e485fabb890e5c9e608579565796b131a3b6212",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\mc_csv_recovery_20261026_01\\monte_carlo_fractions.csv",
+    "expected_sha256": "37b875550e5c1c8c780795fd4109345494d33d087373aff73227ba2f7dd2b7bb",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_curves.csv",
+    "original_sha256": "74c1dab88cc5468e6ad61d74d852e5a46f0f22fc0752196edf5def5e30a854bb",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\oat_all_scenarios_20261025_01\\one_factor_curves.csv",
+    "expected_sha256": "74c1dab88cc5468e6ad61d74d852e5a46f0f22fc0752196edf5def5e30a854bb",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\oat_all_scenarios_20261025_01\\verdict_transitions.csv",
+    "original_sha256": "afff1e239c84211abad5155b3416e1f843dfb64fe93a9a5292ab473a9181d847",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\oat_all_scenarios_20261025_01\\verdict_transitions.csv",
+    "expected_sha256": "afff1e239c84211abad5155b3416e1f843dfb64fe93a9a5292ab473a9181d847",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\oat_all_scenarios_20261025_01\\reference_metrics.csv",
+    "original_sha256": "5677d15dce60037a83305b35c173448266fe5ebed05ba0538648fa1fe28476c2",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\oat_all_scenarios_20261025_01\\reference_metrics.csv",
+    "expected_sha256": "5677d15dce60037a83305b35c173448266fe5ebed05ba0538648fa1fe28476c2",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\failure_catalogue_20261026_03\\failure_catalogue.csv",
+    "original_sha256": "48927870621a0bd5274b7cdb76c968d95f6db3a9d6ce4f6c585cac6df00d1244",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\failure_catalogue_20261026_03\\failure_catalogue.csv",
+    "expected_sha256": "48927870621a0bd5274b7cdb76c968d95f6db3a9d6ce4f6c585cac6df00d1244",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\replay_workflow_20261026_03\\replay_results.csv",
+    "original_sha256": "baa509b6ce06b6c8660340c8f87582622ebfed1336de5ccff1c5fc0d1df0625f",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\replay_workflow_20261026_03\\replay_results.csv",
+    "expected_sha256": "baa509b6ce06b6c8660340c8f87582622ebfed1336de5ccff1c5fc0d1df0625f",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\replay_workflow_20261026_03\\workflow_checks.csv",
+    "original_sha256": "32395eb4a18d7a33d00679600662c49232081ab5fcffdcc7d5283c6a47e29e5f",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\replay_workflow_20261026_03\\workflow_checks.csv",
+    "expected_sha256": "32395eb4a18d7a33d00679600662c49232081ab5fcffdcc7d5283c6a47e29e5f",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\all_scenarios_dev_01\\terminal_summary.csv",
+    "original_sha256": "44b8934aa9efeed35d6205d05b0ecc3f0b0dd8997a2cae7d523377481adbeb48",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\all_scenarios_dev_01\\terminal_summary.csv",
+    "expected_sha256": "44b8934aa9efeed35d6205d05b0ecc3f0b0dd8997a2cae7d523377481adbeb48",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\matched_reference_metrics.csv",
+    "original_sha256": "2a6e0152d97f230846da8d24116707669bd834184ee356b6cd80df9798b763e7",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\matched_reference_metrics.csv",
+    "expected_sha256": "2a6e0152d97f230846da8d24116707669bd834184ee356b6cd80df9798b763e7",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\fixed_vs_matched_metrics.csv",
+    "original_sha256": "0485cf08b257a2ba8e08df03705a33436c8d52294d794835d7ddf2562ed3c23f",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\fixed_vs_matched_metrics.csv",
+    "expected_sha256": "0485cf08b257a2ba8e08df03705a33436c8d52294d794835d7ddf2562ed3c23f",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\reference_label_transitions.csv",
+    "original_sha256": "755087476c8d7e0bec0b40832fef07837ccc0acfd9a8a956df1cada0d0522ab9",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\reference_label_transitions.csv",
+    "expected_sha256": "755087476c8d7e0bec0b40832fef07837ccc0acfd9a8a956df1cada0d0522ab9",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_proposals.csv",
+    "original_sha256": "22814642a7f970cd22afd5f1b1540b665a039adbf16b8ebbf4fa8b8879900d92",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_proposals.csv",
+    "expected_sha256": "22814642a7f970cd22afd5f1b1540b665a039adbf16b8ebbf4fa8b8879900d92",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_case_summary.csv",
+    "original_sha256": "e9d3e242ab70caa1cf68bce9d2ffffb3757bab102bf2a688aff91ca8d56045e4",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_case_summary.csv",
+    "expected_sha256": "e9d3e242ab70caa1cf68bce9d2ffffb3757bab102bf2a688aff91ca8d56045e4",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_validation_summary.csv",
+    "original_sha256": "8f1d29debcdb441b8ad4a021365b3f6ccf2f75e71457c9516c7b6c5af3325c1d",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_validation_summary.csv",
+    "expected_sha256": "8f1d29debcdb441b8ad4a021365b3f6ccf2f75e71457c9516c7b6c5af3325c1d",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_activity.csv",
+    "original_sha256": "666ef339cd96d4f2098dacb67258464667bb93188bf5ba04ca389821d58bf80a",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\counterfactual_activity.csv",
+    "expected_sha256": "666ef339cd96d4f2098dacb67258464667bb93188bf5ba04ca389821d58bf80a",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\matched_point_checks.csv",
+    "original_sha256": "76835ab57ad1546372394b2eac72c4436908649604bc56538d704260e3328cdb",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\matched_point_checks.csv",
+    "expected_sha256": "76835ab57ad1546372394b2eac72c4436908649604bc56538d704260e3328cdb",
+    "verified": true
+  },
+  {
+    "original_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\matched_baseline_labels.csv",
+    "original_sha256": "ba798acd04c64a40bbba02504374f651824bb9ba93ff71292003ace0cb873440",
+    "selected_path": "D:\\IdeaProjects\\NCKH\\reports\\d5\\matched_counterfactual_20261026_01\\matched_baseline_labels.csv",
+    "expected_sha256": "ba798acd04c64a40bbba02504374f651824bb9ba93ff71292003ace0cb873440",
+    "verified": true
+  }
+]

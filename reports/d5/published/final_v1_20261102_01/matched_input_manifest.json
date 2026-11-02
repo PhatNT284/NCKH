@@ -1,0 +1,46 @@
+{
+  "started_at_utc": "2026-11-02T12:13:51.199415+00:00",
+  "status": "RUNNING_DEVELOPMENT",
+  "protocol_version": "1.0.0",
+  "final_d5_complete": false,
+  "cross_check_status": "PENDING",
+  "source_hashes": {
+    "D:\\IdeaProjects\\NCKH\\reports\\d5\\final_v1_20261102_01\\oat\\one_factor_evaluations.csv.gz": "bef389ef9ec6e6f2ce564135502dddc0c19023c2517ebbe1908ac5ada0ca56e4",
+    "D:\\IdeaProjects\\NCKH\\reports\\d5\\final_v1_20261102_01\\oat\\reference_metrics.csv": "5677d15dce60037a83305b35c173448266fe5ebed05ba0538648fa1fe28476c2",
+    "D:\\IdeaProjects\\NCKH\\reports\\d5\\final_v1_20261102_01\\oat\\input_manifest.json": "43a7a410f42da82d1a86eab58f310c59f794186628302b82d505a92f11999ae0"
+  },
+  "upstream_input_hashes": {
+    "configs/d2_protocol.yaml": "bc73374f2734ce8e30bfb4d86844ed461b6142ceae67a8740b7e5806f202bd59",
+    "configs/d3_protocol.yaml": "70488c37a2307f5e17074376f06e3a4327eb303437de76c9f6e71b6a0e835143",
+    "configs/d4_protocol.yaml": "84219016e8c83d7594a74d7d7a2f6f2db787e0e88115a64137576cbbd4391025",
+    "reports/d2_oof_residuals.csv": "607d58f951498c40e94dd415ad3c8f598b66af5f9f496e2c55e8d9913ca0f2df",
+    "reports/d4_scenarios.csv": "cc2550ef77267e877bc10398d538ceec00c86b8e51513f4591021b08ba341da8",
+    "reports/d4_scenarios_labelled.csv": "3970c0041c2bd10e244015113a65b0097c723fee25e6f41ad03e726cb8089a61",
+    "reports/d4_d2_frozen_coefficients.csv": "081c06e7a0aa2d0d79a0a255e1c707bce455e47cd7ec4c89d5fe9e09a7e0a423",
+    "configs/d5_protocol.yaml": "2a11a2f03abeba9f603df433f2afe9b2c11269c21482e9019e239e66fabdd413"
+  },
+  "code_hashes": {
+    "src/reference_world.py": "204f470deda83c048684853166d5f4b043110b42c340dfd049655425107cc110",
+    "src/complete_robustness.py": "5cb5cc5f878ec4988ad68b27e8d86e87e6fae68c93334697e126caaaa11de86b",
+    "src/sensitivity.py": "f5832faa8951fdaa4dbcfb932febf31bd4e1b214757690f92a1d467965fc9d4b",
+    "src/uncertainty.py": "1c6017f00dda6da5620f4f3e45e59a4822a4f885f2384bdcd3a5cd3349d23400",
+    "src/reference_labeller.py": "532d49f43c259ade30f2fd8ac03d8f6247c428489e30d2e82983273594a75b1f",
+    "src/physics_m100.py": "cffd82767eb62d4b8e39907d6ec7bfe61b6d6c8ac14e3b21b4871709b1dbecb3",
+    "src/decision_rules.py": "9599c08ca2da46b173864a801324640954a1a2a3bc534659af3eff4336678de3",
+    "src/safety_invariants.py": "4300cc263090482cf32fc3f893f3d7fe55625ae0c7a7c32d2a7c004999e7a922",
+    "src/available_energy.py": "aec431b6c3240753a7058599102fd34302f58d61880c79afb099d387f8b712aa"
+  },
+  "runtime": {
+    "python": "3.14.5",
+    "implementation": "CPython",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "3.1.0",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "PyYAML": "6.0.3",
+      "joblib": "1.6.0",
+      "threadpoolctl": "3.7.0"
+    }
+  }
+}

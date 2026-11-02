@@ -811,6 +811,15 @@ ranh giới dữ liệu; không coi đây là bản vá toàn bộ D3.
 | Instructions to regenerate | `README.md` và `docs/README.md` |
 | Lịch sử chạy | `reports/experiment_log.jsonl` |
 | Hash bộ kịch bản | `fa81622c5d36884f` |
+| Pipeline D5 v1.0.0 | `src/d5_final.py`; hướng dẫn `docs/cach_lam/D5_chay_cuoi_v1.md` |
+| Bằng chứng chạy D5 ngày 02/11/2026 | [Bộ chia sẻ v1](d5/published/final_v1_20261102_01/README.md); bộ đầy đủ cục bộ `reports/d5/final_v1_20261102_01/` |
+| Thời gian D5 để ghi D9 | [runtime.json](d5/published/final_v1_20261102_01/runtime.json): **1.158,638 giây (19 phút 19 giây)**; không gồm pytest và bước kiểm hash/đặt chỉ đọc cuối |
+
+Các bước chính: Monte Carlo 734,041 giây; OAT 147,151 giây;
+matched-reference/counterfactual 172,023 giây; replay 18,817 giây;
+xác minh schema 3,316 giây. 875 test qua trong 151,92 giây trước thí nghiệm.
+Thời gian là số đo trên máy chạy, không phải cam kết thời gian cho máy khác.
+Kết quả mới có đủ bằng chứng kỹ thuật, không tự thay xác nhận nghiệm thu.
 
 Giấy phép bộ dữ liệu CC BY 4.0 cho phép công bố bảng dữ liệu đã xử lý kèm mã
 nguồn, với điều kiện ghi công Rodrigues et al. (2021) và DOI bộ dữ liệu.

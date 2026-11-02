@@ -1,0 +1,19 @@
+{
+  "monte_carlo_fractions.csv": "mc/monte_carlo_fractions.csv",
+  "one_factor_sensitivity.csv": "oat/one_factor_curves.csv",
+  "verdict_transitions.csv": "oat/verdict_transitions.csv",
+  "reference_policy_sensitivity.csv": "oat/reference_metrics.csv",
+  "failure_catalogue.csv": "catalogue/failure_catalogue.csv",
+  "replay_results.csv": "replay/replay_results.csv",
+  "workflow_invariant_results.csv": "replay/workflow_checks.csv",
+  "monte_carlo_summary.csv": "mc/terminal_summary.csv",
+  "matched_reference_metrics.csv": "matched/matched_reference_metrics.csv",
+  "fixed_vs_matched_metrics.csv": "matched/fixed_vs_matched_metrics.csv",
+  "reference_label_transitions.csv": "matched/reference_label_transitions.csv",
+  "counterfactual_proposals.csv": "matched/counterfactual_proposals.csv",
+  "counterfactual_case_summary.csv": "matched/counterfactual_case_summary.csv",
+  "counterfactual_validation_summary.csv": "matched/counterfactual_validation_summary.csv",
+  "counterfactual_activity.csv": "matched/counterfactual_activity.csv",
+  "matched_point_checks.csv": "matched/matched_point_checks.csv",
+  "matched_baseline_labels.csv": "matched/matched_baseline_labels.csv"
+}

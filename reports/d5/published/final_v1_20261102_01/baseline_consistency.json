@@ -1,0 +1,88 @@
+{
+  "status": "PASSED",
+  "total_scenarios": 18000,
+  "primary_scenarios": 14700,
+  "excluded_strata": {
+    "hard_rule_probe": 2100,
+    "missing_input": 1200
+  },
+  "estimator_artifact": "reports/d4_d2_frozen_coefficients.csv",
+  "estimator_sha256": "081c06e7a0aa2d0d79a0a255e1c707bce455e47cd7ec4c89d5fe9e09a7e0a423",
+  "input_hashes": {
+    "configs/d2_protocol.yaml": "bc73374f2734ce8e30bfb4d86844ed461b6142ceae67a8740b7e5806f202bd59",
+    "configs/d3_protocol.yaml": "70488c37a2307f5e17074376f06e3a4327eb303437de76c9f6e71b6a0e835143",
+    "configs/d4_protocol.yaml": "84219016e8c83d7594a74d7d7a2f6f2db787e0e88115a64137576cbbd4391025",
+    "reports/d2_oof_residuals.csv": "607d58f951498c40e94dd415ad3c8f598b66af5f9f496e2c55e8d9913ca0f2df",
+    "reports/d4_scenarios.csv": "cc2550ef77267e877bc10398d538ceec00c86b8e51513f4591021b08ba341da8",
+    "reports/d4_scenarios_labelled.csv": "3970c0041c2bd10e244015113a65b0097c723fee25e6f41ad03e726cb8089a61",
+    "reports/d4_d2_frozen_coefficients.csv": "081c06e7a0aa2d0d79a0a255e1c707bce455e47cd7ec4c89d5fe9e09a7e0a423",
+    "configs/d5_protocol.yaml": "2a11a2f03abeba9f603df433f2afe9b2c11269c21482e9019e239e66fabdd413"
+  },
+  "numerical_atol": 1e-08,
+  "numerical_rtol": 1e-08,
+  "checks": [
+    {
+      "check": "D2_prediction_vs_saved_D4_REF1_minus_allowance",
+      "passed": true,
+      "max_absolute_difference": 7.105427357601002e-15
+    },
+    {
+      "check": "REF2_energy_vs_saved_D4",
+      "passed": true,
+      "max_absolute_difference": 0.0
+    },
+    {
+      "check": "TB47D_vector_vs_D3_scalar_verdict",
+      "passed": true,
+      "evaluated": 14700
+    },
+    {
+      "check": "TB47D_available_vs_D3_scalar",
+      "passed": true,
+      "max_absolute_difference": 1.4210854715202004e-14
+    },
+    {
+      "check": "available_vs_saved_D4",
+      "passed": true,
+      "max_absolute_difference": 1.4210854715202004e-14
+    },
+    {
+      "check": "ref1_margin_vs_saved_D4",
+      "passed": true,
+      "max_absolute_difference": 1.4210854715202004e-14
+    },
+    {
+      "check": "ref1_ratio_vs_saved_D4",
+      "passed": true,
+      "max_absolute_difference": 8.881784197001252e-16
+    },
+    {
+      "check": "ref1_labels_vs_saved_D4",
+      "passed": true
+    },
+    {
+      "check": "ref2_margin_vs_saved_D4",
+      "passed": true,
+      "max_absolute_difference": 1.4210854715202004e-14
+    },
+    {
+      "check": "ref2_ratio_vs_saved_D4",
+      "passed": true,
+      "max_absolute_difference": 4.440892098500626e-16
+    },
+    {
+      "check": "ref2_labels_vs_saved_D4",
+      "passed": true
+    },
+    {
+      "check": "TB48D_vector_vs_D3_scalar_verdict",
+      "passed": true,
+      "evaluated": 14700
+    },
+    {
+      "check": "TB48D_available_vs_D3_scalar",
+      "passed": true,
+      "max_absolute_difference": 1.4210854715202004e-14
+    }
+  ]
+}

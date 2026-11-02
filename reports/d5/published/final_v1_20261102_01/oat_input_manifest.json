@@ -1,0 +1,2093 @@
+{
+  "started_at_utc": "2026-11-02T12:11:16.842095+00:00",
+  "status": "COMPLETED_OAT_DEVELOPMENT",
+  "protocol_version": "1.0.0",
+  "final_d5_complete": false,
+  "source_run_id": "mc",
+  "source_manifest_hash": "312a9e356fa086899975064ba8918000f0a1b8f299a186cf09a0db52df3b2f5c",
+  "input_hashes": {
+    "configs/d2_protocol.yaml": "bc73374f2734ce8e30bfb4d86844ed461b6142ceae67a8740b7e5806f202bd59",
+    "configs/d3_protocol.yaml": "70488c37a2307f5e17074376f06e3a4327eb303437de76c9f6e71b6a0e835143",
+    "configs/d4_protocol.yaml": "84219016e8c83d7594a74d7d7a2f6f2db787e0e88115a64137576cbbd4391025",
+    "reports/d2_oof_residuals.csv": "607d58f951498c40e94dd415ad3c8f598b66af5f9f496e2c55e8d9913ca0f2df",
+    "reports/d4_scenarios.csv": "cc2550ef77267e877bc10398d538ceec00c86b8e51513f4591021b08ba341da8",
+    "reports/d4_scenarios_labelled.csv": "3970c0041c2bd10e244015113a65b0097c723fee25e6f41ad03e726cb8089a61",
+    "reports/d4_d2_frozen_coefficients.csv": "081c06e7a0aa2d0d79a0a255e1c707bce455e47cd7ec4c89d5fe9e09a7e0a423",
+    "configs/d5_protocol.yaml": "2a11a2f03abeba9f603df433f2afe9b2c11269c21482e9019e239e66fabdd413"
+  },
+  "source_csv_hash": "cf15c45b7809511f85618d444801f09c3014ee21ed1660d90aa506067ae3be12",
+  "code_hashes": {
+    "src/sensitivity.py": "f5832faa8951fdaa4dbcfb932febf31bd4e1b214757690f92a1d467965fc9d4b",
+    "src/uncertainty.py": "1c6017f00dda6da5620f4f3e45e59a4822a4f885f2384bdcd3a5cd3349d23400",
+    "src/physics_m100.py": "cffd82767eb62d4b8e39907d6ec7bfe61b6d6c8ac14e3b21b4871709b1dbecb3",
+    "src/decision_rules.py": "9599c08ca2da46b173864a801324640954a1a2a3bc534659af3eff4336678de3",
+    "src/safety_invariants.py": "4300cc263090482cf32fc3f893f3d7fe55625ae0c7a7c32d2a7c004999e7a922",
+    "src/reference_labeller.py": "532d49f43c259ade30f2fd8ac03d8f6247c428489e30d2e82983273594a75b1f",
+    "src/available_energy.py": "aec431b6c3240753a7058599102fd34302f58d61880c79afb099d387f8b712aa"
+  },
+  "runtime": {
+    "python": "3.14.5",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0"
+  },
+  "scenario_count": 14700,
+  "diagnostic_profile": "CMU_instrumented",
+  "batteries": [
+    "TB47D",
+    "TB48D"
+  ],
+  "points": [
+    {
+      "factor": "soc_error",
+      "kind": "input_error",
+      "point_id": "0",
+      "value": -0.05,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soc_error",
+      "kind": "input_error",
+      "point_id": "1",
+      "value": -0.02,
+      "unit": "fraction",
+      "primary_error": true
+    },
+    {
+      "factor": "soc_error",
+      "kind": "input_error",
+      "point_id": "2",
+      "value": 0.0,
+      "unit": "fraction",
+      "primary_error": true
+    },
+    {
+      "factor": "soc_error",
+      "kind": "input_error",
+      "point_id": "3",
+      "value": 0.02,
+      "unit": "fraction",
+      "primary_error": true
+    },
+    {
+      "factor": "soc_error",
+      "kind": "input_error",
+      "point_id": "4",
+      "value": 0.05,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_error",
+      "kind": "input_error",
+      "point_id": "0",
+      "value": -0.05,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_error",
+      "kind": "input_error",
+      "point_id": "1",
+      "value": -0.02,
+      "unit": "fraction",
+      "primary_error": true
+    },
+    {
+      "factor": "soh_error",
+      "kind": "input_error",
+      "point_id": "2",
+      "value": 0.0,
+      "unit": "fraction",
+      "primary_error": true
+    },
+    {
+      "factor": "soh_error",
+      "kind": "input_error",
+      "point_id": "3",
+      "value": 0.02,
+      "unit": "fraction",
+      "primary_error": true
+    },
+    {
+      "factor": "soh_error",
+      "kind": "input_error",
+      "point_id": "4",
+      "value": 0.05,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_error",
+      "kind": "input_error",
+      "point_id": "0",
+      "value": -2.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_error",
+      "kind": "input_error",
+      "point_id": "1",
+      "value": -1.0,
+      "unit": "m/s",
+      "primary_error": true
+    },
+    {
+      "factor": "wind_error",
+      "kind": "input_error",
+      "point_id": "2",
+      "value": 0.0,
+      "unit": "m/s",
+      "primary_error": true
+    },
+    {
+      "factor": "wind_error",
+      "kind": "input_error",
+      "point_id": "3",
+      "value": 1.0,
+      "unit": "m/s",
+      "primary_error": true
+    },
+    {
+      "factor": "wind_error",
+      "kind": "input_error",
+      "point_id": "4",
+      "value": 2.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "kappa_error",
+      "kind": "input_error",
+      "point_id": "0",
+      "value": -0.05,
+      "unit": "absolute",
+      "primary_error": false
+    },
+    {
+      "factor": "kappa_error",
+      "kind": "input_error",
+      "point_id": "1",
+      "value": -0.02,
+      "unit": "absolute",
+      "primary_error": true
+    },
+    {
+      "factor": "kappa_error",
+      "kind": "input_error",
+      "point_id": "2",
+      "value": 0.0,
+      "unit": "absolute",
+      "primary_error": true
+    },
+    {
+      "factor": "kappa_error",
+      "kind": "input_error",
+      "point_id": "3",
+      "value": 0.02,
+      "unit": "absolute",
+      "primary_error": true
+    },
+    {
+      "factor": "kappa_error",
+      "kind": "input_error",
+      "point_id": "4",
+      "value": 0.05,
+      "unit": "absolute",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "0",
+      "value": 0.7,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "1",
+      "value": 0.73,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "2",
+      "value": 0.76,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "3",
+      "value": 0.79,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "4",
+      "value": 0.82,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "5",
+      "value": 0.85,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "6",
+      "value": 0.88,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "7",
+      "value": 0.91,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "8",
+      "value": 0.94,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "9",
+      "value": 0.97,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "soh_domain",
+      "kind": "scenario_domain",
+      "point_id": "10",
+      "value": 1.0,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "0",
+      "value": 0.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "1",
+      "value": 1.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "2",
+      "value": 2.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "3",
+      "value": 3.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "4",
+      "value": 4.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "5",
+      "value": 5.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "6",
+      "value": 6.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "7",
+      "value": 7.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "8",
+      "value": 8.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "9",
+      "value": 9.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "wind_domain",
+      "kind": "scenario_domain",
+      "point_id": "10",
+      "value": 10.0,
+      "unit": "m/s",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "0",
+      "value": -10.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "1",
+      "value": -5.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "2",
+      "value": 0.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "3",
+      "value": 4.5,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "4",
+      "value": 5.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "5",
+      "value": 10.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "6",
+      "value": 15.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "7",
+      "value": 18.4,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "8",
+      "value": 20.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "9",
+      "value": 25.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "10",
+      "value": 30.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "11",
+      "value": 35.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "temperature_domain",
+      "kind": "scenario_domain",
+      "point_id": "12",
+      "value": 40.0,
+      "unit": "degC",
+      "primary_error": false
+    },
+    {
+      "factor": "reserve_policy",
+      "kind": "policy",
+      "point_id": "0",
+      "value": 0.1,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "reserve_policy",
+      "kind": "policy",
+      "point_id": "1",
+      "value": 0.15,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "reserve_policy",
+      "kind": "policy",
+      "point_id": "2",
+      "value": 0.2,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "reserve_policy",
+      "kind": "policy",
+      "point_id": "3",
+      "value": 0.25,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "reserve_policy",
+      "kind": "policy",
+      "point_id": "4",
+      "value": 0.3,
+      "unit": "fraction",
+      "primary_error": false
+    },
+    {
+      "factor": "battery_assumption",
+      "kind": "battery_assumption",
+      "point_id": "TB47D",
+      "value": "TB47D",
+      "unit": "battery",
+      "primary_error": false
+    },
+    {
+      "factor": "battery_assumption",
+      "kind": "battery_assumption",
+      "point_id": "TB48D",
+      "value": "TB48D",
+      "unit": "battery",
+      "primary_error": false
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_1",
+      "value": 0.4208496804570956,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_2",
+      "value": 2.9054237847091144,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_3",
+      "value": 0.4181584917434549,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_4",
+      "value": -0.15910488557793556,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_5",
+      "value": 0.21638677120649774,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_6",
+      "value": 0.6257077298376537,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_7",
+      "value": -0.40193052611685687,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_8",
+      "value": -1.4076246685814127,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_10",
+      "value": -0.6499697472902923,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_12",
+      "value": -0.11622320905696348,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_14",
+      "value": 0.448878117185604,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_15",
+      "value": 0.6752121908439577,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_16",
+      "value": 0.6591546200349949,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_17",
+      "value": 0.45215128454553266,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_18",
+      "value": -0.22722832390618208,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_20",
+      "value": -0.21918176995465188,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_23",
+      "value": 0.1712828081282325,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_59",
+      "value": -0.039886486025427104,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_60",
+      "value": 0.4502772588049915,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_68",
+      "value": -0.3490733396983039,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_77",
+      "value": -1.0535811696103057,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_78",
+      "value": -0.23734320119753605,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_79",
+      "value": 0.619310716147675,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_80",
+      "value": -1.3190079772010073,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_81",
+      "value": 0.8173046580980454,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_82",
+      "value": 0.5366232150071255,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_83",
+      "value": -0.5376995645861484,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_84",
+      "value": 0.7755744670296032,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_85",
+      "value": 0.3218895510314752,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_86",
+      "value": 0.654716238139148,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_87",
+      "value": 2.654119814220927,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_88",
+      "value": 1.2925335014155728,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_91",
+      "value": 0.3646592586413462,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_92",
+      "value": 0.07022181896063273,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_93",
+      "value": 0.10469126531972961,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_94",
+      "value": -0.6687836656296859,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_95",
+      "value": 0.3709232798238453,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_96",
+      "value": -0.20451853250585472,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_97",
+      "value": -1.2497407396383196,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_98",
+      "value": 1.3875588851984357,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_99",
+      "value": -0.40202295400274934,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_100",
+      "value": 0.500684862173916,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_101",
+      "value": 0.4723564845349273,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_102",
+      "value": -1.26961644275368,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_105",
+      "value": -1.0022532617953708,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_106",
+      "value": -0.4428830504866923,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_107",
+      "value": -0.7142385465743395,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_108",
+      "value": 0.1899125046387038,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_109",
+      "value": -0.5843122439617261,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_110",
+      "value": 0.3764919191927625,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_111",
+      "value": 0.10677631330871407,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_112",
+      "value": -0.6872319886366256,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_113",
+      "value": 0.5858361058586539,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_114",
+      "value": -0.6283784204850171,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_115",
+      "value": 0.6021647947745628,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_116",
+      "value": -1.7935285849926395,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_117",
+      "value": -0.28527534040975056,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_118",
+      "value": 0.9820966584168325,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_119",
+      "value": -0.6058554446274513,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_120",
+      "value": 1.1137546165265935,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_121",
+      "value": 0.4009631912908702,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_122",
+      "value": 1.1175180812206982,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_123",
+      "value": 0.16022364378155984,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_124",
+      "value": -0.595162199389117,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_125",
+      "value": 1.0190181324886254,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_126",
+      "value": -2.651760046151871,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_127",
+      "value": -0.8272668252236883,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_128",
+      "value": 0.4270500817924052,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_129",
+      "value": -2.8671736516585327,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_130",
+      "value": 0.10132568644698381,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_131",
+      "value": 2.0847340133909213,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_134",
+      "value": 0.7679438043850126,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_135",
+      "value": -1.3263396715080837,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_136",
+      "value": -0.19570813575840695,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_137",
+      "value": -0.46314655586562026,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_138",
+      "value": -0.4963516753797208,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_139",
+      "value": -1.527602564986207,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_140",
+      "value": -1.0603530097696918,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_141",
+      "value": -2.122189566001577,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_142",
+      "value": -0.22274810402341672,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_143",
+      "value": -0.041394440988401726,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_144",
+      "value": 0.5208466607578792,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_145",
+      "value": -0.5078028345246146,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_146",
+      "value": -0.5440845045191747,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_147",
+      "value": -0.8648857555959744,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_148",
+      "value": 0.3652014562289416,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_149",
+      "value": -0.3899106314438612,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_150",
+      "value": 0.8239912336098811,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_151",
+      "value": -0.47990653842622777,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_152",
+      "value": -0.9379296961727235,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_153",
+      "value": 0.2530135191228382,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_154",
+      "value": -0.9800748382594335,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_155",
+      "value": -0.7833489695265534,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_156",
+      "value": -1.669942371683419,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_157",
+      "value": 0.20358810097815905,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_158",
+      "value": -0.6338915660245661,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_159",
+      "value": -0.4429137165535053,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_160",
+      "value": -0.6413659462652177,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_162",
+      "value": -0.23941299439968233,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_163",
+      "value": 0.8758762417240291,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_164",
+      "value": 0.7195726102845761,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_165",
+      "value": 0.6458678865854104,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_166",
+      "value": 0.34902076066413557,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_167",
+      "value": 0.7132543416647401,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_168",
+      "value": -0.4310103639477383,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_169",
+      "value": -1.1275947401926025,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_170",
+      "value": -0.6510999691767747,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_171",
+      "value": -0.8711812862998709,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_172",
+      "value": 0.5259974545819084,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_173",
+      "value": -0.7248364619860368,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_174",
+      "value": -0.36930292192253944,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_175",
+      "value": 0.568524117893709,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_176",
+      "value": -0.020590473491875372,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_177",
+      "value": -0.8352206879109776,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_178",
+      "value": 0.8513877536607684,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_179",
+      "value": -0.29528050210995005,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_180",
+      "value": 0.31654611175826375,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_181",
+      "value": -0.2230103796954701,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_182",
+      "value": -0.07630035525386702,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_183",
+      "value": 1.1268217359098731,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_184",
+      "value": -1.2705451400893963,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_185",
+      "value": -0.3504725350980742,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_186",
+      "value": -0.9513706252922809,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_187",
+      "value": 0.3292145022498083,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_188",
+      "value": 1.420526079184107,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_189",
+      "value": 0.6861178366794061,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_190",
+      "value": -0.13457942231625708,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_191",
+      "value": -0.9470849772692418,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_192",
+      "value": -0.501023918614047,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_193",
+      "value": -0.2535874827965685,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_194",
+      "value": 0.8487671967793275,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_195",
+      "value": 0.511121140135316,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_197",
+      "value": 0.43370332478515117,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_198",
+      "value": -0.4818331091818955,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_199",
+      "value": 0.5691142629378803,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_200",
+      "value": 0.7125535949650157,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_201",
+      "value": -0.03580040560222031,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_202",
+      "value": -0.06970536622525358,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_203",
+      "value": -0.6848576241225253,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_204",
+      "value": -0.42125278803950295,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_205",
+      "value": 0.5287734999972855,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_206",
+      "value": 0.385336993540232,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_207",
+      "value": -0.0117679933391166,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_208",
+      "value": 0.4330454711789251,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_209",
+      "value": -0.4309113665560176,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_210",
+      "value": -0.2614518333711011,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_225",
+      "value": 0.030109313757805012,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_226",
+      "value": 0.302627675472813,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_227",
+      "value": -0.29802156816099057,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_228",
+      "value": 0.40525240894083225,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_229",
+      "value": 0.05226895337627191,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_230",
+      "value": 0.35872882050168187,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_231",
+      "value": -0.9757824823570225,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_232",
+      "value": -0.08206095299905769,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_233",
+      "value": 0.44048690269526247,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_234",
+      "value": 0.9577556628985207,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_235",
+      "value": 1.2729192850161262,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_236",
+      "value": 1.2581237707829693,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_237",
+      "value": 1.0975940295850641,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_238",
+      "value": -1.2110086471646824,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_239",
+      "value": -0.5007602192684466,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_240",
+      "value": 0.10188305865694147,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_241",
+      "value": -0.5173075844775283,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_242",
+      "value": 0.1884055017525874,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_243",
+      "value": -0.14675185180363215,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_246",
+      "value": 0.09061426095483327,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_247",
+      "value": -0.28704653544243186,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_248",
+      "value": 0.6760011291516506,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_249",
+      "value": -0.0028782328864096485,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_250",
+      "value": 1.2906926637908391,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_251",
+      "value": 0.1586382102164663,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_252",
+      "value": 0.27958676500664836,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_253",
+      "value": 0.7807366268085509,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_254",
+      "value": 0.43534793389758875,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_255",
+      "value": 0.09178767774341878,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_256",
+      "value": -0.0409167272085007,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_257",
+      "value": -0.5915274053373416,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_258",
+      "value": -0.3620829529524521,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_260",
+      "value": -0.07516893134082281,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_261",
+      "value": -0.6164583206551235,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_262",
+      "value": -0.5491738540928317,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_263",
+      "value": 0.6950308008466592,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_264",
+      "value": 1.0489650905334145,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_267",
+      "value": 1.4118139488741548,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_268",
+      "value": -1.0564365268724707,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_269",
+      "value": 0.19902356818063538,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_270",
+      "value": 0.9547674668085193,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_271",
+      "value": -1.3995184830328782,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_272",
+      "value": 0.7697776415714515,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_275",
+      "value": 1.6465320913866215,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_276",
+      "value": 1.4083153031606876,
+      "unit": "Wh",
+      "primary_error": true
+    },
+    {
+      "factor": "energy_error",
+      "kind": "empirical_error",
+      "point_id": "flight_277",
+      "value": 1.3823143114951364,
+      "unit": "Wh",
+      "primary_error": true
+    }
+  ],
+  "focus_cases": 457,
+  "baseline_verdict_matches_saved_MC": true,
+  "exclusions": {
+    "hard_rule_probe": 2100,
+    "missing_input": 1200
+  },
+  "reference_policy": "Original D4 labels and boundary membership remain fixed, including TB48D",
+  "grid_frequency_note": "Frequencies over deterministic grids are not probabilities; OOF values have equal flight weights",
+  "completed_at_utc": "2026-11-02T12:13:38.238190+00:00",
+  "total_evaluations": 7467600,
+  "output_hashes": {
+    "fly_case_diagnosis.csv": "02433c430c0f0052adb044d231d445aeac9426cdaf69c93cb92e5d7ade3fb5f8",
+    "fly_case_factor_details.csv": "5c7c56968e1dd56098f9628c77ebd8212f9b2e0b2740ad8d089b7403e77b8ccc",
+    "one_factor_curves.csv": "74c1dab88cc5468e6ad61d74d852e5a46f0f22fc0752196edf5def5e30a854bb",
+    "one_factor_evaluations.csv.gz": "bef389ef9ec6e6f2ce564135502dddc0c19023c2517ebbe1908ac5ada0ca56e4",
+    "reference_metrics.csv": "5677d15dce60037a83305b35c173448266fe5ebed05ba0538648fa1fe28476c2",
+    "scenario_factor_sensitivity.csv.gz": "aff13f6598aff11ecf069aaaeee72e85e4102afe76b8d306894b6cea79709c59",
+    "sensitivity_ranking.csv": "24bd2c204f37bd3f407d73672971cb20a97a4e35e30716fce21d1306147a8d9e",
+    "verdict_transitions.csv": "afff1e239c84211abad5155b3416e1f843dfb64fe93a9a5292ab473a9181d847"
+  }
+}
